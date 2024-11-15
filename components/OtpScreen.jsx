@@ -46,7 +46,7 @@ export default function OtpScreen({route, navigation}) {
     
     const [userData, setUserData] = useState(null);
     const [logindata, setlogindata] = useState(null);
-   console.log(flow)
+   
     useEffect(() => {
         let interval = null;
         if (timer > 0) {
@@ -98,7 +98,7 @@ export default function OtpScreen({route, navigation}) {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ phone_number }),
+            body: JSON.stringify({ phoneNumber }),
           });
     
           if (!response.ok) {

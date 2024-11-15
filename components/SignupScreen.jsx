@@ -60,6 +60,7 @@ export default function SignUpScreen  ({navigation})  {
         // Store phone number temporarily
         Alert.alert('OTP Sent', 'Please check your phone for the OTP');
         await AsyncStorage.setItem('userData', JSON.stringify(requestBody));
+        
         navigation.navigate('OTPVerification', { requestBody, flow});
       } else {
         console.log(data)
@@ -71,7 +72,6 @@ export default function SignUpScreen  ({navigation})  {
       setLoading(false);
     }
   };
-
 
 
 
@@ -136,7 +136,8 @@ export default function SignUpScreen  ({navigation})  {
 
 const styles = StyleSheet.create({
   bgimage:{
-    flex:1
+    flex:1,
+    
   },
   container: {
     flex: 1,

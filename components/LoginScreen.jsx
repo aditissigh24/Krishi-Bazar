@@ -80,7 +80,7 @@ const LoginScreen = ({navigation}) => {
         <Text style={styles.lgtext}>Login to your account</Text>
        <TextInput style={styles.input} placeholder='Phone-number' value={phoneNumber} onChangeText={setPhoneNumber}/>
        <TextInput style={styles.input} placeholder='Aadhar no.' value={aadhar} onChangeText={setAadhar}/>
-       <TouchableOpacity style={styles.button} onPress={() => navigation.replace('MainTabs')} disabled={loading}>
+       <TouchableOpacity style={styles.button} onPress={() => navigation.replace('RootTabs')} disabled={loading}>
         <Text style={styles.buttonText}>Get OTP</Text>
        </TouchableOpacity>
        <View style={styles.subcontainer}>

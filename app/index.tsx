@@ -5,16 +5,23 @@ import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppLoading from 'expo-app-loading';
 import { Text, View } from "react-native";
-import RootLayout from "./_layout";
-import RootStack from './../components/Navigator/RootStack';
-import OtpScreen from "@/components/OtpScreen";
-import TabLayout from "./tabs/_layout";
+import RootTabs from "../components/Navigator/RootTabs";
+import AuthStack from '../components/Navigator/AuthStack';
+
+
 
 export default function Index() {
+  const [isauthorized, setIsAuthorized]=useState(true);
      return(
-    <NavigationContainer independent={true}>
-    <RootStack/>
-    </NavigationContainer>
+    
+      <NavigationContainer independent={true}>
+        <RootTabs/>
+        
+        
+      </NavigationContainer>
+    
+    
+   
   );
 }
 
