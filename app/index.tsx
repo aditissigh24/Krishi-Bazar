@@ -11,11 +11,19 @@ import AuthStack from '../components/Navigator/AuthStack';
 
 
 export default function Index() {
-  const [isauthorized, setIsAuthorized]=useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = await AsyncStorage.getItem('jwtToken');
+      setIsAuthenticated(!!token); // Set to true if token exists
+    };
+    checkAuth();
+  }, []);
+
      return(
     
       <NavigationContainer independent={true}>
-        <RootTabs/>
+        {isAuthenticated ? <RootTabs /> : <AuthStack />}
         
         
       </NavigationContainer>

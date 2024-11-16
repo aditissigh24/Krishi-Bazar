@@ -126,7 +126,7 @@ export default function OtpScreen({route, navigation}) {
         phone_number: phoneNumber,
         aadhar_number: aadhar,
         verification_code: otp };
-        
+        console.log('Request Body:', requestBody)
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
@@ -147,7 +147,10 @@ export default function OtpScreen({route, navigation}) {
         await AsyncStorage.removeItem('tempPhone');
         
         // Navigate to home screen or complete profile screen
-        navigation.replace('Home');
+        navigation.reset({
+          index: 0, // Reset to HomeTabs as the first screen
+          routes: [{ name: 'HomeTab' }], // Replace the whole stack with HomeTabs
+        });
       } else {
         Alert.alert('Error', data.message || 'Invalid OTP');
         
@@ -173,7 +176,7 @@ export default function OtpScreen({route, navigation}) {
       
       <TouchableOpacity
         style={[styles.button, loading && styles.buttonDisabled]}
-        onPress= {() => navigation.replace('Home')}
+        onPress={handleVerifyOTP}
         disabled={loading}
       >
         {loading ? (

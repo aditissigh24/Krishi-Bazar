@@ -18,43 +18,54 @@ const products = [
   {
     id: '1',
     name: 'Product 1',
-    price: 19.99,
+    price: 500,
     image: 'https://via.placeholder.com/150',
     category: 'Zari',
+    farmer: 'Bob Wilson'
   },
   {
     id: '2',
     name: 'Product 2',
-    price: 29.99,
+    price: 1200,
     image: 'https://via.placeholder.com/150',
     category: 'Mushroom',
+    farmer:'Jane Smith'
   },
   {
     id: '3',
     name: 'Product 3',
-    price: 14.99,
+    price: 2500,
     image: 'https://via.placeholder.com/150',
     category: 'Zari',
+    farmer:'Jane Smith'
   },
   {
     id: '4',
     name: 'Product 4',
-    price: 39.99,
+    price: 1500,
     image: 'https://via.placeholder.com/150',
     category: 'Mushroom',
+    farmer:'John Doe'
   },
   {
     id: '5',
     name: 'Product 5',
-    price: 24.99,
+    price: 750,
     image: 'https://via.placeholder.com/150',
     category: 'Mushroom',
+    farmer:'John Doe'
   },
 ];
 
 const ExploreScreen = () => {
   const [searchText, setSearchText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [filters, setFilters] = useState({
+    productType: '',
+    priceRange: '',
+    farmerName: '',
+    deliveryDate: '',
+  });
 
   const route = useRoute();
   
@@ -65,16 +76,30 @@ const ExploreScreen = () => {
     }
   }, [category]);
   
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchText.toLowerCase()) &&
-    (selectedCategory === '' || product.category === selectedCategory)
-  );
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory =
+      !filters.productType || product.category === filters.productType;
+    const matchesSearch = product.name.toLowerCase().includes(searchText.toLowerCase());
+    const matchesFarmer =
+    !filters.farmerName || product.farmer === filters.farmerName;
+    const matchesPriceRange = !filters.priceRange || (() => {
+      const range = filters.priceRange.split(' - ');
+      const min = parseInt(range[0].replace('₹', ''));
+      const max = range[1] ? parseInt(range[1].replace('₹', '')) : Infinity;
+      return (product.price <= max) && (product.price >= min)
+     })()
+    return matchesCategory && matchesSearch && matchesFarmer&& matchesPriceRange;
+  });
+  const [modalVisible, setModalVisible] = useState(false);
+  const toggleModal = () => {
+    setModalVisible(true)  // Toggle the visibility of modal
+  };
 
   const renderProduct = ({ item }) => (
     <TouchableOpacity style={styles.productCard}>
       <Image source={{ uri: item.image }} style={styles.productImage} />
       <Text style={styles.productName}>{item.name}</Text>
-      <Text style={styles.productPrice}>${item.price.toFixed(2)}</Text>
+      <Text style={styles.productPrice}>₹{item.price.toFixed(2)}</Text>
     </TouchableOpacity>
   );
 
@@ -91,34 +116,19 @@ const ExploreScreen = () => {
       </View>
 
       <View style={styles.filterContainer}>
-        <TouchableOpacity
-          style={[
-            styles.filterButton,
-            selectedCategory === '' ? styles.activeFilterButton : null,
-          ]}
-          onPress={() => setSelectedCategory('')}
-        >
-          <Text style={styles.filterButtonText}>All</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.filterButton,
-            selectedCategory === 'Zari' ? styles.activeFilterButton : null,
-          ]}
-          onPress={() => setSelectedCategory('Zari')}
-        >
-          <Text style={styles.filterButtonText}>Zari Products</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.filterButton,
-            selectedCategory === 'Mushroom' ? styles.activeFilterButton : null,
-          ]}
-          onPress={() => setSelectedCategory('Mushroom')}
-        >
-          <Text style={styles.filterButtonText}>Mushroom</Text>
-        </TouchableOpacity>
-
+        <TouchableOpacity onPress={toggleModal} style={styles.filterButton}>
+          <Text style={styles.filterButtonText}>FILTER</Text>
+      </TouchableOpacity>
+       {/* Conditionally render the UpdatePhoneNumber component */}
+     {modalVisible && (
+        <FilterDialog
+        activeFilters={filters}
+         onFilterChange={setFilters} // Pass update handler
+          onClose={toggleModal} 
+          visible={modalVisible} 
+          setVisible={setModalVisible} // Pass function to close modal
+        />
+      )}
       </View>
 
       <FlatList
@@ -127,13 +137,15 @@ const ExploreScreen = () => {
         numColumns={2}
         contentContainerStyle={styles.productList}
         renderItem={renderProduct}
+        
+       ItemSeparatorComponent={() => <View style={{ height: 10 , width:10}} />}
       />
     </View>
   );
 };
 
 const { width } = Dimensions.get('window');
-const productCardWidth = (width - 48) / 2;
+const productCardWidth = (width - 54) / 2;
 
 const styles = StyleSheet.create({
   container: {
@@ -171,16 +183,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#1A1A1D',
   },
   filterButtonText: {
-    color: 'white',
-    fontSize: 14,
+    color: '#1A1A1D',
+    fontSize: 16,
+    fontWeight:'bold'
   },
   productList: {
     justifyContent: 'space-between',
+   // gap:10
+   //marginVertical:10
   },
   productCard: {
-    backgroundColor: 'white',
+    backgroundColor: '#FAF6E3',
     borderRadius: 12,
-    padding: 16,
+   marginHorizontal:2,
+    //marginRight:,
+    padding: 12,
     width: productCardWidth,
     marginBottom: 16,
     shadowColor: '#000',
@@ -194,19 +211,20 @@ const styles = StyleSheet.create({
   },
   productImage: {
     width: '100%',
-    height: 120,
+    height: 100,
     borderRadius: 8,
     marginBottom: 8,
   },
   productName: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#1F2937',
+    color: '#1A1A1D',
     marginBottom: 4,
   },
   productPrice: {
     fontSize: 14,
     color: '#6B7280',
+    fontWeight:'500'
   },
 });
 

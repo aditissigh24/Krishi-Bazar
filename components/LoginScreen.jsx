@@ -38,18 +38,27 @@ const LoginScreen = ({navigation}) => {
     });
 
     const data = await response.json();
+   
+
     
     if (response.ok) {
+      if (data.token) {
       // Store phone number temporarily
+      await AsyncStorage.setItem('jwtToken', data.token);
+      console.log('JWT Token stored successfully:', data.token);
       Alert.alert('OTP Sent', 'Please check your phone for the OTP');
       await AsyncStorage.setItem('logindata', JSON.stringify(requestBody));
      
       navigation.navigate('OTPVerification', { phoneNumber,aadhar, flow  });
-    } else {
+    }
+    else {
+      Alert.alert('Error', 'Token not received in response.'); }}
+    else {
       console.log(data)
       Alert.alert('Error', data.message || 'Failed to send OTP');
-    }
-  } catch (error) {
+    }}
+  catch (error) {
+    console.log("Network error:", error);
     Alert.alert('Error', 'Network error. Please try again.');
   } finally {
     setLoading(false);
@@ -80,7 +89,7 @@ const LoginScreen = ({navigation}) => {
         <Text style={styles.lgtext}>Login to your account</Text>
        <TextInput style={styles.input} placeholder='Phone-number' value={phoneNumber} onChangeText={setPhoneNumber}/>
        <TextInput style={styles.input} placeholder='Aadhar no.' value={aadhar} onChangeText={setAadhar}/>
-       <TouchableOpacity style={styles.button} onPress={() => navigation.replace('RootTabs')} disabled={loading}>
+       <TouchableOpacity style={styles.button} onPress={handlesendOTP} disabled={loading}>
         <Text style={styles.buttonText}>Get OTP</Text>
        </TouchableOpacity>
        <View style={styles.subcontainer}>
