@@ -1,50 +1,89 @@
-import React, {useState,useEffect} from 'react';
+import React from 'react';
 import { View, StyleSheet, FlatList, Image, Text , TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 
 
-
-  
-
-const ViewOrders = ({navigation}) => {
-  const [orders, setOrders] = useState([]); // State to store orders
-  const [loading, setLoading] = useState(true); // State to handle loading
-
-  const renderProduct = ({ item,navigation }) => (
-    <TouchableOpacity style={styles.orderCard} onPress={()=> navigation.navigate('SpecificOrder')} >
-       <View >
+const orders = [
+    {
+      id: '1',
+      imageUrl: 'https://example.com/product1.jpg',
+      name: 'Product 1',
+      quantity: 2,
+      price: 19.99,
+      seller: 'Seller A',
+      buyer: 'Buyer X',
+    },
+    {
+      id: '2',
+      imageUrl: 'https://example.com/product2.jpg',
+      name: 'Product 2',
+      quantity: 1,
+      price: 29.99,
+      seller: 'Seller B',
+      buyer: 'Buyer Y',
+    },
+    {
+        id: '3',
+        imageUrl: 'https://example.com/product2.jpg',
+        name: 'Product 3',
+        quantity: 1,
+        price: 29.99,
+        seller: 'Seller B',
+        buyer: 'Buyer Y',
+      },
+      {
+        id: '4',
+        imageUrl: 'https://example.com/product2.jpg',
+        name: 'Product 4',
+        quantity: 1,
+        price: 29.99,
+        seller: 'Seller B',
+        buyer: 'Buyer Y',
+      },
+    // Add more order objects as needed
+  ];
+  const renderProduct = ({ item , navigation}) => (
+    <TouchableOpacity style={styles.orderCard}  onPress={() => navigation.navigate('SpecificOrder', { orderId: item.id })}>
+      <View >
             <View style={styles.orderRow}>
               <View style={styles.productImage}>
                 <Image source={{ uri: item.imageUrl }} style={styles.circleImage} />
               </View>
               <View style={styles.orderDetails}>
-                <Text style={styles.productName}>{item.order_details.product_name}</Text>
-                <Text style={styles.detailText}>Quantity: {item.order_details.quantity_in_kg} kg</Text>
-                <Text style={styles.detailText}>Quantity: {item.order_details.quantity_in_kg} kg</Text>
-                <Text style={styles.detailText}>Seller: {item.seller_details.farmer_first_name} {item.seller_details.farmer_last_name}</Text>
-                <Text style={styles.detailText}>Buyer: {item.buyer_details.buyer_first_name} {item.buyer_details.buyer_last_name}</Text>
-                <Text style={styles.detailText}>Status: {item.order_details.status}</Text>
+                <Text style={styles.productName}>{item.name}</Text>
+                <Text style={styles.detailText}>Quantity: {item.quantity}</Text>
+                <Text style={styles.detailText}>Price: ${item.price}</Text>
+                <Text style={styles.detailText}>Seller: {item.seller}</Text>
+                <Text style={styles.detailText}>Buyer: {item.buyer}</Text>
               </View>
             </View>
           </View>
     </TouchableOpacity>
   );
- 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const response = await fetch('https://krishi-bazar.onrender.com/api/v1/user/1/orders');
-        const data = await response.json();
-        setOrders(data); // Set orders to the fetched data
-      } catch (error) {
-        console.error('Error fetching orders:', error);
-      } finally {
-        setLoading(false); // Set loading to false once the data is fetched
-      }
-    };
 
-    fetchOrders();
-  }, []);
+  
+
+const ViewOrders = ({navigation}) => {
+  const renderProduct = ({ item}) => (
+    <TouchableOpacity style={styles.orderCard}  onPress={() => navigation.navigate('SpecificOrder', { orderId: item.id })}>
+      <View >
+            <View style={styles.orderRow}>
+              <View style={styles.productImage}>
+                <Image source={{ uri: item.imageUrl }} style={styles.circleImage} />
+              </View>
+              <View style={styles.orderDetails}>
+                <Text style={styles.productName}>{item.name}</Text>
+                <Text style={styles.detailText}>Quantity: {item.quantity}</Text>
+                <Text style={styles.detailText}>Price: ${item.price}</Text>
+                <Text style={styles.detailText}>Seller: {item.seller}</Text>
+                <Text style={styles.detailText}>Buyer: {item.buyer}</Text>
+              </View>
+            </View>
+          </View>
+    </TouchableOpacity>
+  );
+
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -55,9 +94,8 @@ const ViewOrders = ({navigation}) => {
       </View>
       <FlatList
         data={orders}
-        keyExtractor={(item) => item.order_details.order_id.toString()}
-        renderItem={(item) => renderProduct({ ...item, navigation })}
-        
+        keyExtractor={(item) => item.id}
+        renderItem={renderProduct}
       />
     </View>
   );

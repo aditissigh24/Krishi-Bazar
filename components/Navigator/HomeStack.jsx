@@ -8,6 +8,7 @@ import ProfileScreen from "./../ProfileScreen/ProfileScreen";
 import ProfileStack from './ProfileStack';
 import ViewOrders from './../HomeScreen/ViewOrders';
 import SpecificOrder from './../HomeScreen/SpecificOrder';
+import ProductDetails from '../ExploreScreen/ProductDetails';
 const Stack=createStackNavigator();
 export default function HomeStack() {
   return (
@@ -17,6 +18,7 @@ export default function HomeStack() {
     <Stack.Screen name="Profile" component={ProfileScreen}/>
     <Stack.Screen name="ViewOrders" component={ViewOrders}/>
     <Stack.Screen name="SpecificOrder" component={SpecificOrder}/>
+    <Stack.Screen name="ProductDetails" component={ProductDetails}/>
 </Stack.Navigator>
   )
 }

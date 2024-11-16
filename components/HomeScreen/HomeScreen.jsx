@@ -44,8 +44,8 @@ useEffect(() => {
   const menuItems = [
     { title: 'View Orders', icon: 'shopping-cart', color: '#1A1A1D', screen:'ViewOrders'}, 
     { title: 'View Products', icon: 'search', color: '#1A1A1D' , screen: 'Products'}, 
-    { title: ' Zari Products', icon: 'bell', color: '#1A1A1D' , screen:'Explore', category:'Zari'}, 
-    { title: ' Mushroom Products', icon: 'bell', color: '#1A1A1D', screen: 'Explore', category:'Mushroom' }, 
+    { title: ' Zari Products', icon: 'bell', color: '#1A1A1D' , screen:'ExploreTab', category:'Zari'}, 
+    { title: ' Mushroom Products', icon: 'bell', color: '#1A1A1D', screen: 'ExploreTab', category:'Mushroom' }, 
     { title: 'Manage Products', icon: 'settings', color: '#1A1A1D' , screen: 'manage products'},
   ];
 
@@ -56,8 +56,8 @@ useEffect(() => {
     );
   }
   const handleButtonPress = (screen, category) => {
-    if (screen === 'Explore' && category) {
-      navigation.navigate('Explore', { category });
+    if (screen === 'ExploreTab' && category) {
+      navigation.navigate('ExploreTab', { category });
     } else {
       navigation.navigate(screen);
     }

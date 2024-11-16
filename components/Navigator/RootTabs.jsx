@@ -7,7 +7,7 @@ import { Colors } from './../../constants/Colors';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeStack from './HomeStack';
 import ProfileStack from './ProfileStack';
-import ExploreScreen from '../ExploreScreen/ExploreScreen';
+import ExploreStack from './ExploreStack'
 
 
 const Tab = createBottomTabNavigator();
@@ -27,7 +27,7 @@ export default function RootTabs
         options={{
           //tabBarLabel:'Home',
           tabBarIcon:({color})=><Ionicons name="home-sharp" size={24} color={color} />}}/>
-        <Tab.Screen name='Explore' component={ExploreScreen}
+        <Tab.Screen name='ExploreTab' component={ExploreStack}
         options={{
           //tabBarLabel:'Explore',
           tabBarIcon:({color})=><AntDesign name="appstore1" size={24} color={color} />}}/>

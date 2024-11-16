@@ -15,13 +15,13 @@ const SpecificOrder = ({ navigation }) => {
     orderId: "OD123456789",
     status: "Processing",
     product: {
-      name: "Organic Tomatoes",
+      name: "Zari",
       image: "https://example.com/tomatoes.jpg", // Replace with your image
       price: 249.99,
       quantity: 5
     },
     customer: {
-      name: "John Doe",
+      name: "Aditi Singh",
       phone: "+91 98765 43210",
       address: "123 Farm Road",
       city: "Bangalore",
@@ -41,8 +41,8 @@ const SpecificOrder = ({ navigation }) => {
 
   const handleViewProduct = () => {
     // Navigate to product details screen
-    // navigation.navigate('ProductDetails', { productId: order.productId });
-    console.log("Viewing product details");
+     navigation.navigate('ProductDetails', { productId: order.orderId });
+  
   };
 
   return (
@@ -106,7 +106,7 @@ const SpecificOrder = ({ navigation }) => {
         {/* Action Buttons */}
         <View style={styles.buttonsContainer}>
           <TouchableOpacity
-            style={[styles.button, { backgroundColor: '#007AFF' }]}
+            style={[styles.button, { backgroundColor: '#1A1A1D' }]}
             onPress={handleStatusUpdate}
           >
             <Text style={styles.buttonText}>
@@ -115,7 +115,7 @@ const SpecificOrder = ({ navigation }) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.button, { backgroundColor: '#4CAF50' }]}
+            style={[styles.button, { backgroundColor: '#1A1A1D' }]}
             onPress={handleViewProduct}
           >
             <Text style={styles.buttonText}>View Product</Text>
@@ -129,7 +129,7 @@ const SpecificOrder = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#FAF6E3',
   },
   header: {
     padding: 16,

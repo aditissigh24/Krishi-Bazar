@@ -23,7 +23,7 @@ export default function Index() {
      return(
     
       <NavigationContainer independent={true}>
-        {isAuthenticated ? <RootTabs /> : <AuthStack />}
+       <RootTabs/>
         
         
       </NavigationContainer>
