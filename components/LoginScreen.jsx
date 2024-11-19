@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import "./../global.css";
+import { GluestackUIProvider } from "./UI/gluestack-ui-provider";
 import { View, Text, TextInput,Platform, StatusBar, TouchableOpacity, StyleSheet, Alert, ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -79,25 +81,24 @@ const LoginScreen = ({navigation}) => {
   //};
 
   return (
-   <ImageBackground source={require('./../assets/images/BG14.jpg')} style={styles.bgimage}>
-     <View>
-      <Text style={styles.title}>Login</Text>
-     </View>
-     <View style={styles.container}>
-      
-        <Text style={styles.wmtext}>Welcome Back!</Text>
-        <Text style={styles.lgtext}>Login to your account</Text>
-       <TextInput style={styles.input} placeholder='Phone-number' value={phoneNumber} onChangeText={setPhoneNumber}/>
-       <TextInput style={styles.input} placeholder='Aadhar no.' value={aadhar} onChangeText={setAadhar}/>
-       <TouchableOpacity style={styles.button} onPress={handlesendOTP} disabled={loading}>
-        <Text style={styles.buttonText}>Get OTP</Text>
-       </TouchableOpacity>
-       <View style={styles.subcontainer}>
-        <Text style={{fontSize:17}}>Don't have an account? <Text onPress={()=> navigation.navigate('SignUp')} style={{color:'#196f3d', fontSize:17,fontWeight:'bold'}}>SignUp</Text></Text>
-       </View>
-     </View>
-
-   </ImageBackground>
+    <GluestackUIProvider mode="light"><ImageBackground source={require('./../assets/images/BG14.jpg')} style={styles.bgimage}>
+        <View>
+         <Text style={styles.title}>Login</Text>
+        </View>
+        <View style={styles.container}>
+         
+           <Text style={styles.wmtext}>Welcome Back!</Text>
+           <Text style={styles.lgtext}>Login to your account</Text>
+          <TextInput style={styles.input} placeholder='Phone-number' value={phoneNumber} onChangeText={setPhoneNumber}/>
+          <TextInput style={styles.input} placeholder='Aadhar no.' value={aadhar} onChangeText={setAadhar}/>
+          <TouchableOpacity style={styles.button} onPress={handlesendOTP} disabled={loading}>
+           <Text style={styles.buttonText}>Get OTP</Text>
+          </TouchableOpacity>
+          <View style={styles.subcontainer}>
+           <Text style={{fontSize:17}}>Don't have an account? <Text onPress={()=> navigation.navigate('SignUp')} style={{color:'#196f3d', fontSize:17,fontWeight:'bold'}}>SignUp</Text></Text>
+          </View>
+        </View>
+      </ImageBackground></GluestackUIProvider>
   );
 };
 

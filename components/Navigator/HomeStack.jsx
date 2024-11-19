@@ -1,4 +1,6 @@
 import { View, Text } from 'react-native'
+import "./../../global.css";
+import { GluestackUIProvider } from "./../UI/gluestack-ui-provider";
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 //screens
@@ -9,16 +11,25 @@ import ProfileStack from './ProfileStack';
 import ViewOrders from './../HomeScreen/ViewOrders';
 import SpecificOrder from './../HomeScreen/SpecificOrder';
 import ProductDetails from '../ExploreScreen/ProductDetails';
+import ManageProducts from './../HomeScreen/ManageProducts'
+import ManageSpecificProduct from './../HomeScreen/ManageSpecificProduct'
+import ZariProducts from './../HomeScreen/ZariProducts'
+import MushroomProducts from './../HomeScreen/MushroomProducts'
 const Stack=createStackNavigator();
 export default function HomeStack() {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-    <Stack.Screen name="Home" component={HomeScreen}/>
-    <Stack.Screen name="Explore" component={ExploreScreen}/>
-    <Stack.Screen name="Profile" component={ProfileScreen}/>
-    <Stack.Screen name="ViewOrders" component={ViewOrders}/>
-    <Stack.Screen name="SpecificOrder" component={SpecificOrder}/>
-    <Stack.Screen name="ProductDetails" component={ProductDetails}/>
-</Stack.Navigator>
-  )
+    <GluestackUIProvider mode="light"><Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen name="Home" component={HomeScreen}/>
+        <Stack.Screen name="Explore" component={ExploreScreen}/>
+        <Stack.Screen name="Profile" component={ProfileScreen}/>
+        <Stack.Screen name="ViewOrders" component={ViewOrders}/>
+        <Stack.Screen name="SpecificOrder" component={SpecificOrder}/>
+        <Stack.Screen name="ProductDetails" component={ProductDetails}/>
+        <Stack.Screen name="ManageProducts" component={ManageProducts}/>
+        <Stack.Screen name="ZariProducts" component={ZariProducts}/>
+        <Stack.Screen name="MushroomProducts" component={MushroomProducts}/>
+   
+        <Stack.Screen name="ManageSpecificProduct" component={ManageSpecificProduct}/>
+      </Stack.Navigator></GluestackUIProvider>
+  );
 }

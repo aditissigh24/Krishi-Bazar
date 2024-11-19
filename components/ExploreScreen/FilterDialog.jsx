@@ -1,4 +1,6 @@
 import React from 'react';
+import "./../../global.css";
+import { GluestackUIProvider } from "./../UI/gluestack-ui-provider";
 import {
   View,
   Text,
@@ -30,106 +32,106 @@ const FilterDialog = ({ activeFilters, onFilterChange, visible, setVisible }) =>
 
 
   return (
-    <Modal visible={visible} transparent animationType="fade"  onRequestClose={closeModal}>
-    <View style={styles.card}>
-      <View style={styles.Modalhead}>
-      <Text style={styles.title}>Filter Options</Text>
-      <TouchableOpacity
-                onPress={closeModal}
-                style={styles.cutButton}
+    <GluestackUIProvider mode="light"><Modal visible={visible} transparent animationType="fade"  onRequestClose={closeModal}>
+        <View style={styles.card}>
+          <View style={styles.Modalhead}>
+          <Text style={styles.title}>Filter Options</Text>
+          <TouchableOpacity
+                    onPress={closeModal}
+                    style={styles.cutButton}
+                  >
+                    <Text style={styles.cutButtonText}>✕</Text>
+                  </TouchableOpacity>
+          </View>
+          <View style={styles.section}>
+            <Text style={styles.subtitle}>Product Type</Text>
+            <View style={styles.optionsRow}>
+              <TouchableOpacity
+                style={[
+                  styles.option,
+                  activeFilters.productType === 'Zari' && styles.activeOption,
+                ]}
+                onPress={() => handleFilterSelect('productType', 'Zari')}
               >
-                <Text style={styles.cutButtonText}>✕</Text>
+                <Text
+                  style={[
+                    styles.optionText,
+                    activeFilters.productType === 'Zari' && styles.activeOptionText,
+                  ]}
+                >
+                  Zari Products
+                </Text>
               </TouchableOpacity>
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.subtitle}>Product Type</Text>
-        <View style={styles.optionsRow}>
-          <TouchableOpacity
-            style={[
-              styles.option,
-              activeFilters.productType === 'Zari' && styles.activeOption,
-            ]}
-            onPress={() => handleFilterSelect('productType', 'Zari')}
-          >
-            <Text
-              style={[
-                styles.optionText,
-                activeFilters.productType === 'Zari' && styles.activeOptionText,
-              ]}
-            >
-              Zari Products
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.option,
-              activeFilters.productType === 'Mushroom' && styles.activeOption,
-            ]}
-            onPress={() => handleFilterSelect('productType', 'Mushroom')}
-          >
-            <Text
-              style={[
-                styles.optionText,
-                activeFilters.productType === 'Mushroom' && styles.activeOptionText,
-              ]}
-            >
-              Mushroom Products
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.subtitle}>Farmers</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {farmers.map((farmer) => (
-            <TouchableOpacity
-              key={farmer}
-              style={[
-                styles.option,
-                activeFilters.farmerName === farmer && styles.activeOption,
-              ]}
-              onPress={() => handleFilterSelect('farmerName', farmer)}
-            >
-              <Text
+              <TouchableOpacity
                 style={[
-                  styles.optionText,
-                  activeFilters.farmerName === farmer && styles.activeOptionText,
+                  styles.option,
+                  activeFilters.productType === 'Mushroom' && styles.activeOption,
                 ]}
+                onPress={() => handleFilterSelect('productType', 'Mushroom')}
               >
-                {farmer}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
+                <Text
+                  style={[
+                    styles.optionText,
+                    activeFilters.productType === 'Mushroom' && styles.activeOptionText,
+                  ]}
+                >
+                  Mushroom Products
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
 
-      <View style={styles.section}>
-        <Text style={styles.subtitle}>Price Range</Text>
-        <View style={styles.optionsRow}>
-          {priceRanges.map((range) => (
-            <TouchableOpacity
-              key={range.label}
-              style={[
-                styles.option,
-                activeFilters.priceRange === range.label && styles.activeOption,
-              ]}
-              onPress={() => handleFilterSelect('priceRange', range.label)}
-            >
-              <Text
-                style={[
-                  styles.optionText,
-                  activeFilters.priceRange === range.label && styles.activeOptionText,
-                ]}
-              >
-                {range.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
+          <View style={styles.section}>
+            <Text style={styles.subtitle}>Farmers</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {farmers.map((farmer) => (
+                <TouchableOpacity
+                  key={farmer}
+                  style={[
+                    styles.option,
+                    activeFilters.farmerName === farmer && styles.activeOption,
+                  ]}
+                  onPress={() => handleFilterSelect('farmerName', farmer)}
+                >
+                  <Text
+                    style={[
+                      styles.optionText,
+                      activeFilters.farmerName === farmer && styles.activeOptionText,
+                    ]}
+                  >
+                    {farmer}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.subtitle}>Price Range</Text>
+            <View style={styles.optionsRow}>
+              {priceRanges.map((range) => (
+                <TouchableOpacity
+                  key={range.label}
+                  style={[
+                    styles.option,
+                    activeFilters.priceRange === range.label && styles.activeOption,
+                  ]}
+                  onPress={() => handleFilterSelect('priceRange', range.label)}
+                >
+                  <Text
+                    style={[
+                      styles.optionText,
+                      activeFilters.priceRange === range.label && styles.activeOptionText,
+                    ]}
+                  >
+                    {range.label}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
         </View>
-      </View>
-    </View>
-    </Modal>
+      </Modal></GluestackUIProvider>
   );
 };
 
@@ -191,8 +193,8 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   activeOption: {
-    backgroundColor: '#007AFF',
-    borderColor: '#007AFF',
+    backgroundColor: '#088395',
+    borderColor: '#088395',
   },
   optionText: {
     color: '#666',

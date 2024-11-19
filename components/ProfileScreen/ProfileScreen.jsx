@@ -1,8 +1,11 @@
 import { View, Text,TouchableOpacity,StyleSheet,Image } from 'react-native'
+import "./../../global.css";
+import { GluestackUIProvider } from "./../UI/gluestack-ui-provider";
 import React,{useState,useEffect} from 'react';
 import Icon from 'react-native-vector-icons/Feather';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import UpdatePhoneNumber from './UpdatePhoneNumber';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 export default function ProfileScreen({navigation}) {
@@ -62,80 +65,81 @@ export default function ProfileScreen({navigation}) {
     console.log('Phone number updated:', updatedPhoneNumber);
   };
   return (
-    <View style={styles.container}>
-    <View style={styles.profileContainer}>
-      <View style={styles.profilePicture}>
-        <Image
-          source={require('./../../assets/images/download.jpg')}
-          style={styles.profileImage}
-        />
-      </View>
-      <Text style={styles.name}>{firstName} {lastName}</Text>
-      <Text style={styles.name}>({isFarmer})</Text>
-    </View>
-    
-    
-    <View style={styles.infoContainer}>
-      <View style={styles.infoItem}>
-        
-        <Text style={styles.infoText}>Phone Number - {phoneNumber}</Text>
-      </View>
-      <View style={styles.infoItem}>
-        
-        <Text style={styles.infoText}>Email - {email}</Text>
-      </View>
-      <View style={styles.infoItem}>
-        
-        <Text style={styles.infoText}>Aadhar Number - {aadhar}</Text>
-      </View>
-      <View style={styles.infoItem}>
-        
-        <Text style={styles.infoText}>Address - {address}</Text>
+    <GluestackUIProvider mode="light"><ScrollView style={styles.container}>
+      
+        <View style={styles.profileContainer}>
+          <View style={styles.profilePicture}>
+            <Image
+              source={require('./../../assets/images/download.jpg')}
+              style={styles.profileImage}
+            />
+          </View>
+          <Text style={styles.name}>{firstName} {lastName}</Text>
+          <Text style={styles.name}>({isFarmer})</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <View style={styles.infoItem}>
+            
+            <Text style={styles.infoText}>Phone Number - {phoneNumber}</Text>
+          </View>
+          <View style={styles.infoItem}>
+            
+            <Text style={styles.infoText}>Email - {email}</Text>
+          </View>
+          <View style={styles.infoItem}>
+            
+            <Text style={styles.infoText}>Aadhar Number - {aadhar}</Text>
+          </View>
+          <View style={styles.infoItem}>
+            
+            <Text style={styles.infoText}>Address - {address}</Text>
 
-      </View>
-      <View style={styles.infoItem}>
-        
-        <Text style={styles.infoText}>City - {city}</Text>
-        
-      </View>
-      <View style={styles.infoItem}>
-        
-        <Text style={styles.infoText}>State - {state}</Text>
-        
-      </View>
-      <View style={styles.infoItem}>
-       
-        <Text style={styles.infoText}>Pincode - {pincode}</Text>
-        
-      </View>
-    </View>
-
-    <TouchableOpacity style={styles.updateButton} onPress={toggleModal}>
-      <Text style={styles.updateButtonText}>Update Phone Number</Text>
-    </TouchableOpacity>
-     {/* Conditionally render the UpdatePhoneNumber component */}
-     {modalVisible && (
-        <UpdatePhoneNumber
-          currentPhoneNumber={phoneNumber}
-          onUpdate={handlePhoneNumberUpdate}  // Pass update handler
-          onClose={toggleModal} 
-          visible={modalVisible} 
-          setVisible={setModalVisible} // Pass function to close modal
-        />
-      )}
-  </View>
-);
-};
+          </View>
+          <View style={styles.infoItem}>
+            
+            <Text style={styles.infoText}>City - {city}</Text>
+            
+          </View>
+          <View style={styles.infoItem}>
+            
+            <Text style={styles.infoText}>State - {state}</Text>
+            
+          </View>
+          <View style={styles.infoItem}>
+           
+            <Text style={styles.infoText}>Pincode - {pincode}</Text>
+            
+          </View>
+        </View>
+        <TouchableOpacity style={styles.updateButton} onPress={toggleModal}>
+          <Text style={styles.updateButtonText}>Update Phone Number</Text>
+        </TouchableOpacity>
+        {/* Conditionally render the UpdatePhoneNumber component */}
+        {modalVisible && (
+           <UpdatePhoneNumber
+             currentPhoneNumber={phoneNumber}
+             onUpdate={handlePhoneNumberUpdate}  // Pass update handler
+             onClose={toggleModal} 
+             visible={modalVisible} 
+             setVisible={setModalVisible} // Pass function to close modal
+           />
+         )}
+      </ScrollView>
+      
+      </GluestackUIProvider>
+  );
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#B59F78',
+    backgroundColor: '#FAF6E3',
     paddingHorizontal: 24,
     paddingVertical: 32,
   },
   profileContainer: {
     alignItems: 'center',
     marginBottom: 32,
+    
   },
   profilePicture: {
     width: 120,
@@ -143,6 +147,14 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     overflow: 'hidden',
     marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
   },
   profileImage: {
     width: '100%',
@@ -154,7 +166,7 @@ const styles = StyleSheet.create({
     color: '#1F2937',
   },
   infoContainer: {
-    backgroundColor: '#FAF6E3',
+    backgroundColor: 'white',
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
@@ -178,7 +190,7 @@ const styles = StyleSheet.create({
     fontWeight:"500"
   },
   updateButton: {
-    backgroundColor: '#2A3663',
+    backgroundColor: '#088395',
     borderRadius: 8,
     paddingVertical: 12,
     marginTop: 24,

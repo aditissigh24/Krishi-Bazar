@@ -1,7 +1,10 @@
 import { Redirect} from "expo-router";
 
+import "./../global.css";
+import { GluestackUIProvider } from "./../components/UI/gluestack-ui-provider";
+
 import React, { useState, useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, NavigationIndependentTree } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppLoading from 'expo-app-loading';
 import { Text, View } from "react-native";
@@ -20,25 +23,19 @@ export default function Index() {
     checkAuth();
   }, []);
 
-     return(
-    
-      <NavigationContainer independent={true}>
-       <RootTabs/>
-        
-        
-      </NavigationContainer>
-    
-    
-   
-  );
+     return (
+       <GluestackUIProvider mode="light"><NavigationIndependentTree>
+           <AuthStack/>
+       </NavigationIndependentTree></GluestackUIProvider>
+     );
 }
 
-     
-        //<RootLayout/>
-      
-    
-      
-     //<Redirect href='/tabs/home'/>
+
+//<RootLayout/>
+
+
+
+//<Redirect href='/tabs/home'/>
     
     
   

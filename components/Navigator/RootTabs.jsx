@@ -1,4 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
+import "./../../global.css";
+import { GluestackUIProvider } from "./../UI/gluestack-ui-provider";
 import React from 'react'
 import { Tabs } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -14,15 +16,15 @@ const Tab = createBottomTabNavigator();
 export default function RootTabs
 () {
   return (
-    <Tab.Navigator screenOptions={{
-      headerShown:false,
-      tabBarActiveTintColor:'#d4ac0d ',
-      //tabBarInactiveTintColor:'#d4ac0d',
-      tabBarStyle: {
-        backgroundColor: 'white', // Tab bar background color
-        height: 60, // Adjust the height as needed
-      },
-      }}>
+    <GluestackUIProvider mode="light"><Tab.Navigator screenOptions={{
+        headerShown:false,
+        tabBarActiveTintColor:'#d4ac0d ',
+        //tabBarInactiveTintColor:'#d4ac0d',
+        tabBarStyle: {
+          backgroundColor: 'white', // Tab bar background color
+          height: 60, // Adjust the height as needed
+        },
+        }}>
         <Tab.Screen name='HomeTab' component={HomeStack}
         options={{
           //tabBarLabel:'Home',
@@ -35,8 +37,8 @@ export default function RootTabs
         options={{
           //tabBarLabel:'Profile',
           tabBarIcon:({color})=><Ionicons name="person-sharp" size={24} color={color} />}}/>
-    </Tab.Navigator>
-  )
+      </Tab.Navigator></GluestackUIProvider>
+  );
 }
 
 const styles = StyleSheet.create({})

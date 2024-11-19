@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useRoute } from '@react-navigation/native';
-import FilterDialog from './FilterDialog';
+import FilterDialog from './../ExploreScreen/FilterDialog';
 
 // Sample product data
 const products = [
@@ -59,7 +59,7 @@ const products = [
   },
 ];
 
-const ExploreScreen = ({navigation}) => {
+const Card = ({navigation}) => {
   const [searchText, setSearchText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [filters, setFilters] = useState({
@@ -98,7 +98,9 @@ const ExploreScreen = ({navigation}) => {
   };
 
   const renderProduct = ({ item }) => (
-    <TouchableOpacity style={styles.productCard} onPress={() => navigation.navigate('ProductDetails', { ProductId: products.id })}>
+   
+    <TouchableOpacity style={styles.productCard} onPress={() => navigation.navigate('ManageSpecificProduct', { ProductId: products.id })}>
+        
       <Image source={{ uri: item.image }} style={styles.productImage} />
       <Text style={styles.productName}>{item.name}</Text>
       <Text style={styles.productPrice}>₹{item.price.toFixed(2)}</Text>
@@ -247,4 +249,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExploreScreen;
+export default Card;

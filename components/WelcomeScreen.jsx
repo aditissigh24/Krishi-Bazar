@@ -1,4 +1,6 @@
 import React from 'react';
+import "./../global.css";
+import { GluestackUIProvider } from "./UI/gluestack-ui-provider";
 import {
   View,
   Text,
@@ -6,56 +8,58 @@ import {
   StyleSheet,
   Dimensions,
   SafeAreaView,
-  StatusBar,
+  StatusBar,ScrollView,
+  ImageBackground
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import {LinearGradient} from 'expo-linear-gradient';
 
 const { width, height } = Dimensions.get('window');
 
 const WelcomeScreen = ({ navigation }) => {
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      <LinearGradient
-        colors={['#FEF3C7', '#FFE4BC']}
-        style={styles.gradient}
-      >
-        {/* Decorative Elements */}
-        <View style={styles.decorativeCircle1} />
-        <View style={styles.decorativeCircle2} />
+   
+    <GluestackUIProvider mode="light">
+      
+      
+        <StatusBar barStyle="dark-content" />
+      
+        <ImageBackground source={require('./../assets/images/White-oyster-3.png')} style={styles.container}>
+          {/* Decorative Elements */}
+          <View style={styles.decorativeCircle1} />
+          <View style={styles.decorativeCircle2} />
 
-        <View style={styles.contentContainer}>
-          {/* Logo Container */}
-          <View style={styles.logoContainer}>
-            <Text style={styles.logoText}>🍄</Text>
-          </View>
+          <View style={styles.contentContainer}>
+            {/* Logo Container */}
+            
 
-          {/* Welcome Text */}
-          <View style={styles.textContainer}>
-            <Text style={styles.title}>Welcome to Zari & Mushrooms</Text>
-            <Text style={styles.subtitle}>
-              Discover exquisite zari crafts and premium mushroom products from artisans around the world
+            {/* Welcome Text */}
+            <View style={styles.textContainer}>
+              <Text style={styles.title}>Welcome to Zari & Mushrooms</Text>
+              <Text style={styles.subtitle}>
+                Discover exquisite zari crafts and premium mushroom products from our community!
+              </Text>
+            </View>
+
+            {/* Button */}
+            <TouchableOpacity
+              style={styles.button}
+              activeOpacity={0.8}
+              onPress={() => {navigation.navigate('SignUp')
+                // Add your navigation logic here
+                // navigation.navigate('Home');
+              }}
+            >
+              <Text style={styles.buttonText}>Get Started</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.communityText}>
+              Join our community of craft lovers and food enthusiasts
             </Text>
-          </View>
-
-          {/* Button */}
-          <TouchableOpacity
-            style={styles.button}
-            activeOpacity={0.8}
-            onPress={() => {
-              // Add your navigation logic here
-              // navigation.navigate('Home');
-            }}
-          >
-            <Text style={styles.buttonText}>Get Started</Text>
-          </TouchableOpacity>
-
-          <Text style={styles.communityText}>
-            Join our community of craft lovers and food enthusiasts
-          </Text>
-        </View>
-      </LinearGradient>
-    </SafeAreaView>
+          </View></ImageBackground>
+        
+        
+      </GluestackUIProvider>
+     
   );
 };
 
@@ -113,26 +117,27 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     alignItems: 'center',
+    marginTop:140,
     marginBottom: 40,
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#1F2937',
+    color: 'white',
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: 18,
   },
   subtitle: {
     fontSize: 16,
-    color: '#4B5563',
+    color: 'white',
     textAlign: 'center',
     paddingHorizontal: 20,
     lineHeight: 24,
   },
   button: {
     backgroundColor: '#F59E0B',
-    paddingHorizontal: 40,
-    paddingVertical: 16,
+    paddingHorizontal: 25,
+    paddingVertical: 10,
     borderRadius: 30,
     elevation: 5,
     shadowColor: '#000',
@@ -143,6 +148,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     marginBottom: 20,
+    marginTop:70
   },
   buttonText: {
     color: '#FFFFFF',
@@ -151,7 +157,7 @@ const styles = StyleSheet.create({
   },
   communityText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: 'white',
     textAlign: 'center',
   },
 });

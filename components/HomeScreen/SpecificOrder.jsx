@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import "./../../global.css";
+import { GluestackUIProvider } from "./../UI/gluestack-ui-provider";
 import {
   View,
   Text,
@@ -8,8 +10,11 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
 
 const SpecificOrder = ({ navigation }) => {
+  const [showActionsheet, setShowActionsheet] = React.useState(false)
+  const handleClose = () => setShowActionsheet(false)
   // Sample order data - replace with your actual data
   const [order] = useState({
     orderId: "OD123456789",
@@ -46,83 +51,85 @@ const SpecificOrder = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView>
-        {/* Header Section */}
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Order Details</Text>
-        </View>
+    <GluestackUIProvider mode="light"><SafeAreaView style={styles.container}>
+        <ScrollView>
+          {/* Header Section */}
+          <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 10 }}>
+          <Icon name= 'chevrons-left' size={24} color="#333" /></TouchableOpacity>
+            <Text style={styles.headerTitle}>Order Details</Text>
+          </View>
 
-        {/* Order Status Card */}
-        <View style={styles.card}>
-          <View style={styles.orderIdRow}>
-            <Text style={styles.orderId}>Order #{order.orderId}</Text>
-            <View style={[
-              styles.statusBadge,
-              { backgroundColor: orderStatus === "Delivered" ? "#4CAF50" : "#FF9800" }
-            ]}>
-              <Text style={styles.statusText}>{orderStatus}</Text>
+          {/* Order Status Card */}
+          <View style={styles.card}>
+            <View style={styles.orderIdRow}>
+              <Text style={styles.orderId}>Order #{order.orderId}</Text>
+              <View style={[
+                styles.statusBadge,
+                { backgroundColor: orderStatus === "Delivered" ? "#4CAF50" : "#FF9800" }
+              ]}>
+                <Text style={styles.statusText}>{orderStatus}</Text>
+              </View>
+            </View>
+            <Text style={styles.orderDate}>Ordered on: {order.orderDate}</Text>
+          </View>
+
+          {/* Product Details Card */}
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Product Details</Text>
+            <View style={styles.productContainer}>
+              <Image
+                source={require('./../../assets/images/BG9.jpg')} // Replace with your image
+                style={styles.productImage}
+                resizeMode="cover"
+              />
+              <View style={styles.productInfo}>
+                <Text style={styles.productName}>{order.product.name}</Text>
+                <Text style={styles.price}>₹{order.product.price}</Text>
+                <Text style={styles.quantity}>Quantity: {order.product.quantity}</Text>
+              </View>
             </View>
           </View>
-          <Text style={styles.orderDate}>Ordered on: {order.orderDate}</Text>
-        </View>
 
-        {/* Product Details Card */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Product Details</Text>
-          <View style={styles.productContainer}>
-            <Image
-              source={require('./../../assets/images/BG9.jpg')} // Replace with your image
-              style={styles.productImage}
-              resizeMode="cover"
-            />
-            <View style={styles.productInfo}>
-              <Text style={styles.productName}>{order.product.name}</Text>
-              <Text style={styles.price}>₹{order.product.price}</Text>
-              <Text style={styles.quantity}>Quantity: {order.product.quantity}</Text>
+          {/* Customer Details Card */}
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Customer Details</Text>
+            <View style={styles.detailRow}>
+              <Text style={styles.detailLabel}>Name:</Text>
+              <Text style={styles.detailText}>{order.customer.name}</Text>
+            </View>
+            <View style={styles.detailRow}>
+              <Text style={styles.detailLabel}>Phone:</Text>
+              <Text style={styles.detailText}>{order.customer.phone}</Text>
+            </View>
+            <View style={styles.detailRow}>
+              <Text style={styles.detailLabel}>Address:</Text>
+              <Text style={styles.detailText}>
+                {`${order.customer.address}, ${order.customer.city}, ${order.customer.state} - ${order.customer.pincode}`}
+              </Text>
             </View>
           </View>
-        </View>
 
-        {/* Customer Details Card */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Customer Details</Text>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Name:</Text>
-            <Text style={styles.detailText}>{order.customer.name}</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Phone:</Text>
-            <Text style={styles.detailText}>{order.customer.phone}</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Address:</Text>
-            <Text style={styles.detailText}>
-              {`${order.customer.address}, ${order.customer.city}, ${order.customer.state} - ${order.customer.pincode}`}
-            </Text>
-          </View>
-        </View>
+          {/* Action Buttons */}
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handleStatusUpdate}
+            >
+              <Text style={styles.buttonText}>
+                {orderStatus === "Processing" ? "Mark as Delivered" : "Mark as Processing"}
+              </Text>
+            </TouchableOpacity>
 
-        {/* Action Buttons */}
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: '#1A1A1D' }]}
-            onPress={handleStatusUpdate}
-          >
-            <Text style={styles.buttonText}>
-              {orderStatus === "Processing" ? "Mark as Delivered" : "Mark as Processing"}
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: '#1A1A1D' }]}
-            onPress={handleViewProduct}
-          >
-            <Text style={styles.buttonText}>View Product</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handleViewProduct}
+            >
+              <Text style={styles.buttonText}>View Product</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </SafeAreaView></GluestackUIProvider>
   );
 };
 
@@ -132,15 +139,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#FAF6E3',
   },
   header: {
-    padding: 16,
     backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    padding: 15,
+    flexDirection:'row',
   },
   headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
     color: '#333',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginLeft:10
   },
   card: {
     backgroundColor: 'white',
@@ -241,6 +248,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor:'#088395'
   },
   buttonText: {
     color: 'white',

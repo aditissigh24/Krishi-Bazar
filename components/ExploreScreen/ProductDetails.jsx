@@ -1,4 +1,6 @@
 import React from 'react';
+import "./../../global.css";
+import { GluestackUIProvider } from "./../UI/gluestack-ui-provider";
 import {
   View,
   Text,
@@ -16,7 +18,7 @@ const ProductDetails = ({ navigation }) => {
   const product = {
     id:1,
     name: "Pretty Mushroom",
-    image: "https://example.com/mushroom.jpg", // Replace with your image
+    image: 'BG9.jpg', // Replace with your image
     type: "Mushroom",
     quantity: "500g",
     price: 299,
@@ -29,102 +31,101 @@ const ProductDetails = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      
-      {/* Header with back button */}
-      <View style={styles.header}>
-        <TouchableOpacity 
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
-          <Feather name="arrow-left" size={24} color="#333" />
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView style={styles.scrollView}>
-        {/* Product Image */}
-        <View style={styles.imageContainer}>
-          <Image
-            source={{ uri: product.image }}
-            style={styles.image}
-            resizeMode="cover"
-          />
+    <GluestackUIProvider mode="light"><SafeAreaView style={styles.container}>
+        <StatusBar barStyle="dark-content" />
+        {/* Header with back button */}
+        <View style={styles.header}>
+          <TouchableOpacity 
+            onPress={() => navigation.goBack()}
+            style={styles.backButton}
+          >
+            <Feather name="arrow-left" size={24} color="#333" />
+          </TouchableOpacity>
         </View>
-
-        {/* Product Info Section */}
-        <View style={styles.infoContainer}>
-          <Text style={styles.productName}>{product.name}</Text>
-          
-          <View style={styles.basicInfo}>
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>{product.type}</Text>
-            </View>
-            <View style={styles.ratingContainer}>
-              <Feather name="star" size={16} color="#FFB800" />
-              <Text style={styles.ratingText}>{product.rating}</Text>
-            </View>
+        <ScrollView style={styles.scrollView}>
+          {/* Product Image */}
+          <View style={styles.imageContainer}>
+            <Image
+              source={{ uri: product.image }}
+              style={[styles.image, styles.card]}
+              resizeMode="cover"
+            />
           </View>
 
-          {/* Price and Quantity */}
-          <View style={styles.priceSection}>
-            <Text style={styles.price}>₹{product.price}</Text>
-            <Text style={styles.quantity}>Quantity: {product.quantity}</Text>
-          </View>
-
-          {/* Farmer Info */}
-          <View style={styles.farmerSection}>
-            <Text style={styles.sectionTitle}>Farmer Details</Text>
-            <View style={styles.farmerInfo}>
-              <View style={styles.farmerIconContainer}>
-                <Feather name="user" size={24} color="#666" />
+          {/* Product Info Section */}
+          <View style={styles.infoContainer}>
+            <Text style={styles.productName}>{product.name}</Text>
+            
+            <View style={styles.basicInfo}>
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>{product.type}</Text>
               </View>
-              <View style={styles.farmerDetails}>
-                <Text style={styles.farmerName}>{product.farmer.name}</Text>
-                <Text style={styles.farmerLocation}>
-                  <Feather name="map-pin" size={14} color="#666" /> {product.farmer.location}
-                </Text>
-                <Text style={styles.farmerExperience}>
-                  Experience: {product.farmer.experience}
-                </Text>
+              <View style={styles.ratingContainer}>
+                <Feather name="star" size={16} color="#FFB800" />
+                <Text style={styles.ratingText}>{product.rating}</Text>
               </View>
             </View>
-          </View>
 
-          {/* Product Description */}
-          <View style={styles.descriptionSection}>
-            <Text style={styles.sectionTitle}>Product Description</Text>
-            <Text style={styles.description}>{product.description}</Text>
+            {/* Price and Quantity */}
+            <View style={styles.priceSection}>
+              <Text style={styles.price}>₹{product.price}</Text>
+              <Text style={styles.quantity}>Quantity: {product.quantity}</Text>
+            </View>
+
+            {/* Farmer Info */}
+            <View style={[styles.farmerSection , styles.card]}>
+              <Text style={styles.sectionTitle}>Farmer Details</Text>
+              <View style={styles.farmerInfo}>
+                <View style={styles.farmerIconContainer}>
+                  <Feather name="user" size={24} color="#666" />
+                </View>
+                <View style={styles.farmerDetails}>
+                  <Text style={styles.farmerName}>{product.farmer.name}</Text>
+                  <Text style={styles.farmerLocation}>
+                    <Feather name="map-pin" size={14} color="#666" /> {product.farmer.location}
+                  </Text>
+                  <Text style={styles.farmerExperience}>
+                    Experience: {product.farmer.experience}
+                  </Text>
+                </View>
+              </View>
+            </View>
+
+            {/* Product Description */}
+            <View style={styles.descriptionSection}>
+              <Text style={styles.sectionTitle}>Product Description</Text>
+              <Text style={styles.description}>{product.description}</Text>
+            </View>
           </View>
+        </ScrollView>
+        {/* Bottom Buy Button */}
+        <View style={styles.bottomContainer}>
+          <TouchableOpacity 
+            style={styles.buyButton}
+            onPress={() => { navigation.navigate('BuyOrder', { productId: product.id })
+              // Add your purchase logic here
+            }}
+          >
+            <Text style={[styles.buyButtonText, styles.card]}>Buy Now</Text>
+          </TouchableOpacity>
         </View>
-      </ScrollView>
-
-      {/* Bottom Buy Button */}
-      <View style={styles.bottomContainer}>
-        <TouchableOpacity 
-          style={styles.buyButton}
-          onPress={() => { navigation.navigate('CreateOrder', { productId: product.id })
-            // Add your purchase logic here
-          }}
-        >
-          <Text style={styles.buyButtonText}>Buy Now</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView></GluestackUIProvider>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAF6E3',
+    backgroundColor: 'white',
   },
+  
   header: {
     height: 50,
     justifyContent: 'center',
     paddingHorizontal: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
+    backgroundColor:'#FAF6E3'
   },
   backButton: {
     padding: 8,
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: '100%',
-    height: 300,
+    height: 250,
     backgroundColor: '#B59F78',
   },
   image: {
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
   },
   farmerInfo: {
     flexDirection: 'row',
-    backgroundColor: '#f8f8f8',
+    backgroundColor: '#FAF6E3',
     padding: 15,
     borderRadius: 12,
   },
@@ -247,9 +248,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#FAF6E3',
   },
   buyButton: {
-    backgroundColor: '#1A1A1D',
+    backgroundColor: '#088395',
     paddingVertical: 15,
-    borderRadius: 25,
+    borderRadius: 8,
     alignItems: 'center',
   },
   buyButtonText: {

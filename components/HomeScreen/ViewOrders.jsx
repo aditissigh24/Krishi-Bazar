@@ -1,7 +1,9 @@
 import React from 'react';
+import "./../../global.css";
+import { GluestackUIProvider } from "./../UI/gluestack-ui-provider";
 import { View, StyleSheet, FlatList, Image, Text , TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-
+import { LinearGradient } from 'expo-linear-gradient';
 
 const orders = [
     {
@@ -42,26 +44,9 @@ const orders = [
       },
     // Add more order objects as needed
   ];
-  const renderProduct = ({ item , navigation}) => (
-    <TouchableOpacity style={styles.orderCard}  onPress={() => navigation.navigate('SpecificOrder', { orderId: item.id })}>
-      <View >
-            <View style={styles.orderRow}>
-              <View style={styles.productImage}>
-                <Image source={{ uri: item.imageUrl }} style={styles.circleImage} />
-              </View>
-              <View style={styles.orderDetails}>
-                <Text style={styles.productName}>{item.name}</Text>
-                <Text style={styles.detailText}>Quantity: {item.quantity}</Text>
-                <Text style={styles.detailText}>Price: ${item.price}</Text>
-                <Text style={styles.detailText}>Seller: {item.seller}</Text>
-                <Text style={styles.detailText}>Buyer: {item.buyer}</Text>
-              </View>
-            </View>
-          </View>
-    </TouchableOpacity>
-  );
 
-  
+
+
 
 const ViewOrders = ({navigation}) => {
   const renderProduct = ({ item}) => (
@@ -73,10 +58,10 @@ const ViewOrders = ({navigation}) => {
               </View>
               <View style={styles.orderDetails}>
                 <Text style={styles.productName}>{item.name}</Text>
-                <Text style={styles.detailText}>Quantity: {item.quantity}</Text>
-                <Text style={styles.detailText}>Price: ${item.price}</Text>
-                <Text style={styles.detailText}>Seller: {item.seller}</Text>
-                <Text style={styles.detailText}>Buyer: {item.buyer}</Text>
+                <Text style={styles.detailtext}>Quantity: <Text style={styles.detailText}>{item.quantity}</Text> </Text>
+                <Text style={styles.detailtext}>Price: <Text style={styles.pricetext}>${item.price}</Text> </Text>
+                <Text style={styles.detailtext}>Seller: <Text style={styles.detailText}>{item.seller}</Text> </Text>
+                <Text style={styles.detailtext}>Buyer: <Text style={styles.detailText}>{item.buyer}</Text></Text>
               </View>
             </View>
           </View>
@@ -85,36 +70,42 @@ const ViewOrders = ({navigation}) => {
 
   
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-      <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 10 }}>
-      <Icon name= 'chevrons-left' size={24} color="white" />
-    </TouchableOpacity>
-        <Text style={styles.headerText}>My Orders</Text>
-      </View>
-      <FlatList
-        data={orders}
-        keyExtractor={(item) => item.id}
-        renderItem={renderProduct}
-      />
-    </View>
+    <LinearGradient
+    colors={['#FAF6E3', '#FAF6E3']}
+    style={styles.container}
+  >
+    <GluestackUIProvider mode="light">
+      
+        <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 10 }}>
+        <Icon name= 'chevrons-left' size={24} color="#333" />
+      </TouchableOpacity>
+          <Text style={styles.headerText}>My Orders</Text>
+        </View>
+        <FlatList
+          data={orders}
+          keyExtractor={(item) => item.id}
+          renderItem={renderProduct}
+        />
+      </GluestackUIProvider>
+      </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#B59F78',
+    backgroundColor: '#FAF6E3',
   },
   header: {
-    backgroundColor: '#1A1A1D',
-    padding: 22,
+    backgroundColor: 'white',
+    padding: 15,
     flexDirection:'row',
     
     
   },
   headerText: {
-    color: '#fff',
+    color: '#333',
     fontSize: 18,
     fontWeight: 'bold',
     marginLeft:10
@@ -122,7 +113,7 @@ const styles = StyleSheet.create({
   orderCard: {
     marginVertical: 8,
     marginHorizontal: 16,
-    backgroundColor: '#FAF6E3',
+    backgroundColor: 'white',
     borderRadius: 8,
     elevation: 2,
   },
@@ -149,8 +140,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 4,
   },
+  detailtext:{
+    color:'#666',
+    fontWeight:'500'
+  },
+  pricetext:{
+   color: '#2E7D32',
+   fontWeight:'500'
+  },
   detailText: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#666',
     marginBottom: 2,
   },

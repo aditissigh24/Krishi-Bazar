@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import "./../../global.css";
+import { GluestackUIProvider } from "./../UI/gluestack-ui-provider";
 import {
   View,
   Text,
@@ -13,9 +15,9 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from '@react-native-community/datetimepicker'
 
-const CreateOrder = ({ navigation, route }) => {
+const BuyOrder = ({ navigation, route }) => {
   // Sample product data - replace with your actual data
   const product = {
     name: "Golden Oyster Mushrooms",
@@ -93,177 +95,173 @@ const CreateOrder = ({ navigation, route }) => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity 
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
-          <Feather name="arrow-left" size={24} color="#333" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Create Order</Text>
-      </View>
-
-      <ScrollView style={styles.scrollView}>
-        {/* Product Summary */}
-        <View style={styles.productSummary}>
-          <Image
-            source={{ uri: product.image }}
-            style={styles.productImage}
-          />
-          <View style={styles.productInfo}>
-            <Text style={styles.productName}>{product.name}</Text>
-            <Text style={styles.productPrice}>₹{product.price}</Text>
-          </View>
+    <GluestackUIProvider mode="light"><SafeAreaView style={styles.container}>
+        <StatusBar barStyle="dark-content" />
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity 
+            onPress={() => navigation.goBack()}
+            style={styles.backButton}
+          >
+            <Feather name="arrow-left" size={24} color="#333" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Create Order</Text>
         </View>
-
-        {/* Order Details Form */}
-        <View style={styles.form}>
-          {/* Quantity Selector */}
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Quantity</Text>
-            <View style={styles.quantitySelector}>
-              <TouchableOpacity 
-                style={styles.quantityButton}
-                onPress={() => quantity > 1 && setQuantity(quantity - 1)}
-              >
-                <Feather name="minus" size={20} color="#333" />
-              </TouchableOpacity>
-              <Text style={styles.quantityText}>{quantity}</Text>
-              <TouchableOpacity 
-                style={styles.quantityButton}
-                onPress={() => quantity < product.availableQuantity && setQuantity(quantity + 1)}
-              >
-                <Feather name="plus" size={20} color="#333" />
-              </TouchableOpacity>
+        <ScrollView style={styles.scrollView}>
+          {/* Product Summary */}
+          <View style={styles.productSummary}>
+            <Image
+              source={{ uri: product.image }}
+              style={styles.productImage}
+            />
+            <View style={styles.productInfo}>
+              <Text style={styles.productName}>{product.name}</Text>
+              <Text style={styles.productPrice}>₹{product.price}</Text>
             </View>
           </View>
 
-          {/* Phone Number */}
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Phone Number</Text>
-            <TextInput
-              style={styles.input}
-              value={phone}
-              onChangeText={setPhone}
-              placeholder="Enter your phone number"
-              keyboardType="phone-pad"
-            />
-          </View>
+          {/* Order Details Form */}
+          <View style={styles.form}>
+            {/* Quantity Selector */}
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Quantity</Text>
+              <View style={styles.quantitySelector}>
+                <TouchableOpacity 
+                  style={styles.quantityButton}
+                  onPress={() => quantity > 1 && setQuantity(quantity - 1)}
+                >
+                  <Feather name="minus" size={20} color="#333" />
+                </TouchableOpacity>
+                <Text style={styles.quantityText}>{quantity}</Text>
+                <TouchableOpacity 
+                  style={styles.quantityButton}
+                  onPress={() => quantity < product.availableQuantity && setQuantity(quantity + 1)}
+                >
+                  <Feather name="plus" size={20} color="#333" />
+                </TouchableOpacity>
+              </View>
+            </View>
 
-          {/* Delivery Address */}
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Delivery Address</Text>
-            <TextInput
-              style={[styles.input, styles.textArea]}
-              value={address}
-              onChangeText={setAddress}
-              placeholder="Enter delivery address"
-              multiline
-              numberOfLines={3}
-            />
-          </View>
-
-          {/* Delivery Date */}
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Delivery Date</Text>
-            <TouchableOpacity 
-              style={styles.dateSelector}
-              onPress={() => setShowDatePicker(true)}
-            >
-              <Text>{deliveryDate.toLocaleDateString()}</Text>
-              <Feather name="calendar" size={20} color="#666" />
-            </TouchableOpacity>
-            {showDatePicker && (
-              <DateTimePicker
-                value={deliveryDate}
-                mode="date"
-                minimumDate={new Date()}
-                onChange={(event, selectedDate) => {
-                  setShowDatePicker(false);
-                  if (selectedDate) setDeliveryDate(selectedDate);
-                }}
+            {/* Phone Number */}
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Phone Number</Text>
+              <TextInput
+                style={styles.input}
+                value={phone}
+                onChangeText={setPhone}
+                placeholder="Enter your phone number"
+                keyboardType="phone-pad"
               />
-            )}
-          </View>
+            </View>
 
-          {/* Delivery Mode */}
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Delivery Mode</Text>
-            <View style={styles.deliveryModeContainer}>
+            {/* Delivery Address */}
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Delivery Address</Text>
+              <TextInput
+                style={[styles.input, styles.textArea]}
+                value={address}
+                onChangeText={setAddress}
+                placeholder="Enter delivery address"
+                multiline
+                numberOfLines={3}
+              />
+            </View>
+
+            {/* Delivery Date */}
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Delivery Date</Text>
               <TouchableOpacity 
-                style={[
-                  styles.deliveryModeButton,
-                  deliveryMode === 'standard' && styles.deliveryModeActive
-                ]}
-                onPress={() => setDeliveryMode('standard')}
+                style={styles.dateSelector}
+                onPress={() => setShowDatePicker(true)}
               >
-                <Text style={[
-                  styles.deliveryModeText,
-                  deliveryMode === 'standard' && styles.deliveryModeTextActive
-                ]}>Standard</Text>
+                <Text>{deliveryDate.toLocaleDateString()}</Text>
+                <Feather name="calendar" size={20} color="#666" />
               </TouchableOpacity>
-              <TouchableOpacity 
-                style={[
-                  styles.deliveryModeButton,
-                  deliveryMode === 'express' && styles.deliveryModeActive
-                ]}
-                onPress={() => setDeliveryMode('express')}
-              >
-                <Text style={[
-                  styles.deliveryModeText,
-                  deliveryMode === 'express' && styles.deliveryModeTextActive
-                ]}>Express</Text>
-              </TouchableOpacity>
+              {showDatePicker && (
+                <DateTimePicker
+                  value={deliveryDate}
+                  mode="date"
+                  minimumDate={new Date()}
+                  onChange={(event, selectedDate) => {
+                    setShowDatePicker(false);
+                    if (selectedDate) setDeliveryDate(selectedDate);
+                  }}
+                />
+              )}
+            </View>
+
+            {/* Delivery Mode */}
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Delivery Mode</Text>
+              <View style={styles.deliveryModeContainer}>
+                <TouchableOpacity 
+                  style={[
+                    styles.deliveryModeButton,
+                    deliveryMode === 'standard' && styles.deliveryModeActive
+                  ]}
+                  onPress={() => setDeliveryMode('standard')}
+                >
+                  <Text style={[
+                    styles.deliveryModeText,
+                    deliveryMode === 'standard' && styles.deliveryModeTextActive
+                  ]}>Standard</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  style={[
+                    styles.deliveryModeButton,
+                    deliveryMode === 'express' && styles.deliveryModeActive
+                  ]}
+                  onPress={() => setDeliveryMode('express')}
+                >
+                  <Text style={[
+                    styles.deliveryModeText,
+                    deliveryMode === 'express' && styles.deliveryModeTextActive
+                  ]}>Express</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
+        </ScrollView>
+        {/* Create Order Button */}
+        <View style={styles.bottomContainer}>
+          <View style={styles.totalContainer}>
+            <Text style={styles.totalLabel}>Total Amount</Text>
+            <Text style={styles.totalAmount}>₹{product.price * quantity}</Text>
+          </View>
+          <TouchableOpacity 
+            style={styles.createButton}
+            onPress={handleCreateOrder}
+            disabled={loading}
+          >
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.createButtonText}>Create Order</Text>
+            )}
+          </TouchableOpacity>
         </View>
-      </ScrollView>
-
-      {/* Create Order Button */}
-      <View style={styles.bottomContainer}>
-        <View style={styles.totalContainer}>
-          <Text style={styles.totalLabel}>Total Amount</Text>
-          <Text style={styles.totalAmount}>₹{product.price * quantity}</Text>
-        </View>
-        <TouchableOpacity 
-          style={styles.createButton}
-          onPress={handleCreateOrder}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <Text style={styles.createButtonText}>Create Order</Text>
-          )}
-        </TouchableOpacity>
-      </View>
-
-      {/* Status Modals */}
-      <StatusModal 
-        visible={showSuccessModal} 
-        onClose={() => {
-          setShowSuccessModal(false);
-          navigation.navigate('Orders'); // Navigate to orders screen
-        }}
-        success={true}
-      />
-      <StatusModal 
-        visible={showErrorModal} 
-        onClose={() => setShowErrorModal(false)}
-        success={false}
-      />
-    </SafeAreaView>
+        {/* Status Modals */}
+        <StatusModal 
+          visible={showSuccessModal} 
+          onClose={() => {
+            setShowSuccessModal(false);
+            navigation.navigate('ProductDetails'); // Navigate to orders screen
+          }}
+          success={true}
+        />
+        <StatusModal 
+          visible={showErrorModal} 
+          onClose={() => setShowErrorModal(false)}
+          success={false}
+        />
+      </SafeAreaView></GluestackUIProvider>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FAF6E3',
   },
   header: {
     height: 56,
@@ -272,6 +270,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
+    backgroundColor:'white'
   },
   backButton: {
     padding: 8,
@@ -290,6 +289,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
+    backgroundColor:'white'
   },
   productImage: {
     width: 80,
@@ -329,6 +329,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
+    backgroundColor:'white'
   },
   textArea: {
     height: 80,
@@ -341,9 +342,12 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     borderRadius: 8,
     padding: 8,
+    backgroundColor:'white'
   },
   quantityButton: {
-    padding: 8,
+    padding: 4,
+    backgroundColor:'#F4CE14',
+    borderRadius:8
   },
   quantityText: {
     fontSize: 16,
@@ -357,6 +361,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     borderRadius: 8,
     padding: 12,
+    backgroundColor:'white'
   },
   deliveryModeContainer: {
     flexDirection: 'row',
@@ -371,7 +376,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   deliveryModeActive: {
-    backgroundColor: '#2F9461',
+    backgroundColor: '#F4CE14',
   },
   deliveryModeText: {
     color: '#666',
@@ -401,7 +406,7 @@ const styles = StyleSheet.create({
     color: '#2F9461',
   },
   createButton: {
-    backgroundColor: '#2F9461',
+    backgroundColor: '#088395',
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
@@ -450,6 +455,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     minWidth: 120,
     alignItems: 'center',
+    
   },
   modalButtonText: {
     color: '#fff',
@@ -458,4 +464,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateOrder;
+export default BuyOrder;

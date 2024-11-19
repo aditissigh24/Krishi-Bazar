@@ -1,4 +1,6 @@
 import { StyleSheet,ActivityIndicator, Text, View, TextInput, TouchableOpacity,Alert } from 'react-native'
+import "./../global.css";
+import { GluestackUIProvider } from "./UI/gluestack-ui-provider";
 import React, {useEffect, useState,useRef} from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -18,19 +20,19 @@ const OTPInput = ({ value, onChange }) => {
   };
 
   return (
-    <View style={styles.otpContainer}>
-      {[...Array(OTP_LENGTH)].map((_, index) => (
-        <TextInput
-          key={index}
-          ref={(ref) => (inputRefs.current[index] = ref)}
-          style={styles.otpInput}
-          maxLength={1}
-          keyboardType="number-pad"
-          onChangeText={(text) => handleChange(text, index)}
-          value={value[index] || ''}
-        />
-      ))}
-    </View>
+    <GluestackUIProvider mode="light"><View style={styles.otpContainer}>
+        {[...Array(OTP_LENGTH)].map((_, index) => (
+          <TextInput
+            key={index}
+            ref={(ref) => (inputRefs.current[index] = ref)}
+            style={styles.otpInput}
+            maxLength={1}
+            keyboardType="number-pad"
+            onChangeText={(text) => handleChange(text, index)}
+            value={value[index] || ''}
+          />
+        ))}
+      </View></GluestackUIProvider>
   );
 };
 export default function OtpScreen({route, navigation}) {
@@ -166,39 +168,35 @@ export default function OtpScreen({route, navigation}) {
   };
   
     return (
-      <View style={styles.container}>
-      <Text style={styles.title}>Verify Your Account</Text>
-      <Text style={styles.subtitle}>Enter the 6-digit code sent to  {phoneNumber} </Text>
-      
-      <OTPInput placeholder='Enter the code' value={otp} onChange={setOtp} keyboardType='number-pad' maxLength={6} style={styles.otpInput}/>
-      
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
-      
-      <TouchableOpacity
-        style={[styles.button, loading && styles.buttonDisabled]}
-        onPress={handleVerifyOTP}
-        disabled={loading}
-      >
-        {loading ? (
-          <ActivityIndicator color="#ffffff" />
-        ) : (
-          <Text style={styles.buttonText}>Verify OTP</Text>
-        )}
-      </TouchableOpacity>
-      
-      <View style={styles.resendContainer}>
-        {!canResend?(
-          <Text>Resend OTP in {timer}s</Text>
-        ):(
-          <TouchableOpacity onPress={handleResendOTP} style={styles.resendButton}>
-            <Text style={styles.resendText}> Resend OTP</Text>
+      <GluestackUIProvider mode="light"><View style={styles.container}>
+          <Text style={styles.title}>Verify Your Account</Text>
+          <Text style={styles.subtitle}>Enter the 6-digit code sent to  {phoneNumber} </Text>
+          <OTPInput placeholder='Enter the code' value={otp} onChange={setOtp} keyboardType='number-pad' maxLength={6} style={styles.otpInput}/>
+          {error ? <Text style={styles.errorText}>{error}</Text> : null}
+          <TouchableOpacity
+            style={[styles.button, loading && styles.buttonDisabled]}
+            onPress={handleVerifyOTP}
+            disabled={loading}
+          >
+            {loading ? (
+              <ActivityIndicator color="#ffffff" />
+            ) : (
+              <Text style={styles.buttonText}>Verify OTP</Text>
+            )}
           </TouchableOpacity>
-        )}
+          <View style={styles.resendContainer}>
+            {!canResend?(
+              <Text>Resend OTP in {timer}s</Text>
+            ):(
+              <TouchableOpacity onPress={handleResendOTP} style={styles.resendButton}>
+                <Text style={styles.resendText}> Resend OTP</Text>
+              </TouchableOpacity>
+            )}
 
-      </View>
-    </View>
-  );
-};
+          </View>
+        </View></GluestackUIProvider>
+    );
+}
 
 const styles = StyleSheet.create({
   container: {

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import "./../global.css";
+import { GluestackUIProvider } from "./UI/gluestack-ui-provider";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, StatusBar, Platform, ScrollView, Switch, KeyboardAvoidingView, ImageBackground, Button} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {LinearGradient} from 'react-native-linear-gradient'
@@ -97,42 +99,48 @@ export default function SignUpScreen  ({navigation})  {
   
 
   return (
-    <ImageBackground source={require('./../assets/images/BG14.jpg')} style={styles.bgimage}> 
-     <View>
-      <Text style={styles.title}>Signup</Text>
-     </View>
-     <View style={styles.container}>
-      
-      <TextInput style={styles.input} placeholder='FirstName' value={FirstName} onChangeText={setFirstName}/>
-      <TextInput style={styles.input} placeholder='LastName' value={LastName} onChangeText={setLastName}/>
-      <TextInput style={styles.input} placeholder='Phone-number' value={phoneNumber} onChangeText={setPhoneNumber}/>
-      <TextInput style={styles.input} placeholder='E-mail' value={email} onChangeText={setemail}/>
-      <TextInput style={styles.input} placeholder='Aadhar no.' value={aadhar} onChangeText={setAadhar}/>
-      <TextInput style={styles.input} placeholder='Address' value={address} onChangeText={setAddress}/>
-      <TextInput style={styles.input} placeholder='City' value={city} onChangeText={setCity}/>
-      <TextInput style={styles.input} placeholder='State' value={state} onChangeText={setState}/>
-      <TextInput style={styles.input} placeholder='Pincode' value={pincode} onChangeText={setPincode}/>
-      <TextInput style={styles.input} placeholder='Farm size' value={farmsize} onChangeText={setFarmsize}/>
-       <View style={{flexDirection: 'row', alignSelf:'baseline',alignItems:"center", paddingLeft:50}}>
-        <Text style={styles.farmertext}>Are you a farmer?</Text>
-        <Switch trackColor={{ false: '#767577', true: '#196f3d' }} 
-                value={isFarmer} 
-                onValueChange={setIsFarmer}
-               />
-       </View>
-       <TouchableOpacity style={styles.button} onPress={handleSignUpAndSendOtp} disabled={loading}> 
-        <Text style={styles.buttonText}>Sign Up!</Text>
-       </TouchableOpacity>
-       <View style={styles.subcontainer}>
-        <Text style={{fontSize:17}}>Already have an account? <Text onPress={()=> navigation.navigate('Login')} style={{color:'#196f3d', fontSize:17,fontWeight:'bold'}}>Login</Text></Text>
-        
-       </View>
-       </View>
+    <ScrollView>
+    <GluestackUIProvider mode="light">
        
+      <ImageBackground source={require('./../assets/images/BG14.jpg')} style={styles.bgimage}>
+     
+        <View>
+         <Text style={styles.title}>Signup</Text>
+        </View>
+        <View style={styles.container}>
+         
+         <TextInput style={styles.input} placeholder='FirstName' value={FirstName} onChangeText={setFirstName}/>
+         <TextInput style={styles.input} placeholder='LastName' value={LastName} onChangeText={setLastName}/>
+         <TextInput style={styles.input} placeholder='Phone-number' value={phoneNumber} onChangeText={setPhoneNumber}/>
+         <TextInput style={styles.input} placeholder='E-mail' value={email} onChangeText={setemail}/>
+         <TextInput style={styles.input} placeholder='Aadhar no.' value={aadhar} onChangeText={setAadhar}/>
+         <TextInput style={styles.input} placeholder='Address' value={address} onChangeText={setAddress}/>
+         <TextInput style={styles.input} placeholder='City' value={city} onChangeText={setCity}/>
+         <TextInput style={styles.input} placeholder='State' value={state} onChangeText={setState}/>
+         <TextInput style={styles.input} placeholder='Pincode' value={pincode} onChangeText={setPincode}/>
+         <TextInput style={styles.input} placeholder='Farm size' value={farmsize} onChangeText={setFarmsize}/>
+          <View style={{flexDirection: 'row', alignSelf:'baseline',alignItems:"center", paddingLeft:50}}>
+           <Text style={styles.farmertext}>Are you a farmer?</Text>
+           <Switch trackColor={{ false: '#767577', true: '#196f3d' }} 
+                   value={isFarmer} 
+                   onValueChange={setIsFarmer}
+                  />
+          </View>
+          <TouchableOpacity style={styles.button} onPress={handleSignUpAndSendOtp} disabled={loading}> 
+           <Text style={styles.buttonText}>Sign Up!</Text>
+          </TouchableOpacity>
+          <View style={styles.subcontainer}>
+           <Text style={{fontSize:17}}>Already have an account? <Text onPress={()=> navigation.navigate('Login')} style={{color:'#196f3d', fontSize:17,fontWeight:'bold'}}>Login</Text></Text>
+           
+          </View>
+          </View>
+        
       </ImageBackground>
-      
+     
+      </GluestackUIProvider>
+      </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   bgimage:{

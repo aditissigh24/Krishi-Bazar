@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import "./../../global.css";
+import { GluestackUIProvider } from "./../UI/gluestack-ui-provider";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 //import { useNavigation } from '@react-navigation/native';
