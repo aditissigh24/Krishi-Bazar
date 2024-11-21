@@ -15,6 +15,7 @@ import ManageProducts from './../HomeScreen/ManageProducts'
 import ManageSpecificProduct from './../HomeScreen/ManageSpecificProduct'
 import ZariProducts from './../HomeScreen/ZariProducts'
 import MushroomProducts from './../HomeScreen/MushroomProducts'
+import BuyOrder from './../ExploreScreen/CreateOrder';
 const Stack=createStackNavigator();
 export default function HomeStack() {
   return (
@@ -28,7 +29,7 @@ export default function HomeStack() {
         <Stack.Screen name="ManageProducts" component={ManageProducts}/>
         <Stack.Screen name="ZariProducts" component={ZariProducts}/>
         <Stack.Screen name="MushroomProducts" component={MushroomProducts}/>
-   
+        <Stack.Screen name="BuyOrder" component={BuyOrder}/>
         <Stack.Screen name="ManageSpecificProduct" component={ManageSpecificProduct}/>
       </Stack.Navigator></GluestackUIProvider>
   );

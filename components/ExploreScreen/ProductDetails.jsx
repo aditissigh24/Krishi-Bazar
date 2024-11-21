@@ -116,7 +116,7 @@ const ProductDetails = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#f5f5f5',
   },
   
   header: {
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
-    backgroundColor:'#FAF6E3'
+    backgroundColor:'white'
   },
   backButton: {
     padding: 8,
@@ -202,14 +202,14 @@ const styles = StyleSheet.create({
   },
   farmerInfo: {
     flexDirection: 'row',
-    backgroundColor: '#FAF6E3',
+    backgroundColor: 'white',
     padding: 15,
     borderRadius: 12,
   },
   farmerIconContainer: {
     width: 50,
     height: 50,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFCC00',
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
@@ -245,17 +245,19 @@ const styles = StyleSheet.create({
     padding: 20,
     borderTopWidth: 1,
     borderTopColor: '#eee',
-    backgroundColor: '#FAF6E3',
+    backgroundColor: '#f5f5f5',
   },
   buyButton: {
-    backgroundColor: '#088395',
-    paddingVertical: 15,
+    paddingVertical: 12,
+    paddingHorizontal:20,
     borderRadius: 8,
-    alignItems: 'center',
+    alignSelf:'center',
+    justifyContent: 'flex-start',
+    backgroundColor:'#3B82F6'
   },
   buyButtonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
   },
 });

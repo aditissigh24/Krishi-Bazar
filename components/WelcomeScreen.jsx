@@ -9,7 +9,8 @@ import {
   Dimensions,
   SafeAreaView,
   StatusBar,ScrollView,
-  ImageBackground
+  ImageBackground,
+  Image
 } from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
 
@@ -23,18 +24,19 @@ const WelcomeScreen = ({ navigation }) => {
       
         <StatusBar barStyle="dark-content" />
       
-        <ImageBackground source={require('./../assets/images/White-oyster-3.png')} style={styles.container}>
+        <View style={styles.container}>
           {/* Decorative Elements */}
-          <View style={styles.decorativeCircle1} />
-          <View style={styles.decorativeCircle2} />
 
           <View style={styles.contentContainer}>
-            {/* Logo Container */}
-            
+            {/* image Container */}
+            <View style={styles.imageContainer}>
+              <Image source={require('./../assets/images/King-trumpet.png')} style={styles.Image}></Image>
+            </View>
 
             {/* Welcome Text */}
             <View style={styles.textContainer}>
-              <Text style={styles.title}>Welcome to Zari & Mushrooms</Text>
+              <Text style={styles.title}>Welcome to Krishi-Bazar</Text>
+              
               <Text style={styles.subtitle}>
                 Discover exquisite zari crafts and premium mushroom products from our community!
               </Text>
@@ -55,7 +57,8 @@ const WelcomeScreen = ({ navigation }) => {
             <Text style={styles.communityText}>
               Join our community of craft lovers and food enthusiasts
             </Text>
-          </View></ImageBackground>
+          </View>
+          </View>
         
         
       </GluestackUIProvider>
@@ -66,79 +69,68 @@ const WelcomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems:"center",
+    backgroundColor: '#f5f5f5',
   },
   gradient: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  decorativeCircle1: {
-    position: 'absolute',
-    top: height * 0.1,
-    right: width * 0.1,
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: 'rgba(251, 191, 36, 0.2)',
-  },
-  decorativeCircle2: {
-    position: 'absolute',
-    bottom: height * 0.15,
-    left: width * 0.1,
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-    backgroundColor: 'rgba(251, 146, 60, 0.2)',
-  },
+  
   contentContainer: {
     width: width * 0.85,
     alignItems: 'center',
-    paddingVertical: 20,
+    //paddingVertical: 10,
   },
-  logoContainer: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: '#FCD34D',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 40,
-    elevation: 5,
+  imageContainer: {
+    backgroundColor: 'white',
+    marginTop: 130,
+    marginBottom:70,
+    
+    height:320,
+    width:360,
+   
+    borderRadius: 12,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  logoText: {
-    fontSize: 50,
+  Image:{
+    height:'100%',
+    width:'100%',
+    borderRadius: 12,
   },
   textContainer: {
     alignItems: 'center',
-    marginTop:140,
-    marginBottom: 40,
+    alignSelf:'center',
+    //backgroundColor:'yellow',
+    margin:1
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: 'white',
+    color: 'black',
     textAlign: 'center',
     marginBottom: 18,
   },
   subtitle: {
     fontSize: 16,
-    color: 'white',
+    color: 'black',
     textAlign: 'center',
     paddingHorizontal: 20,
     lineHeight: 24,
   },
   button: {
-    backgroundColor: '#F59E0B',
+    backgroundColor: '#0096FF',
     paddingHorizontal: 25,
     paddingVertical: 10,
-    borderRadius: 30,
+    borderRadius: 5,
     elevation: 5,
     shadowColor: '#000',
     shadowOffset: {
@@ -156,8 +148,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   communityText: {
-    fontSize: 14,
-    color: 'white',
+    fontSize: 16,
+    color: '#85929e',
     textAlign: 'center',
   },
 });

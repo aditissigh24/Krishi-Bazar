@@ -28,7 +28,7 @@ export default function ProfileScreen({navigation}) {
   };
   const handlePhoneNumberUpdate = (newPhoneNumber) => {
     setPhoneNumber(newPhoneNumber);  // Update phone number in state
-    console.log('Phone number updated:', newPhoneNumber);
+    
   };
  // const [updatedPhoneNumber, setUpdatedPhoneNumber] = useState(userData.phoneNumber);
   useEffect(() => {
@@ -59,11 +59,7 @@ export default function ProfileScreen({navigation}) {
     fetchUserdata();
   }, []);
   
-  const handleUpdatePhoneNumber = () => {
-    // Implement logic to update the phone number
-    navigation.navigate('UpdatePhoneNumber')
-    console.log('Phone number updated:', updatedPhoneNumber);
-  };
+ 
   return (
     <GluestackUIProvider mode="light"><ScrollView style={styles.container}>
       
@@ -121,32 +117,32 @@ export default function ProfileScreen({navigation}) {
              onUpdate={handlePhoneNumberUpdate}  // Pass update handler
              onClose={toggleModal} 
              visible={modalVisible} 
-             setVisible={setModalVisible} // Pass function to close modal
+             setVisible={setModalVisible}// Pass function to close modal
+             setAadhar={aadhar} 
            />
          )}
       </ScrollView>
-      
       </GluestackUIProvider>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAF6E3',
-    paddingHorizontal: 24,
-    paddingVertical: 32,
+    backgroundColor: '#f5f5f5',
+    paddingHorizontal: 35,
+    paddingVertical: 100,
   },
   profileContainer: {
     alignItems: 'center',
-    marginBottom: 32,
-    
+    marginBottom:70,
+    height:'120'
   },
   profilePicture: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    margin:30,
+    width: 150,
+    height: 150,
+    borderRadius: 70,
     overflow: 'hidden',
-    marginBottom: 16,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -168,6 +164,7 @@ const styles = StyleSheet.create({
   infoContainer: {
     backgroundColor: 'white',
     borderRadius: 12,
+    marginBottom:30,
     padding: 16,
     shadowColor: '#000',
     shadowOffset: {
@@ -190,10 +187,12 @@ const styles = StyleSheet.create({
     fontWeight:"500"
   },
   updateButton: {
-    backgroundColor: '#088395',
-    borderRadius: 8,
     paddingVertical: 12,
-    marginTop: 24,
+    paddingHorizontal:20,
+    borderRadius: 8,
+    alignSelf:'center',
+    justifyContent: 'flex-start',
+    backgroundColor:'#3B82F6'
   },
   updateButtonText: {
     color: 'white',

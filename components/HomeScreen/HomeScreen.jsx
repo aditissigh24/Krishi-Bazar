@@ -124,33 +124,38 @@ useEffect(() => {
       icon: 'package',
       screen: 'ViewOrders',
       description: 'View your previous Orders',
-      badge: `${stats.totalProducts} Items`
+      badge: `${stats.totalProducts} Items`,
+      color:'#FF9900'
     },
     {
       title: 'View Products',
       icon: 'shopping-cart',
       screen: 'Explore',
       description: 'View and order Products',
-      badge: `${stats.activeOrders} Active`
+      badge: `${stats.activeOrders} Active`,
+      color:'#FFCC00'
     },
     {
       title: 'Zari Products',
       icon: 'trending-up',
       screen: 'ZariProducts',
       category:'Zari',
-      description: 'Explore items made with zari'
+      description: 'Explore items made with zari',
+      color:'#990033'
     },
     {
       title: 'Mushroom Products',
       icon: 'users',
       screen: 'MushroomProducts',
       category:'Mushroom',
-      description: 'Explore Mushrooms'
+      description: 'Explore Mushrooms',
+      color:'#6600CC'
     },
     {title: 'Manage Products',
       icon: 'settings',
       screen: 'ManageProducts',
-      description: 'view and manage products'
+      description: 'view and manage products',
+      color:'#009933'
     }
   ];
 
@@ -171,40 +176,38 @@ useEffect(() => {
 
 
   return (
-    <LinearGradient
-    colors={['#FAF6E3', '#F5F5F5']}
-    style={styles.container}
-  >
+    
+  
     <GluestackUIProvider mode="light">
        <Animated.View style={[styles.content, { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }] } >
         
         <StatusBar barStyle="dark-content" />
         <View style={styles.header}>
-          <Text style={styles.greeting}>{greeting}</Text>
+          
+          <View style={styles.card}>
+          <Text style={styles.greeting}>Welcome back! </Text>
           <Text style={styles.name}>Aditi Singh</Text>
           
             <View style={styles.farmerBadge}>
               <Icon name="award" size={16} color="#2E7D32" />
               <Text style={styles.farmerText}>Verified Farmer</Text>
-            </View>
+              </View>
+            
           
-        </View>
+        
         <TouchableOpacity
           style={styles.profileButton}
           onPress={() => navigation.navigate('ProfileTab')}
         >
-          <LinearGradient
-            colors={['#088395', '#088395']}
-            style={styles.profileGradient}
-          >
-            <Icon name="user" size={20} color="white" />
+          
+            <Icon name="user" size={20} color="#1F75FE" />
             <Text style={styles.profileButtonText}>View Profile</Text>
-          </LinearGradient>
-        </TouchableOpacity>
+          
+        </TouchableOpacity></View></View>
         {/* Navigation Buttons in Pairs */}
         
         
-        <ScrollView style={styles.menuGrid}>
+        <View style={styles.menuGrid}>
           {chunk(menuItems, 2).map((pair, rowIndex) => (
             <View key={rowIndex} style={styles.menuRow}>
               {pair.map((item, index) => (
@@ -214,7 +217,7 @@ useEffect(() => {
                   onPress={() => handleButtonPress(item.screen)}
                 >
                   <LinearGradient
-                    colors={['#579BB1', '#BAD7E9']}
+                    colors={['#1F2833', '#1f2833']}
                     style={styles.menuItemGradient}
                   >
                     <Icon name={item.icon} size={24} color="white" />
@@ -225,46 +228,62 @@ useEffect(() => {
             </View>
           ))}
 
-        </ScrollView>
+        </View>
         
         </Animated.View></GluestackUIProvider>
-        </LinearGradient>
+        
   );
 }
 const styles = StyleSheet.create({
     container:{
-      flex:1,
-      padding:20,
-      backgroundColor:'#F5F5F5'
+      backgroundColor:'#f5f5f5'
     },
     content:{
       flex:1
     },
     header:{
-      marginTop:40,
-      marginBottom:30
+      margin:20,
+      marginTop:200,
+      padding:6,
+      marginBottom:45
     },
     greeting: {
-      fontSize: 26,
+      fontSize: 28,
       fontWeight: '600',
-      color: '#323232',
-      marginBottom: 8,
-      
+      color: 'white',
+      //marginBottom:6,
+      marginLeft:10
+    },
+    card: {
+      backgroundColor: '#0A71EB',
+      padding: 10,
+      borderRadius: 12,
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 3,
     },
     name: {
-      fontSize: 25,
+      fontSize: 22,
       fontWeight: 'bold',
-      color: '#062C30',
-      marginBottom: 12,
+      color: 'white',
+      marginBottom: 3,
+      marginLeft:20
     },
     farmerBadge: {
       flexDirection: 'row',
       alignItems: 'center',
       backgroundColor: '#E8F5E9',
-      paddingVertical: 6,
-      paddingHorizontal: 12,
+      paddingVertical: 2,
+      paddingHorizontal: 6,
       borderRadius: 20,
       alignSelf: 'flex-start',
+      marginBottom:10,
+      marginLeft:16
     },
     farmerText: {
       marginLeft: 8,
@@ -272,50 +291,62 @@ const styles = StyleSheet.create({
       fontWeight: '600',
     },
     profileButton: {
-      marginBottom: 30,
-      borderRadius: 12,
-      overflow: 'hidden',
-      elevation: 3,
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
+    paddingVertical: 11,
+    flexDirection:'row',
+    alignItems:'center',
+    alignSelf:'flex-start',
+    borderRadius: 8,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    profileGradient: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: 16,
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    marginBottom: 6,
+    marginLeft:20
     },
+    
     profileButtonText: {
-      color: 'white',
+      color: '#0A71EB',
       fontSize: 16,
       fontWeight: '600',
-      marginLeft: 10,
+      marginLeft:10
     },
     menuGrid: {
       flex: 1,
+      margin:20
     },
     menuRow: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginBottom: 16,
+      justifyContent: 'center',
+      marginBottom: 18,
     },
     menuItem: {
-      flex: 1,
-      marginHorizontal: 8,
-      borderRadius: 12,
+      marginHorizontal: 10,
+      borderRadius: 10,
       overflow: 'hidden',
       elevation: 3,
+      height:70,
+      width:'45%'
     },
     menuItemGradient: {
       padding: 20,
       alignItems: 'center',
       justifyContent: 'center',
-      aspectRatio: 1,
+      //aspectRatio: 1,
     },
     menuItemText: {
       color: 'white',
       fontSize: 14,
       fontWeight: '600',
-      marginTop: 8,
+     // marginTop: 8,
       textAlign: 'center',
+      marginBottom:10
+      
     },
    
   })

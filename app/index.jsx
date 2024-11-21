@@ -1,7 +1,8 @@
 import { Redirect} from "expo-router";
+import  { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import "./../global.css";
-import { GluestackUIProvider } from "./../components/UI/gluestack-ui-provider";
+import { GluestackUIProvider } from "../components/UI/gluestack-ui-provider";
 
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer, NavigationIndependentTree } from '@react-navigation/native';
@@ -10,6 +11,7 @@ import AppLoading from 'expo-app-loading';
 import { Text, View } from "react-native";
 import RootTabs from "../components/Navigator/RootTabs";
 import AuthStack from '../components/Navigator/AuthStack';
+import OtpScreen from "@/components/OtpScreen";
 
 
 
@@ -24,9 +26,11 @@ export default function Index() {
   }, []);
 
      return (
+      
        <GluestackUIProvider mode="light"><NavigationIndependentTree>
-           <AuthStack/>
+           <RootTabs/>
        </NavigationIndependentTree></GluestackUIProvider>
+       
      );
 }
 

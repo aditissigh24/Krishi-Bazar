@@ -31,31 +31,22 @@ const LoginScreen = ({navigation}) => {
       aadhar_number: aadhar,
     };
     
-    const response = await fetch('http://krishi-bazar.onrender.com/api/auth/login', {
+    const response = await fetch('https://krishi-bazar.onrender.com/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        
       },
       body: JSON.stringify( requestBody ),
     });
-
     const data = await response.json();
-   
-
-    
     if (response.ok) {
-      if (data.token) {
-      // Store phone number temporarily
-      await AsyncStorage.setItem('jwtToken', data.token);
-      console.log('JWT Token stored successfully:', data.token);
       Alert.alert('OTP Sent', 'Please check your phone for the OTP');
       await AsyncStorage.setItem('logindata', JSON.stringify(requestBody));
-     
+     console.log(response);
       navigation.navigate('OTPVerification', { phoneNumber,aadhar, flow  });
     }
-    else {
-      Alert.alert('Error', 'Token not received in response.'); }}
-    else {
+       else {
       console.log(data)
       Alert.alert('Error', data.message || 'Failed to send OTP');
     }}
@@ -81,41 +72,49 @@ const LoginScreen = ({navigation}) => {
   //};
 
   return (
-    <GluestackUIProvider mode="light"><ImageBackground source={require('./../assets/images/BG14.jpg')} style={styles.bgimage}>
-        <View>
-         <Text style={styles.title}>Login</Text>
-        </View>
-        <View style={styles.container}>
+    <GluestackUIProvider mode="light"><View  style={styles.container}>
+        
+        <View style={styles.content}>
          
            <Text style={styles.wmtext}>Welcome Back!</Text>
            <Text style={styles.lgtext}>Login to your account</Text>
           <TextInput style={styles.input} placeholder='Phone-number' value={phoneNumber} onChangeText={setPhoneNumber}/>
           <TextInput style={styles.input} placeholder='Aadhar no.' value={aadhar} onChangeText={setAadhar}/>
+         
           <TouchableOpacity style={styles.button} onPress={handlesendOTP} disabled={loading}>
            <Text style={styles.buttonText}>Get OTP</Text>
           </TouchableOpacity>
+           </View>
           <View style={styles.subcontainer}>
-           <Text style={{fontSize:17}}>Don't have an account? <Text onPress={()=> navigation.navigate('SignUp')} style={{color:'#196f3d', fontSize:17,fontWeight:'bold'}}>SignUp</Text></Text>
+           <Text style={styles.subtext}>Don't have an account? <Text onPress={()=> navigation.navigate('SignUp')} style={styles.signuptext}>SignUp</Text></Text>
           </View>
-        </View>
-      </ImageBackground></GluestackUIProvider>
+        
+      </View></GluestackUIProvider>
   );
 };
 
 const styles = StyleSheet.create({
-  bgimage:{
-    flex:1
+  container:{
+    flex:1,
+    backgroundColor: '#f5f5f5',
   },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    padding: 20,
-    height:70,
-    width:'100%',
-    paddingTop:  Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-    backgroundColor: '#f5f5dc',
-    borderTopLeftRadius:130,
+  content: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+   marginTop:220,
+    marginLeft:30,
+    marginRight:30,
+    marginBottom:20,
+    padding: 13,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
+    alignItems:'center'
   },
   title: {
     fontSize: 45,
@@ -123,38 +122,39 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingTop:120,
     marginBottom: 40,
-    color:'#fbfcfc'
+    color:'#333'
   },
   wmtext:{
     fontSize:35,
-    color:"#873600",
+    color:"#333",
     fontWeight:'bold'
   },
   lgtext:{
     fontSize:19,
     fontWeight:'bold',
-    color:'#873600',
+    color:'#666',
     marginBottom:30
   },
   input: {
     height: 50,
     width: '80%',
-    borderWidth: 3,
-    borderColor: '#196f3d',
-    backgroundColor:'#fcf3cf',
-    borderRadius: 100,
+    borderWidth: 1,
+    borderColor: '#85929e',
+    backgroundColor:'white',
+    borderRadius: 10,
     paddingHorizontal: 20,
-    marginTop:5,
-    marginBottom: 15,
+    marginTop:8,
   },
   button: {
-    width: 150,
-    height: 50,
-    backgroundColor: '#d4ac0d',
-    borderRadius: 99,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom:10
+    paddingVertical: 12,
+    paddingHorizontal:20,
+    borderRadius: 5,
+    alignSelf:'center',
+    justifyContent: 'flex-start',
+    backgroundColor:'#0096FF',
+    marginBottom:10,
+    marginTop:20
+    
   },
   buttonText: {
     color: '#fbfcfc',
@@ -165,6 +165,15 @@ const styles = StyleSheet.create({
     display:'flex',
     flexDirection:'row',
     justifyContent:'center'
+  },
+  subtext:{
+     fontSize:18,
+    color:'#85929e'
+  },
+  signuptext:{
+    color:'#0096FF',
+    fontSize:18,
+    fontWeight:'bold'
   }
 });
 

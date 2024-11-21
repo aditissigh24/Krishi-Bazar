@@ -8,6 +8,7 @@ import WelcomeScreen from '../WelcomeScreen';
 import LoginScreen from '../LoginScreen';
 import SignupScreen from '../SignupScreen';
 import OtpScreen from '../OtpScreen';
+import HomeScreen from "../HomeScreen/HomeScreen";
 
 const Stack= createStackNavigator();
 export default  function AuthStack() {
@@ -17,6 +18,7 @@ export default  function AuthStack() {
                 <Stack.Screen name="SignUp" component={SignupScreen}/>
                 <Stack.Screen name="Login" component={LoginScreen}/>
                 <Stack.Screen name="OTPVerification" component={OtpScreen}/>
+                <Stack.Screen name="Home" component={HomeScreen}/>
             </Stack.Navigator></GluestackUIProvider>
     );
 }

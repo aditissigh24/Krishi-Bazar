@@ -3,9 +3,10 @@ import "./../../global.css";
 import { GluestackUIProvider } from "./../UI/gluestack-ui-provider";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 //import { useNavigation } from '@react-navigation/native';
 
-const UpdatePhoneNumber = ({ visible, setVisible,navigation }) => {
+const UpdatePhoneNumber = ({ visible, setVisible,navigation, setAadhar}) => {
   
   const [newPhoneNumber, setNewPhoneNumber] = useState('');
  // const navigation = useNavigation();
@@ -13,16 +14,51 @@ const UpdatePhoneNumber = ({ visible, setVisible,navigation }) => {
     setNewPhoneNumber(''); // Clear the phone number input
     setVisible(false); // Close the modal
   };
-
-  const handleUpdatePhoneNumber = () => {
-    // Implement logic to validate and update the phone number
-    setVisible(false);
-    /*navigation.navigate('AuthStack', {
-      screen: 'OTPVerification',
-      params: { phoneNumber: newPhoneNumber },
-    });*/
+  const validatePhoneNumber = (number) => {
+    const phoneRegex = /^[0-9]\d{9}$/;
+    return phoneRegex.test(number.trim());
+  };
+  const handleUpdatePhoneNumber = async() => {
+    if (!validatePhoneNumber(newPhoneNumber)) {
+      Alert.alert('Invalid Phone Number', 'Please enter a valid phone number');
+      return;
+    }
+     //Implement OTP sending logic here
+   setLoading(true);
+   try{
+    const requestBody={
+      phone_number: newPhoneNumber,
+      aadhar_number: aadhar,
+    };
+    
+    const response = await fetch('https://krishi-bazar.onrender.com/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        
+      },
+      body: JSON.stringify( requestBody ),
+    });
+    const data = await response.json();
+    if (response.ok) {
+      Alert.alert('OTP Sent', 'Please check your phone for the OTP');
+      await AsyncStorage.setItem('logindata', JSON.stringify(requestBody));
+     console.log(response);
+      navigation.navigate('OTPVerification', { phoneNumber,aadhar, flow  });
+    }
+       else {
+      console.log(data)
+      Alert.alert('Error', data.message || 'Failed to send OTP');
+    }}
+  catch (error) {
+    console.log("Network error:", error);
+    Alert.alert('Error', 'Network error. Please try again.');
+  } finally {
+    setLoading(false);
+   }
   };
 
+  
   return (
     <>
      

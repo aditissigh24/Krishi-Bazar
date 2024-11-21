@@ -3,7 +3,7 @@ import "./../global.css";
 import { GluestackUIProvider } from "./UI/gluestack-ui-provider";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, StatusBar, Platform, ScrollView, Switch, KeyboardAvoidingView, ImageBackground, Button} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {LinearGradient} from 'react-native-linear-gradient'
+import Icon from 'react-native-vector-icons/Feather';
 
 export default function SignUpScreen  ({navigation})  {
   const [FirstName, setFirstName] = useState('');
@@ -48,10 +48,11 @@ export default function SignUpScreen  ({navigation})  {
       };
 
       
-      const response = await fetch('http://krishi-bazar.onrender.com/api/auth/signup', {
+      const response = await fetch('https://krishi-bazar.onrender.com/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+
         },
         body: JSON.stringify( requestBody ),
       });
@@ -78,7 +79,7 @@ export default function SignUpScreen  ({navigation})  {
 
 
   const handleSignUp = async () => {
-    if (!FirstName || !phoneNumber || !LastName || !aadhar ||!email ||!isFarmer ||!address ||!city ||!state ||!pincode ||!farmsize) {
+    if (!FirstName || !phoneNumber || !LastName || !aadhar ||!email ||!address ||!city ||!state ||!pincode ||!farmsize) {
      Alert.alert('Error', 'Please fill in all fields');
       return;
     }};
@@ -99,15 +100,20 @@ export default function SignUpScreen  ({navigation})  {
   
 
   return (
-    <ScrollView>
+    
     <GluestackUIProvider mode="light">
        
-      <ImageBackground source={require('./../assets/images/BG14.jpg')} style={styles.bgimage}>
+      <View style={styles.container}>
      
-        <View>
-         <Text style={styles.title}>Signup</Text>
+        <View style={styles.titleContainer}>
+         <Text style={styles.title}>Register Now!</Text>
         </View>
-        <View style={styles.container}>
+        <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}
+      >
+        <ScrollView>
+        <View style={styles.inputContainer}>
          
          <TextInput style={styles.input} placeholder='FirstName' value={FirstName} onChangeText={setFirstName}/>
          <TextInput style={styles.input} placeholder='LastName' value={LastName} onChangeText={setLastName}/>
@@ -119,102 +125,113 @@ export default function SignUpScreen  ({navigation})  {
          <TextInput style={styles.input} placeholder='State' value={state} onChangeText={setState}/>
          <TextInput style={styles.input} placeholder='Pincode' value={pincode} onChangeText={setPincode}/>
          <TextInput style={styles.input} placeholder='Farm size' value={farmsize} onChangeText={setFarmsize}/>
-          <View style={{flexDirection: 'row', alignSelf:'baseline',alignItems:"center", paddingLeft:50}}>
+          <View style={styles.togglecontainer}>
            <Text style={styles.farmertext}>Are you a farmer?</Text>
-           <Switch trackColor={{ false: '#767577', true: '#196f3d' }} 
+           <Switch trackColor={{ false: '#767577', true: '#0096FF' }} 
                    value={isFarmer} 
-                   onValueChange={setIsFarmer}
+                   onValueChange={(value) => setIsFarmer(value)}
                   />
           </View>
+          </View>
+          <View>
           <TouchableOpacity style={styles.button} onPress={handleSignUpAndSendOtp} disabled={loading}> 
            <Text style={styles.buttonText}>Sign Up!</Text>
           </TouchableOpacity>
           <View style={styles.subcontainer}>
-           <Text style={{fontSize:17}}>Already have an account? <Text onPress={()=> navigation.navigate('Login')} style={{color:'#196f3d', fontSize:17,fontWeight:'bold'}}>Login</Text></Text>
+           <Text style={styles.subtext}>Already have an account? 
+            <Text onPress={()=> navigation.navigate('Login')} style={styles.logintext}>Login</Text>
+          </Text>
            
           </View>
           </View>
-        
-      </ImageBackground>
-     
+          </ScrollView>
+     </KeyboardAvoidingView>
+     </View>
       </GluestackUIProvider>
-      </ScrollView>
+      
   );
 }
 
 const styles = StyleSheet.create({
-  bgimage:{
+  container:{
     flex:1,
-    
+    backgroundColor: '#f5f5f5',
   },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    padding: 20,
-    height:70,
-    width:'100%',
-    paddingTop:  Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-    backgroundColor: '#f5f5dc',
-    borderTopLeftRadius:130,
+  inputContainer: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+    margin:10,
+    marginLeft:30,
+    marginRight:30,
+    padding: 13,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
+    alignItems:'center'
+  },
+  titleContainer:{
+    alignItems:'center',
+    marginTop:40
   },
   title: {
-    fontSize: 40,
-    alignSelf:'center',
+    fontSize: 28,
     fontWeight: 'bold',
-    paddingTop:40,
-    marginBottom: 35,
-    color:'#fbfcfc'
+    color:'#333'
   },
-  gradient: {
-    flex: 1,
-  },
-  inputcontainer:{
-    width:'100%'
-  },
-  input: {
+    input: {
     height: 50,
     width: '80%',
-    borderWidth: 3,
-    borderColor: '#196f3d',
-    backgroundColor:'#fcf3cf',
-    borderRadius: 100,
+    borderWidth: 1,
+    borderColor: '#85929e',
+    backgroundColor:'white',
+    borderRadius: 10,
     paddingHorizontal: 20,
-    marginTop:5,
-    marginBottom: 5,
+    marginTop:8,
   },
   togglecontainer:{
     flexDirection: 'row',
-    alignSelf:'left',
-     alignItems: 'center',
-
-     marginBottom: 15
+     alignItems: 'center', 
  },
  
  farmertext:{
   fontSize:18,
-  marginRight:90,
-  fontWeight:'bold'
+  alignSelf:'center',
+  fontWeight:'400',
+  marginRight:65
   
  },
   button: {
-    width: 150,
-    height: 50,
-    backgroundColor: '#d4ac0d',
-    borderRadius: 99,
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal:20,
+    borderRadius: 5,
+    alignSelf:'center',
+    justifyContent: 'flex-start',
+    backgroundColor:'#0096FF',
     marginBottom:10
   },
   buttonText: {
     color: '#fbfcfc',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600',
   },
   subcontainer:{
     display:'flex',
     flexDirection:'row',
     justifyContent:'center'
+  },
+  subtext:{
+    fontSize:18,
+    color:'#85929e' 
+  },
+  logintext:{
+    color:'#0096FF',
+    fontSize:18,
+    fontWeight:'bold'
   }
 });
 

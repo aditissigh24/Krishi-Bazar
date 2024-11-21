@@ -261,7 +261,7 @@ const BuyOrder = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAF6E3',
+    backgroundColor: '#f5f5f5',
   },
   header: {
     height: 56,
@@ -406,10 +406,12 @@ const styles = StyleSheet.create({
     color: '#2F9461',
   },
   createButton: {
-    backgroundColor: '#088395',
-    padding: 16,
+    paddingVertical: 12,
+    paddingHorizontal:20,
     borderRadius: 8,
-    alignItems: 'center',
+    alignSelf:'center',
+    justifyContent: 'flex-start',
+    backgroundColor:'#3B82F6'
   },
   createButtonText: {
     color: '#fff',

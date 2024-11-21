@@ -151,7 +151,7 @@ const productCardWidth = (width - 54) / 2;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAF6E3',
+    backgroundColor: '#f5f5f5',
     paddingHorizontal: 24,
     paddingVertical: 32,
   },

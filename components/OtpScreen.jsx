@@ -118,17 +118,17 @@ export default function OtpScreen({route, navigation}) {
         setLoading(true);
     try {
       
-      const endpoint = route.params.flow=== 'signup' 
-      ? 'http://krishi-bazar.onrender.com/api/auth/complete-signup' 
-      : 'http://krishi-bazar.onrender.com/api/auth/complete-login';
+      const endpoint = flow === 'signup' 
+      ? 'https://krishi-bazar.onrender.com/api/auth/complete-signup' 
+      : 'https://krishi-bazar.onrender.com/api/auth/complete-login';
     
-    const requestBody = route.params.flow === 'signup' 
+    const requestBody = flow === 'signup' 
       ? { userData,otp } 
       : {
-        phone_number: phoneNumber,
-        aadhar_number: aadhar,
+        phone_number: '6200059008',
+        aadhar_number: '582228381168',
         verification_code: otp };
-        console.log('Request Body:', requestBody)
+       
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
@@ -136,23 +136,23 @@ export default function OtpScreen({route, navigation}) {
         },
         body: JSON.stringify(requestBody),
       });
-      
-
+      console.log(`calling endpoint: \n\n{endpoint}`)
       const data = await response.json();
+      console.log('Response', JSON.stringify(response));
+     
      
       if (response.ok) {
         // Store user data in AsyncStorage
         await AsyncStorage.setItem('userData', JSON.stringify(data.user));
-        await AsyncStorage.setItem('authToken', data.token);
+        
+        await AsyncStorage.setItem('responseBody', JSON.stringify(response));
+        
         
         // Remove temporary phone storage
         await AsyncStorage.removeItem('tempPhone');
         
         // Navigate to home screen or complete profile screen
-        navigation.reset({
-          index: 0, // Reset to HomeTabs as the first screen
-          routes: [{ name: 'HomeTab' }], // Replace the whole stack with HomeTabs
-        });
+        navigation.naviagte('Home');
       } else {
         Alert.alert('Error', data.message || 'Invalid OTP');
         

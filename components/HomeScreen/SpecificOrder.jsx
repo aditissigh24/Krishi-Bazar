@@ -8,9 +8,10 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
+  SafeAreaView,Modal,FlatList
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+
 
 const SpecificOrder = ({ navigation }) => {
   const [showActionsheet, setShowActionsheet] = React.useState(false)
@@ -36,19 +37,37 @@ const SpecificOrder = ({ navigation }) => {
     orderDate: "2024-03-15"
   });
 
-  const [orderStatus, setOrderStatus] = useState(order.status);
+  const [modalVisible, setModalVisible] = useState(false);
+ 
+  const [selectedOption, setSelectedOption] = useState(null);
+  const options = [
+    { id: '1', label: 'Delivered' },
+    { id: '2', label: 'Pending' },
+    { id: '3', label: 'Processing' },
+    { id: '4', label: 'Cancelled' },
+    { id: '5', label: 'Refunded' }
+  ];
 
-  const handleStatusUpdate = () => {
-    // Toggle between Processing and Delivered
-    const newStatus = orderStatus === "Processing" ? "Delivered" : "Processing";
-    setOrderStatus(newStatus);
+  const getStatusColor = (option) => {
+    switch(option) {
+      case 'Delivered': return '#4CAF50';  // Green
+      case 'Pending': return '#FF9800';    // Orange
+      case 'Processing': return '#2196F3'; // Blue
+      case 'Cancelled': return '#F44336';  // Red
+      case 'Refunded': return '#9C27B0';   // Purple
+      default: return '#607D8B';           // Grey
+    }
   };
-
+  const handleStatusSelect = (option) => {
+    setSelectedOption(option.label);
+    setModalVisible(false);
+  };
   const handleViewProduct = () => {
     // Navigate to product details screen
      navigation.navigate('ProductDetails', { productId: order.orderId });
   
   };
+ 
 
   return (
     <GluestackUIProvider mode="light"><SafeAreaView style={styles.container}>
@@ -65,10 +84,10 @@ const SpecificOrder = ({ navigation }) => {
             <View style={styles.orderIdRow}>
               <Text style={styles.orderId}>Order #{order.orderId}</Text>
               <View style={[
-                styles.statusBadge,
-                { backgroundColor: orderStatus === "Delivered" ? "#4CAF50" : "#FF9800" }
-              ]}>
-                <Text style={styles.statusText}>{orderStatus}</Text>
+                            styles.statusBadge,
+                            { backgroundColor: getStatusColor(selectedOption) }
+                          ]}>
+                <Text style={styles.statusText}>{selectedOption ? selectedOption : 'Processing'}</Text>
               </View>
             </View>
             <Text style={styles.orderDate}>Ordered on: {order.orderDate}</Text>
@@ -111,15 +130,52 @@ const SpecificOrder = ({ navigation }) => {
           </View>
 
           {/* Action Buttons */}
-          <View style={styles.buttonsContainer}>
+          <View style={[styles.buttonsContainer, styles.card]}>
+          {modalVisible && (
+        <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Choose an Option</Text>
+            
+            <FlatList
+              data={options}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <TouchableOpacity 
+                style={
+                  styles.optionItem}
+                  
+                  onPress={() => handleStatusSelect(item)}
+                >
+                  <Text style={styles.optionText}>{item.label}</Text>
+                </TouchableOpacity>
+              )}
+            />
+            
+            <TouchableOpacity 
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      )}
             <TouchableOpacity
               style={styles.button}
-              onPress={handleStatusUpdate}
+              onPress={() =>  setModalVisible(true)}
             >
               <Text style={styles.buttonText}>
-                {orderStatus === "Processing" ? "Mark as Delivered" : "Mark as Processing"}
+                Order Status
               </Text>
             </TouchableOpacity>
+            
 
             <TouchableOpacity
               style={styles.button}
@@ -136,7 +192,7 @@ const SpecificOrder = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAF6E3',
+    backgroundColor: '#f5f5f5',
   },
   header: {
     backgroundColor: 'white',
@@ -245,15 +301,64 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingVertical: 12,
+    paddingHorizontal:20,
     borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor:'#088395'
+    alignSelf:'center',
+    justifyContent: 'flex-start',
+    backgroundColor:'#3B82F6'
   },
   buttonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: '600',
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContainer: {
+    width: 300,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 15,
+  },
+  optionItem: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+    width: '100%',
+    alignItems: 'center',
+  },
+  optionText: {
+    fontSize: 16,
+  },
+  closeButton: {
+    marginTop: 15,
+    backgroundColor: '#e74c3c',
+    padding: 10,
+    borderRadius: 10,
+    width: '100%',
+    alignItems: 'center',
+  },
+  closeButtonText: {
+    color: 'white',
+    fontSize: 16,
   },
 });
 
