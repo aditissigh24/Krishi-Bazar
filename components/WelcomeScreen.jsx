@@ -1,68 +1,159 @@
+
+
 import React from 'react';
-import { Image, ImageBackground, StyleSheet,View,Text, TouchableOpacity } from 'react-native';
+import "./../global.css";
+import { GluestackUIProvider } from "./UI/gluestack-ui-provider";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+  SafeAreaView,
+  StatusBar,ScrollView,
+  ImageBackground,
+  Image
+} from 'react-native';
+import {LinearGradient} from 'expo-linear-gradient';
 
-function WelcomeScreen({navigation}) {
-    return (
-       
+const { width, height } = Dimensions.get('window');
+
+const WelcomeScreen = ({ navigation }) => {
+  return (
+   
+    <GluestackUIProvider mode="light">
+      
+      
+        <StatusBar barStyle="dark-content" />
+      
+        <View style={styles.container}>
+          {/* Decorative Elements */}
+
+          <View style={styles.contentContainer}>
+            {/* image Container */}
+            <View style={styles.imageContainer}>
+              <Image source={require('./../assets/images/King-trumpet.png')} style={styles.Image}></Image>
+            </View>
+
+            {/* Welcome Text */}
+            <View style={styles.textContainer}>
+              <Text style={styles.title}>Welcome to Krishi-Bazar</Text>
+              
+              <Text style={styles.subtitle}>
+                Discover exquisite zari crafts and premium mushroom products from our community!
+              </Text>
+            </View>
+
+            {/* Button */}
+            <TouchableOpacity
+              style={styles.button}
+              activeOpacity={0.8}
+              onPress={() => {navigation.navigate('SignUp')
+                // Add your navigation logic here
+                // navigation.navigate('Home');
+              }}
+            >
+              <Text style={styles.buttonText}>Get Started</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.communityText}>
+              Join our community of craft lovers and food enthusiasts
+            </Text>
+          </View>
+          </View>
         
-        <ImageBackground style= {styles.background} source={require('../assets/images/BG14.jpg')} >
-        <Image source={require('../assets/images/BG9.jpg')} style={styles.coverimage}></Image> 
-           <View style={styles.subcontainer}>
-            <Text style={styles.wmtext}>Welcome!</Text>
-            <Text style={styles.mptext}>Your go to marketplace for zari and mushroom</Text>
-           </View>
-            <TouchableOpacity style={styles.gsbutton} onPress={() => navigation.navigate('SignUp')}><Text style={styles.gstext}>Get Started!</Text></TouchableOpacity>
-        </ImageBackground>
         
-        
-    );
-}
+      </GluestackUIProvider>
+     
+  );
+};
+
 const styles = StyleSheet.create({
-    background:{
-        flex:1,
-        //justifyContent:'flex-end'
-    },
-        
-
-    gsbutton:{
-        backgroundColor:'#d4ac0d',
-        padding:20,
-        borderRadius:99,
-        width:'70%',
-        position: 'absolute',
-        bottom: '12%',
-        left:'15%'
-    },
-    gstext:{
-        textAlign:'center',
-        //fontfamily:'inline'
-    },
-    coverimage:{
-       height:'80%',
-       width:'140%',
-       resizeMode:'cover',
-       borderRadius:150,
-       bottom:100
-    },
-    wmtext:{
-        fontSize:60,
-        fontFamily:'',
-        color:'#fbfcfc',
-    },
-    mptext:{
-        fontSize:21,
-        fontFamily:'',
-        color:'#fbfcfc',
-        //alignSelf:'center'
-
-    },
-    subcontainer:{
-        bottom:150,
-       
-    }
+  container: {
+    flex: 1,
+    alignItems:"center",
+    backgroundColor: '#f5f5f5',
+  },
+  gradient: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  
+  contentContainer: {
+    width: width * 0.85,
+    alignItems: 'center',
+    //paddingVertical: 10,
+  },
+  imageContainer: {
+    backgroundColor: 'white',
+    marginTop: 130,
+    marginBottom:70,
     
-    
-    
-})
+    height:320,
+    width:360,
+   
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  Image:{
+    height:'100%',
+    width:'100%',
+    borderRadius: 12,
+  },
+  textContainer: {
+    alignItems: 'center',
+    alignSelf:'center',
+    //backgroundColor:'yellow',
+    margin:1
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+    marginBottom: 18,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: 'black',
+    textAlign: 'center',
+    paddingHorizontal: 20,
+    lineHeight: 24,
+  },
+  button: {
+    backgroundColor: '#0096FF',
+    paddingHorizontal: 25,
+    paddingVertical: 10,
+    borderRadius: 5,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    marginBottom: 20,
+    marginTop:70
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  communityText: {
+    fontSize: 16,
+    color: '#85929e',
+    textAlign: 'center',
+  },
+});
 
 export default WelcomeScreen;

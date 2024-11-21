@@ -1,19 +1,62 @@
+
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import "./../global.css";
+import { GluestackUIProvider } from "./UI/gluestack-ui-provider";
+import { View, Text, TextInput,Platform, StatusBar, TouchableOpacity, StyleSheet, Alert, ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({navigation}) => {
-  const [phone, setPhone] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [otp, setOtp] = useState('');
   const [otpSent, setOtpSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [aadhar, setAadhar]= useState('');
+  const flow = 'login';
 
-  const sendOTP = () => {
-    if (!phone) {
-      Alert.alert('Error', 'Please enter phone number');
+  
+  const validatePhoneNumber = (number) => {
+    const phoneRegex = /^[0-9]\d{9}$/;
+    return phoneRegex.test(number.trim());
+  };
+
+  const handlesendOTP = async() => {
+    if (!validatePhoneNumber(phoneNumber)) {
+      Alert.alert('Invalid Phone Number', 'Please enter a valid phone number');
       return;
     }
      //Implement OTP sending logic here
-   setOtpSent(true);
+   setLoading(true);
+   try{
+    const requestBody={
+      phone_number: phoneNumber,
+      aadhar_number: aadhar,
+    };
+    
+    const response = await fetch('https://krishi-bazar.onrender.com/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        
+      },
+      body: JSON.stringify( requestBody ),
+    });
+    const data = await response.json();
+    if (response.ok) {
+      Alert.alert('OTP Sent', 'Please check your phone for the OTP');
+      await AsyncStorage.setItem('logindata', JSON.stringify(requestBody));
+     console.log(response);
+      navigation.navigate('OTPVerification', { phoneNumber,aadhar, flow  });
+    }
+       else {
+      console.log(data)
+      Alert.alert('Error', data.message || 'Failed to send OTP');
+    }}
+  catch (error) {
+    console.log("Network error:", error);
+    Alert.alert('Error', 'Network error. Please try again.');
+  } finally {
+    setLoading(false);
+   }
   };
 
   //const verifyOTP = async () => {
@@ -30,82 +73,110 @@ const LoginScreen = ({navigation}) => {
   //};
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Phone Number"
-        value={phone}
-        onChangeText={setPhone}
-        keyboardType="phone-pad"
-        editable={!otpSent}
-      />
-      {!otpSent ? (
-        <TouchableOpacity 
-          style={styles.button}
-          onPress={sendOTP}
-        >
-          <Text style={styles.buttonText}>Send OTP</Text>
-        </TouchableOpacity>
-      ) : (
-        <>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter OTP"
-            value={otp}
-            onChangeText={setOtp}
-            keyboardType="number-pad"
-            maxLength={6}
-          />
-          <TouchableOpacity 
-            style={styles.button}
-            onPress={verifyOTP}  
-          >
-            <Text style={styles.buttonText}>Verify OTP</Text>
+    <GluestackUIProvider mode="light"><View  style={styles.container}>
+        
+        <View style={styles.content}>
+         
+           <Text style={styles.wmtext}>Welcome Back!</Text>
+           <Text style={styles.lgtext}>Login to your account</Text>
+          <TextInput style={styles.input} placeholder='Phone-number' value={phoneNumber} onChangeText={setPhoneNumber}/>
+          <TextInput style={styles.input} placeholder='Aadhar no.' value={aadhar} onChangeText={setAadhar}/>
+         
+          <TouchableOpacity style={styles.button} onPress={handlesendOTP} disabled={loading}>
+           <Text style={styles.buttonText}>Get OTP</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Welcome')}>
-            <Text>Back to welcome</Text>
-          </TouchableOpacity>
-        </>
-      )}
-    </View>
+           </View>
+          <View style={styles.subcontainer}>
+           <Text style={styles.subtext}>Don't have an account? <Text onPress={()=> navigation.navigate('SignUp')} style={styles.signuptext}>SignUp</Text></Text>
+          </View>
+        
+      </View></GluestackUIProvider>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
+  container:{
+    flex:1,
+    backgroundColor: '#f5f5f5',
+  },
+  content: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+   marginTop:220,
+    marginLeft:30,
+    marginRight:30,
+    marginBottom:20,
+    padding: 13,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
+    alignItems:'center'
   },
   title: {
-    fontSize: 24,
+    fontSize: 45,
+    alignSelf:'center',
     fontWeight: 'bold',
-    marginBottom: 30,
+    paddingTop:120,
+    marginBottom: 40,
+    color:'#333'
+  },
+  wmtext:{
+    fontSize:35,
+    color:"#333",
+    fontWeight:'bold'
+  },
+  lgtext:{
+    fontSize:19,
+    fontWeight:'bold',
+    color:'#666',
+    marginBottom:30
   },
   input: {
-    width: '100%',
     height: 50,
+    width: '80%',
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    marginBottom: 15,
+    borderColor: '#85929e',
+    backgroundColor:'white',
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    marginTop:8,
   },
   button: {
-    width: '100%',
-    height: 50,
-    backgroundColor: '#007AFF',
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal:20,
+    borderRadius: 5,
+    alignSelf:'center',
+    justifyContent: 'flex-start',
+    backgroundColor:'#0096FF',
+    marginBottom:10,
+    marginTop:20
+    
   },
   buttonText: {
-    color: 'white',
+    color: '#fbfcfc',
     fontSize: 16,
     fontWeight: '600',
   },
+  subcontainer:{
+    display:'flex',
+    flexDirection:'row',
+    justifyContent:'center'
+  },
+  subtext:{
+     fontSize:18,
+    color:'#85929e'
+  },
+  signuptext:{
+    color:'#0096FF',
+    fontSize:18,
+    fontWeight:'bold'
+  }
 });
 
 export default LoginScreen;
+
