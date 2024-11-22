@@ -130,7 +130,7 @@ useEffect(() => {
     {
       title: 'View Products',
       icon: 'shopping-cart',
-      screen: 'Explore',
+      screen: 'ExploreTab',
       description: 'View and order Products',
       badge: `${stats.activeOrders} Active`,
       color:'#FFCC00'
@@ -181,7 +181,7 @@ useEffect(() => {
     <GluestackUIProvider mode="light">
        <Animated.View style={[styles.content, { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }] } >
         
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle='light-content' />
         <View style={styles.header}>
           
           <View style={styles.card}>

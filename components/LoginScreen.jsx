@@ -44,7 +44,6 @@ const LoginScreen = ({navigation}) => {
     if (response.ok) {
       Alert.alert('OTP Sent', 'Please check your phone for the OTP');
       await AsyncStorage.setItem('logindata', JSON.stringify(requestBody));
-     console.log(response);
       navigation.navigate('OTPVerification', { phoneNumber,aadhar, flow  });
     }
        else {
@@ -58,19 +57,6 @@ const LoginScreen = ({navigation}) => {
     setLoading(false);
    }
   };
-
-  //const verifyOTP = async () => {
-   // try {
-      //if (otp.length === 6) {
-        //await AsyncStorage.setItem('isAuthenticated', 'true');
-       // navigation.replace('MainScreen');
-      //} else {
-       // Alert.alert('Error', 'Invalid OTP');
-     // }
-    //} catch (error) {
-     // Alert.alert('Error', 'Verification failed');
-    //}
-  //};
 
   return (
     <GluestackUIProvider mode="light"><View  style={styles.container}>

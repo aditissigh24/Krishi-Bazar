@@ -5,6 +5,8 @@ import { View, StyleSheet, FlatList, Image, Text , TouchableOpacity} from 'react
 import Icon from 'react-native-vector-icons/Feather';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from '@/Store/AuthContext';
 
 const orders = [
     {
@@ -50,28 +52,46 @@ const orders = [
 
 
 const ViewOrders = ({navigation}) => {
+
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { token } = useAuth();
+ 
   useEffect(() => {
-    fetchOrders();
-  }, []);
-  const fetchOrders = async () => {
-    try {
-      const response = await fetch('http://krishi-bazar.onrender.com/api/v1/user/1/orders');
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch orders');
+    const fetchOrders = async () => {
+      try {
+        console.log('Fetching token...');
+      console.log('Token:', token);
+        // Fetch orders from API with token in the header
+        const response = await fetch('https://krishi-bazar.onrender.com/api/v1/user/1/orders', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`, // Add token in Authorization header
+          },
+        });
+        console.log('Response status:', response.status);
+        console.log('token', token)
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Orders fetched successfully:', data);
+          setOrders(data); // Adjust based on your API response structure
+        } else {
+          console.error('Failed to fetch orders:', response.status, response.statusText);
+          const errorDetails = await response.json(); // Additional error details from the API
+          console.error('Error details:', errorDetails);
+         // console.error('Failed to fetch orders:', response.status);
+        }
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+      } finally {
+        setIsLoading(false);
       }
-      
-      const data = await response.json();
-      setOrders(data);
-      setIsLoading(false);
-    } catch (err) {
-      setError(err.message);
-      setIsLoading(false);
-    }
-  };
+    };
+
+    fetchOrders();
+  }, [token]);
 
   const renderProduct = ({ item}) => (
     <TouchableOpacity style={styles.orderCard}  onPress={() => navigation.navigate('SpecificOrder', { orderId: item.order_details.order_id })}>
@@ -196,6 +216,14 @@ const styles = StyleSheet.create({
     color: '#666',
     marginBottom: 2,
   },
+  emptyContainer:{
+    alignItems:'center',
+    marginLeft:19
+  },
+  emptyText:{
+    fontSize:20,
+    fontWeight:'bold',
+  }
 });
 
 export default ViewOrders;

@@ -10,7 +10,7 @@ import {
   Modal
 } from 'react-native';
 
-const FilterDialog = ({ activeFilters, onFilterChange, visible, setVisible }) => {
+const FilterDialog = ({ activeFilters, onFilterChange, visible, setVisible, ProductData }) => {
   const handleFilterSelect = (filterType, value) => {
     const newFilters = {
       ...activeFilters,
@@ -19,11 +19,11 @@ const FilterDialog = ({ activeFilters, onFilterChange, visible, setVisible }) =>
     onFilterChange(newFilters);
   };
 
-  const farmers = ['John Doe', 'Jane Smith', 'Bob Wilson', 'Alice Brown'];
+  const farmers = ['Rohan Sharma', 'Aditi Singh'];
   const priceRanges = [
     { label: '₹0 - ₹500', min: 0, max: 500 },
-    { label: '₹501 - ₹1000', min: 501, max: 1000 },
-    { label: '₹1001 - ₹2000', min: 1001, max: 2000 },
+    { label: '₹500 - ₹1000', min: 501, max: 1000 },
+    { label: '₹1000 - ₹2000', min: 1001, max: 2000 },
     { label: '₹2000+', min: 2000, max: Infinity },
   ];
   const closeModal = () => {
@@ -44,7 +44,7 @@ const FilterDialog = ({ activeFilters, onFilterChange, visible, setVisible }) =>
                   </TouchableOpacity>
           </View>
           <View style={styles.section}>
-            <Text style={styles.subtitle}>Product Type</Text>
+            <Text style={styles.subtitle}>Product Name</Text>
             <View style={styles.optionsRow}>
               <TouchableOpacity
                 style={[

@@ -6,22 +6,19 @@ import Icon from 'react-native-vector-icons/Feather';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import UpdatePhoneNumber from './UpdatePhoneNumber';
 import { ScrollView } from 'react-native-gesture-handler';
+import LogoutButton from './LogoutButton'
+import {useAuth} from './../../Store/AuthContext'
 
 
 export default function ProfileScreen({navigation}) {
-  const [firstName, setfirstName]=useState('');
-  const [lastName, setlastName]=useState('');
-  const [isFarmer,setIsFarmer]=useState('');
+  
   const [phoneNumber,setPhoneNumber]=useState('');
-  const [email,setEmail]=useState('');
-  const [address,setaddress]=useState('');
-  const [city,setcity]=useState('');
-  const [aadhar,setAadhar]=useState('');
-  const [state,setState]=useState('');
-  const [pincode,setPincode]=useState('');
-
-  const [loading, setLoading] = useState(true);
+ 
+  const [isloading, setIsLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [user, setUser] = useState([]);
+ const [error, setError] = useState(null);
+ const { token } = useAuth();
   
   const toggleModal = () => {
     setModalVisible(true)  // Toggle the visibility of modal
@@ -31,33 +28,42 @@ export default function ProfileScreen({navigation}) {
     
   };
  // const [updatedPhoneNumber, setUpdatedPhoneNumber] = useState(userData.phoneNumber);
-  useEffect(() => {
-    // Fetch the user's data from AsyncStorage when the component mounts
-    const fetchUserdata = async () => {
-      try {
-        const userDataJSON = await AsyncStorage.getItem('userData');
-        if (userDataJSON) {
-            const userData=JSON.parse(userDataJSON);
-          setfirstName(userData.first_name);
-          setlastName(userData.last_name);
-          setIsFarmer(userData.is_farmer? 'Farmer': 'Buyer') 
-          setPhoneNumber(userData.phone_number);
-          setEmail(userData.email);
-          setaddress(userData.address);
-          setcity(userData.city);
-          setAadhar(userData.aadhar_number);
-          setState(userData.state);
-          setPincode(userData.pin_code);
-        }
-      } catch (error) {
-        console.error('Error fetching user name from AsyncStorage:', error);
-      } finally {
-        setLoading(false); // Hide loading indicator after fetching data
-      }
-    };
+ 
 
-    fetchUserdata();
-  }, []);
+ useEffect(() => {
+   const fetchUser = async () => {
+     try {
+       console.log('Fetching token...');
+     console.log('Token:', token);
+       // Fetch orders from API with token in the header
+       const response = await fetch('https://krishi-bazar.onrender.com/api/v1/user/1/profile', {
+         method: 'GET',
+         headers: {
+           'Content-Type': 'application/json',
+           Authorization: `Bearer ${token}`, // Add token in Authorization header
+         },
+       });
+       console.log('Response status:', response.status);
+       console.log('token', token)
+       if (response.ok) {
+         const data = await response.json();
+         console.log('User details fetched successfully:', data);
+         setUser(data); // Adjust based on your API response structure
+       } else {
+         console.error('Failed to fetch user details:', response.status, response.statusText);
+         const errorDetails = await response.json(); // Additional error details from the API
+         console.error('Error details:', errorDetails);
+        // console.error('Failed to fetch orders:', response.status);
+       }
+     } catch (error) {
+       console.error('Error fetching orders:', error);
+     } finally {
+       setIsLoading(false);
+     }
+   };
+
+   fetchUser();
+ }, [token]);
   
  
   return (
@@ -70,46 +76,47 @@ export default function ProfileScreen({navigation}) {
               style={styles.profileImage}
             />
           </View>
-          <Text style={styles.name}>{firstName} {lastName}</Text>
-          <Text style={styles.name}>({isFarmer})</Text>
+          <Text style={styles.name}>{user.first_name} {user.last_name}</Text>
+          <Text style={styles.name}>{user.user_type}</Text>
         </View>
         <View style={styles.infoContainer}>
           <View style={styles.infoItem}>
             
-            <Text style={styles.infoText}>Phone Number - {phoneNumber}</Text>
+            <Text style={styles.infoText}>Phone Number - {user.phone_number}</Text>
           </View>
           <View style={styles.infoItem}>
             
-            <Text style={styles.infoText}>Email - {email}</Text>
+            <Text style={styles.infoText}>Email - {user.email}</Text>
           </View>
           <View style={styles.infoItem}>
             
-            <Text style={styles.infoText}>Aadhar Number - {aadhar}</Text>
+            <Text style={styles.infoText}>Aadhar Number - {user.aadhar_number}</Text>
           </View>
           <View style={styles.infoItem}>
             
-            <Text style={styles.infoText}>Address - {address}</Text>
+            <Text style={styles.infoText}>Address - {user.address}</Text>
 
           </View>
           <View style={styles.infoItem}>
             
-            <Text style={styles.infoText}>City - {city}</Text>
+            <Text style={styles.infoText}>City - {user.city}</Text>
             
           </View>
           <View style={styles.infoItem}>
             
-            <Text style={styles.infoText}>State - {state}</Text>
+            <Text style={styles.infoText}>State - {user.state}</Text>
             
           </View>
           <View style={styles.infoItem}>
            
-            <Text style={styles.infoText}>Pincode - {pincode}</Text>
+            <Text style={styles.infoText}>Pincode - {user.pin_code}</Text>
             
           </View>
         </View>
         <TouchableOpacity style={styles.updateButton} onPress={toggleModal}>
           <Text style={styles.updateButtonText}>Update Phone Number</Text>
         </TouchableOpacity>
+       
         {/* Conditionally render the UpdatePhoneNumber component */}
         {modalVisible && (
            <UpdatePhoneNumber
@@ -118,7 +125,7 @@ export default function ProfileScreen({navigation}) {
              onClose={toggleModal} 
              visible={modalVisible} 
              setVisible={setModalVisible}// Pass function to close modal
-             setAadhar={aadhar} 
+             aadhar={setAadhar}
            />
          )}
       </ScrollView>

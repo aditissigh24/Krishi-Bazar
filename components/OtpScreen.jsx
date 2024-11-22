@@ -48,7 +48,6 @@ export default function OtpScreen({route, navigation}) {
     const aadhar = route?.params?.aadhar;
     
     const [userData, setUserData] = useState(null);
-    const [logindata, setlogindata] = useState(null);
    
     useEffect(() => {
         let interval = null;
@@ -77,21 +76,7 @@ export default function OtpScreen({route, navigation}) {
         };
         getData();
       }, []);
-     /* useEffect(() => {
-        const getData = async () => {
-          try {
-            const storedData = await AsyncStorage.getItem('logindata');
-            if (storedData !== null) {
-              // Parse the stored data
-              setlogindata(JSON.parse(storedData));
-              
-            }
-          } catch (e) {
-            console.error('Failed to fetch data from AsyncStorage', e);
-          }
-        };
-        getData();
-      }, []);*/
+    
     const handleResendOTP = async () => {
         setCanResend(false);
         setTimer(2*60*60);
@@ -111,62 +96,119 @@ export default function OtpScreen({route, navigation}) {
           Alert.alert('Error', 'Network error. Please try again.');
         }
       };
-    const handleVerifyOTP = async () => {
-        if (otp.length !== 6) {
-          Alert.alert('Invalid OTP', 'Please enter a valid 6-digit OTP');
+    /*  const fetchWithTimeout = async (resource, options = {}, timeout = 50000) => {
+        const controller = new AbortController();
+        const signal = controller.signal;
+        const id = setTimeout(() => controller.abort(), timeout);
+      
+        try {
+          const response = await fetch(resource, { ...options, signal });
+          clearTimeout(id);
+          return response;
+        } catch (err) {
+          throw new Error('Request timed out or failed.');
+        }
+      };*/
+      
+      const handleVerifyOTP = async () => {
+        // Enhanced input validation
+        if (!otp || otp.length !== 6 || !/^\d+$/.test(otp)) {
+          Alert.alert('Invalid OTP', 'Please enter a valid 6-digit numeric OTP');
           return;
         }
+      
+        // Additional pre-verification checks
+        if (flow === 'signup' && (!userData || !userData.phone_number)) {
+          Alert.alert('Error', 'Missing user data. Please restart the signup process.');
+          return;
+        }
+      
+        if (flow === 'login' && (!phoneNumber || !aadhar)) {
+          Alert.alert('Error', 'Missing required information for login verification.');
+          return;
+        }
+      
         setLoading(true);
-    try {
       
-      const endpoint = flow === 'signup' 
-      ? 'https://krishi-bazar.onrender.com/api/auth/complete-signup' 
-      : 'https://krishi-bazar.onrender.com/api/auth/complete-login';
-    
-    const requestBody = flow === 'signup' 
-      ? { userData,otp } 
-      : {
-        phone_number: '6200059008',
-        aadhar_number: '582228381168',
-        verification_code: otp };
-       
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody),
-      });
-      console.log(`calling endpoint: \n\n{endpoint}`)
-      const data = await response.json();
-      console.log('Response', JSON.stringify(response));
-     
-     
-      if (response.ok) {
-        // Store user data in AsyncStorage
-        await AsyncStorage.setItem('userData', JSON.stringify(data.user));
-        
-        await AsyncStorage.setItem('responseBody', JSON.stringify(response));
-        
-        
-        // Remove temporary phone storage
-        await AsyncStorage.removeItem('tempPhone');
-        
-        // Navigate to home screen or complete profile screen
-        navigation.naviagte('Home');
-      } else {
-        Alert.alert('Error', data.message || 'Invalid OTP');
-        
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Network error. Please try again.');
-      console.log(error)
+        try {
+          const endpoint =
+            flow === 'signup'
+              ? 'https://krishi-bazar.onrender.com/api/auth/complete-signup'
+              : 'https://krishi-bazar.onrender.com/api/auth/complete-login';
       
+          const requestBody =
+            flow === 'signup'
+              ? { 
+                  userData: {
+                    ...userData,
+                    otp 
+                  }
+                }
+              : { 
+                  phone_number: phoneNumber, 
+                  aadhar_number: aadhar, 
+                  verification_code: otp 
+                };
       
-    } finally {
-      setLoading(false);
-    }
-  };
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody),
+           // timeout: 10000 // 10-second timeout
+          });
+      
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Verification failed');
+          }
+      
+          const responseData = await response.json();
+          const { token, user } = responseData;
+      
+          // Validate response data
+          if (!token || !user) {
+            throw new Error('Invalid server response');
+          }
+      
+          // Secure storage with error handling
+          try {
+            await AsyncStorage.setItem('JwtToken', token);
+            await AsyncStorage.setItem('userID', JSON.stringify(user));
+            await AsyncStorage.removeItem('tempPhone');
+          } catch (storageError) {
+            console.error('Storage error:', storageError);
+            Alert.alert('Storage Error', 'Could not save user data. Please try again.');
+            return;
+          }
+      
+          // Clear sensitive data
+          resetSensitiveState();
+      
+          navigation.navigate('HomeTab');
+        } catch (error) {
+          console.error('Verification error:', error);
+          
+          // More informative error handling
+          const errorMessage = 
+            error.message.includes('Network') 
+              ? 'Network error. Please check your internet connection.'
+              : error.message || 'Verification failed. Please try again.';
+          
+          Alert.alert('Verification Failed', errorMessage);
+        } finally {
+          setLoading(false);
+        }
+      };
+      
+      // Helper function to reset sensitive state (suggested addition)
+      const resetSensitiveState = () => {
+        setOtp('');
+       // setPhoneNumber('');
+       // setAadhar('');
+        setUserData(null);
+      };
   
     return (
       <GluestackUIProvider mode="light"><View style={styles.container}>

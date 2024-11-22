@@ -20,12 +20,8 @@ export default function RootTabs
       <View style={styles.container}> {/* Add background here */}
         <Tab.Navigator screenOptions={{
         headerShown:false,
-
         tabBarInactiveTintColor:'#663300 ',
         tabBarActiveTintColor:'#0A71EB',
-        
-        
-       
         tabBarStyle: {
           backgroundColor: 'white', // Tab bar background color
           height: 60, // Adjust the height as needed

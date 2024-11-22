@@ -1,30 +1,46 @@
 import React, { useState } from 'react';
 import "./../../global.css";
 import { GluestackUIProvider } from "./../UI/gluestack-ui-provider";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //import { useNavigation } from '@react-navigation/native';
 
-const UpdatePhoneNumber = ({ visible, setVisible,navigation, setAadhar}) => {
-  
+const UpdatePhoneNumber = ({ visible, setVisible,navigation, aadhar}) => {
+  const flow = 'login';
   const [newPhoneNumber, setNewPhoneNumber] = useState('');
+  const [loading,setLoading]= useState(false)
  // const navigation = useNavigation();
   const handleCancel = () => {
     setNewPhoneNumber(''); // Clear the phone number input
     setVisible(false); // Close the modal
   };
+  
+ 
   const validatePhoneNumber = (number) => {
-    const phoneRegex = /^[0-9]\d{9}$/;
-    return phoneRegex.test(number.trim());
+    const phoneRegex = /^[6-9]\d{9}$/;  // Matches numbers starting with 6-9 and followed by 9 digits
+    const sanitizedNumber = number.trim(); // Ensure no leading or trailing spaces
+    console.log('Sanitized Phone Number:', sanitizedNumber);  // Log sanitized phone number
+    const isValid = phoneRegex.test(sanitizedNumber);
+    console.log('Is Phone Number Valid:', isValid); // Log whether it passes the regex
+    return isValid;
   };
+  
+  
   const handleUpdatePhoneNumber = async() => {
-    if (!validatePhoneNumber(newPhoneNumber)) {
+    console.log('Button pressed');
+    console.log('New Phone Number:', newPhoneNumber);
+    const sanitizedPhoneNumber = newPhoneNumber.trim();  // Sanitize the phone number
+    console.log('Sanitized Phone Number:', sanitizedPhoneNumber);
+    if (!validatePhoneNumber(sanitizedPhoneNumber)) {
       Alert.alert('Invalid Phone Number', 'Please enter a valid phone number');
       return;
     }
+  
      //Implement OTP sending logic here
    setLoading(true);
+   console.log('Phone Number Validated');
+ 
    try{
     const requestBody={
       phone_number: newPhoneNumber,
@@ -40,11 +56,12 @@ const UpdatePhoneNumber = ({ visible, setVisible,navigation, setAadhar}) => {
       body: JSON.stringify( requestBody ),
     });
     const data = await response.json();
+    //console.log(data)
     if (response.ok) {
       Alert.alert('OTP Sent', 'Please check your phone for the OTP');
       await AsyncStorage.setItem('logindata', JSON.stringify(requestBody));
      console.log(response);
-      navigation.navigate('OTPVerification', { phoneNumber,aadhar, flow  });
+      navigation.navigate('otpScreen', { newPhoneNumber,aadhar,flow});
     }
        else {
       console.log(data)
