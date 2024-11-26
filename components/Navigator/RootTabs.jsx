@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, KeyboardAvoidingView,Platform } from 'react-native'
 import "./../../global.css";
 import { GluestackUIProvider } from "./../UI/gluestack-ui-provider";
 import React from 'react'
@@ -16,19 +16,25 @@ const Tab = createBottomTabNavigator();
 export default function RootTabs
 () {
   return (
+
     <GluestackUIProvider mode="light">
+      
       <View style={styles.container}> {/* Add background here */}
-        <Tab.Navigator screenOptions={{
+        <Tab.Navigator screenOptions={({route})=>({
         headerShown:false,
-        tabBarInactiveTintColor:'#663300 ',
+        tabBarInactiveTintColor:'#bf9819 ',
         tabBarActiveTintColor:'#0A71EB',
+        tabBarHideOnKeyboard:true,
         tabBarStyle: {
-          backgroundColor: 'white', // Tab bar background color
+          backgroundColor: 'white',
+          //position:'absolute',
+          //bottom:20,
+          marginLeft:70,
+          marginRight:70, // Tab bar background color
           height: 60, // Adjust the height as needed
-          borderRadius:100,
-          width:'60%',
-          marginBottom:40,
-          alignSelf:"center",
+          borderRadius:10,
+          //marginBottom:40,
+          //alignSelf:"center",
           elevation:7,
           
           
@@ -38,7 +44,7 @@ export default function RootTabs
           fontWeight: '600', // Font weight of labels
           //color: '', // Label color
         },
-        }}>
+        })}>
         <Tab.Screen name='HomeTab' component={HomeStack}
         options={{
           tabBarLabel:'Home',
@@ -61,6 +67,8 @@ export default function RootTabs
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    //justifyContent:'center',
+    //alignItems:'center',
     backgroundColor: '#f5f5f5', // Match app background to avoid visual artifacts
   },
 })

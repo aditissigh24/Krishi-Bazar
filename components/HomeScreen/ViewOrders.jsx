@@ -8,6 +8,7 @@ import { ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '@/Store/AuthContext';
 
+
 const orders = [
     {
       id: '1',
@@ -56,15 +57,18 @@ const ViewOrders = ({navigation}) => {
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { token } = useAuth();
+ // const { token } = useAuth();
+ const { user_id } = useAuth();
  
+ const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MjQ1ODIsInVzZXJfaWQiOjEsInVzZXJfdHlwZSI6ImZhcm1lciJ9.3DCo4LmnbMGL3jS-SP2TmQkEKW8tkympsh8zwc25lzI';
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         console.log('Fetching token...');
       console.log('Token:', token);
+      console.log(user_id)
         // Fetch orders from API with token in the header
-        const response = await fetch('https://krishi-bazar.onrender.com/api/v1/user/1/orders', {
+        const response = await fetch(`https://krishi-bazar.onrender.com/api/v1/user/1/orders`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -113,14 +117,14 @@ const ViewOrders = ({navigation}) => {
   );
   if (isLoading) {
     return (
-      <LinearGradient colors={['#FAF6E3', '#FAF6E3']} style={styles.container}>
+      <LinearGradient colors={['#f5f5f5', '#f5f5f5']} style={styles.container}>
         <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
       </LinearGradient>
     );
   }
   if (error) {
     return (
-      <LinearGradient colors={['#FAF6E3', '#FAF6E3']} style={styles.container}>
+      <LinearGradient colors={['#f5f5f5', '#f5f5f5']} style={styles.container}>
         <Text style={styles.errorText}>Error: {error}</Text>
       </LinearGradient>
     );
@@ -129,7 +133,7 @@ const ViewOrders = ({navigation}) => {
   
   return (
     <LinearGradient
-    colors={['#FAF6E3', '#FAF6E3']}
+    colors={['#f5f5f5', '#f5f5f5']}
     style={styles.container}
   >
     <GluestackUIProvider mode="light">
@@ -146,7 +150,7 @@ const ViewOrders = ({navigation}) => {
           renderItem={renderProduct}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>No orders found</Text>
+              <Text style={styles.emptyText}>Loading...</Text>
             </View>
           }
         />
@@ -217,8 +221,8 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   emptyContainer:{
-    alignItems:'center',
-    marginLeft:19
+    alignSelf:'center',
+    margin:20
   },
   emptyText:{
     fontSize:20,

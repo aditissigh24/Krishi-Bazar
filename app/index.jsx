@@ -1,9 +1,9 @@
 import "./../global.css";
 import { GluestackUIProvider } from "../components/UI/gluestack-ui-provider";
 import React, { useState, useEffect } from 'react';
-import { NavigationIndependentTree } from '@react-navigation/native';
+import { NavigationIndependentTree, KeyboardAvoidingView,Platform } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Text, View } from "react-native";
+import { Text, View, SafeAreaView,StyleSheet } from "react-native";
 import RootTabs from "../components/Navigator/RootTabs";
 import AuthStack from '../components/Navigator/AuthStack';
 import{AuthProvider,useAuth} from './../Store/AuthContext'
@@ -43,18 +43,30 @@ export default function Index() {
 
      return (
       <AuthProvider>
-       <GluestackUIProvider mode="light">
+        <GluestackUIProvider mode="light">
+        
+         <View style={styles.container}>
+       
         <NavigationIndependentTree>
-        <RootTabs/>
+          
+        <RootTabs></RootTabs>
        </NavigationIndependentTree>
+       </View>
+       
        </GluestackUIProvider>
+       
        </AuthProvider>
        
-     );
-}
-
-
-
+       
+      );
+    }
     
     
-// isAuthenticated ? <RootTabs /> : <AuthStack />
+    //isAuthenticated ? <RootTabs /> : <AuthStack />}
+    const styles = StyleSheet.create({
+      container: {
+        flex: 1,
+      },
+    });
+    
+    

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import "./../../global.css";
 import { GluestackUIProvider } from "./../UI/gluestack-ui-provider";
 import {
@@ -9,7 +9,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
-  Modal,
+  Modal,Alert,
   SafeAreaView,
   StatusBar,
   ActivityIndicator,
@@ -25,7 +25,10 @@ const BuyOrder = ({ navigation, route }) => {
     price: 299,
     availableQuantity: 500,
   };
-
+  const Id = route?.params?.Id;
+  const image = route?.params?.image;
+  const productName = route?.params?.productName;
+  const productRate = route?.params?.productRate;
   const [quantity, setQuantity] = useState(1);
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
@@ -35,20 +38,58 @@ const BuyOrder = ({ navigation, route }) => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [formData, setFormData] = useState({
+    quantity_in_kg:'0',
+    delivery_address: "",
+    delivery_city: "",
+    delivery_address_zip:'',
+    mode_of_delivery: "standard",
+  });
 
   const handleCreateOrder = async () => {
     setLoading(true);
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Simulate success/failure randomly
-      if (Math.random() > 0.5) {
-        throw new Error('Order failed');
+      if (!formData.quantity_in_kg || !formData.delivery_address || !formData.delivery_city || !formData.delivery_address_zip||!formData.mode_of_delivery) {
+        Alert.alert('Error', 'Please fill all required fields');
+        return;
       }
-      
+      const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MjQ1ODIsInVzZXJfaWQiOjEsInVzZXJfdHlwZSI6ImZhcm1lciJ9.3DCo4LmnbMGL3jS-SP2TmQkEKW8tkympsh8zwc25lzI';
+      // Create JSON payload
+      const payload = {
+        ...formData,
+        quantity_in_kg: parseFloat(formData.quantity_in_kg),
+      };
+      console.log('Payload:', payload);
+      const response = await fetch(`https://krishi-bazar.onrender.com/api/v1/product/${Id}/order`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+      await new Promise(resolve => setTimeout(resolve, 2000));
+     
+      console.log(response)
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error('Order Failed, try again!');
+        }
+        console.log(error)
       setShowSuccessModal(true);
+      setFormData({
+        quantity_in_kg:'0',
+        delivery_address: "",
+        delivery_city: "",
+        delivery_address_zip:'',
+        mode_of_delivery: "standard",
+      });
     } catch (error) {
+      console.log(error)
       setShowErrorModal(true);
     } finally {
       setLoading(false);
@@ -111,12 +152,12 @@ const BuyOrder = ({ navigation, route }) => {
           {/* Product Summary */}
           <View style={styles.productSummary}>
             <Image
-              source={{ uri: product.image }}
+              source={{ uri: image }}
               style={styles.productImage}
             />
             <View style={styles.productInfo}>
-              <Text style={styles.productName}>{product.name}</Text>
-              <Text style={styles.productPrice}>₹{product.price}</Text>
+              <Text style={styles.productName}>{productName}</Text>
+              <Text style={styles.productPrice}>₹{productRate}</Text>
             </View>
           </View>
 
@@ -125,21 +166,14 @@ const BuyOrder = ({ navigation, route }) => {
             {/* Quantity Selector */}
             <View style={styles.formGroup}>
               <Text style={styles.label}>Quantity</Text>
-              <View style={styles.quantitySelector}>
-                <TouchableOpacity 
-                  style={styles.quantityButton}
-                  onPress={() => quantity > 1 && setQuantity(quantity - 1)}
-                >
-                  <Feather name="minus" size={20} color="#333" />
-                </TouchableOpacity>
-                <Text style={styles.quantityText}>{quantity}</Text>
-                <TouchableOpacity 
-                  style={styles.quantityButton}
-                  onPress={() => quantity < product.availableQuantity && setQuantity(quantity + 1)}
-                >
-                  <Feather name="plus" size={20} color="#333" />
-                </TouchableOpacity>
-              </View>
+              <Text style={styles.label}>Quantity (kg) *</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.quantity_in_kg}
+                onChangeText={(text) => setFormData({ ...formData, quantity_in_kg: text })}
+                keyboardType="decimal-pad"
+                placeholder="Enter quantity in kg"
+                />
             </View>
 
             {/* Phone Number */}
@@ -147,8 +181,8 @@ const BuyOrder = ({ navigation, route }) => {
               <Text style={styles.label}>Phone Number</Text>
               <TextInput
                 style={styles.input}
-                value={phone}
-                onChangeText={setPhone}
+                value={formData.buyers_phone_number}
+                onChangeText={(text) => setFormData({ ...formData, buyers_phone_number: text })}
                 placeholder="Enter your phone number"
                 keyboardType="phone-pad"
               />
@@ -159,16 +193,35 @@ const BuyOrder = ({ navigation, route }) => {
               <Text style={styles.label}>Delivery Address</Text>
               <TextInput
                 style={[styles.input, styles.textArea]}
-                value={address}
-                onChangeText={setAddress}
+                value={formData.delivery_address}
+                onChangeText={(text) => setFormData({ ...formData, delivery_address : text })}
                 placeholder="Enter delivery address"
                 multiline
                 numberOfLines={3}
+              /></View>
+               <View style={styles.formGroup}>
+               <Text style={styles.label}>Delivery City</Text>
+              <TextInput
+                style={[styles.input, styles.textArea]}
+                value={formData.delivery_city}
+                onChangeText={(text) => setFormData({ ...formData, delivery_city : text })}
+                placeholder="Enter city"
+                numberOfLines={3}
+              />
+            </View>
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Pin Code</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.delivery_address_zip}
+                onChangeText={(text) => setFormData({ ...formData, delivery_address_zip: text })}
+                placeholder="Enter the pincode"
+                keyboardType="phone-pad"
               />
             </View>
 
             {/* Delivery Date */}
-            <View style={styles.formGroup}>
+            {/* <View style={styles.formGroup}>
               <Text style={styles.label}>Delivery Date</Text>
               <TouchableOpacity 
                 style={styles.dateSelector}
@@ -188,7 +241,7 @@ const BuyOrder = ({ navigation, route }) => {
                   }}
                 />
               )}
-            </View>
+            </View> */}
 
             {/* Delivery Mode */}
             <View style={styles.formGroup}>
@@ -199,7 +252,7 @@ const BuyOrder = ({ navigation, route }) => {
                     styles.deliveryModeButton,
                     deliveryMode === 'standard' && styles.deliveryModeActive
                   ]}
-                  onPress={() => setDeliveryMode('standard')}
+                  onPress={(text) => setFormData({ ...formData, mode_of_delivery: text })}
                 >
                   <Text style={[
                     styles.deliveryModeText,
@@ -211,7 +264,7 @@ const BuyOrder = ({ navigation, route }) => {
                     styles.deliveryModeButton,
                     deliveryMode === 'express' && styles.deliveryModeActive
                   ]}
-                  onPress={() => setDeliveryMode('express')}
+                  onPress={(text) => setFormData({ ...formData, mode_of_delivery: text })}
                 >
                   <Text style={[
                     styles.deliveryModeText,
@@ -221,12 +274,12 @@ const BuyOrder = ({ navigation, route }) => {
               </View>
             </View>
           </View>
-        </ScrollView>
+        </ScrollView>aa
         {/* Create Order Button */}
         <View style={styles.bottomContainer}>
           <View style={styles.totalContainer}>
             <Text style={styles.totalLabel}>Total Amount</Text>
-            <Text style={styles.totalAmount}>₹{product.price * quantity}</Text>
+            <Text style={styles.totalAmount}>₹{productRate * formData.quantity_in_kg}</Text>
           </View>
           <TouchableOpacity 
             style={styles.createButton}

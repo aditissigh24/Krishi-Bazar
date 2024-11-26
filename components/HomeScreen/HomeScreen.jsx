@@ -97,7 +97,7 @@ useEffect(() => {
     if (!loading) {
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 500,
+        duration: 300,
         easing: Easing.ease,
         useNativeDriver: true,
       }).start();
@@ -183,14 +183,14 @@ useEffect(() => {
         
         <StatusBar barStyle='light-content' />
         <View style={styles.header}>
+          <Text style={styles.greeting}>Welcome back! </Text>
           
           <View style={styles.card}>
-          <Text style={styles.greeting}>Welcome back! </Text>
-          <Text style={styles.name}>Aditi Singh</Text>
+          <Text style={styles.name}>{firstName} {lastName}</Text>
           
             <View style={styles.farmerBadge}>
               <Icon name="award" size={16} color="#2E7D32" />
-              <Text style={styles.farmerText}>Verified Farmer</Text>
+              <Text style={styles.farmerText}>Verified {isFarmer}</Text>
               </View>
             
           
@@ -242,16 +242,16 @@ const styles = StyleSheet.create({
       flex:1
     },
     header:{
-      margin:20,
-      marginTop:200,
+      margin:10,
+      marginTop:150,
       padding:6,
-      marginBottom:45
+      marginBottom:90
     },
     greeting: {
       fontSize: 28,
       fontWeight: '600',
-      color: 'white',
-      //marginBottom:6,
+      color: 'black',
+      marginBottom:16,
       marginLeft:10
     },
     card: {

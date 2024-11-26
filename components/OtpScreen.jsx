@@ -43,6 +43,7 @@ export default function OtpScreen({route, navigation}) {
     const [canResend, setCanResend] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const requestBody=route?.params.requestBody;
     const flow = route?.params?.flow;
     const phoneNumber = route?.params?.phoneNumber;
     const aadhar = route?.params?.aadhar;
@@ -88,7 +89,7 @@ export default function OtpScreen({route, navigation}) {
             },
             body: JSON.stringify({ phoneNumber }),
           });
-    
+          
           if (!response.ok) {
             Alert.alert('Error', 'Failed to resend OTP');
           }
@@ -129,7 +130,7 @@ export default function OtpScreen({route, navigation}) {
         }
       
         setLoading(true);
-      
+      console.log(storedData)
         try {
           const endpoint =
             flow === 'signup'
@@ -139,10 +140,9 @@ export default function OtpScreen({route, navigation}) {
           const requestBody =
             flow === 'signup'
               ? { 
-                  userData: {
-                    ...userData,
-                    otp 
-                  }
+                  user: requestBody,
+                  verification_code: otp 
+                  
                 }
               : { 
                   phone_number: phoneNumber, 

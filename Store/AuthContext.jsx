@@ -5,16 +5,18 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
-  const [user, setUser] = useState(null);
+  const [user_id, setUserID] = useState(null);
 
   useEffect(() => {
     const fetchToken = async () => {
       const storedToken = await AsyncStorage.getItem('JwtToken');
-      const storedUser = await AsyncStorage.getItem('user');
+      const storedUser = await AsyncStorage.getItem('userID');
 
       if (storedToken) {
         setToken(storedToken);
-        setUser(JSON.parse(storedUser));
+      }
+      if (storedUser) {
+        setUserID(JSON.parse(storedUser));
       }
     };
 
@@ -22,7 +24,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ token, setToken }}>
+    <AuthContext.Provider value={{ token, setToken, user_id, setUserID}}>
       {children}
     </AuthContext.Provider>
   );

@@ -75,7 +75,8 @@ const ManageProducts = ({navigation}) => {
   });
 
   const route = useRoute();
-  const { token } = useAuth();
+  //const { token } = useAuth();
+  const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MjQ1ODIsInVzZXJfaWQiOjEsInVzZXJfdHlwZSI6ImZhcm1lciJ9.3DCo4LmnbMGL3jS-SP2TmQkEKW8tkympsh8zwc25lzI';
   const { category } = route.params || {};
   useEffect(() => {
     if (category) {
@@ -117,12 +118,16 @@ const ManageProducts = ({navigation}) => {
     fetchProducts();
   }, [token]);
   
+  
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
       !filters.productType || products.name === filters.productType;
-    const matchesSearch = products.name.toLowerCase().includes(searchText.toLowerCase());
+    const matchesSearch =  product.name && product.name.toLowerCase().includes(searchText.toLowerCase());
     const matchesFarmer =
-    !filters.farmerName || products.farmers_first_name + products.farmers_last_name === filters.farmerName;
+    !filters.farmerName ||
+    (product.farmers_first_name + ' ' + product.farmers_last_name)
+      .toLowerCase()
+      .includes(filters.farmerName.toLowerCase());
     const matchesPriceRange = !filters.priceRange || (() => {
       const range = filters.priceRange.split(' - ');
       const min = parseInt(range[0].replace('₹', ''));
@@ -138,13 +143,13 @@ const ManageProducts = ({navigation}) => {
 
   const renderProduct = ({ item }) => (
    
-    <TouchableOpacity style={styles.productCard} onPress={() => navigation.navigate('ManageSpecificProduct', { ProductId: products.id })}>
+    <TouchableOpacity style={styles.productCard} onPress={() => navigation.navigate('ManageSpecificProduct', {Id: item.id})}>
         
-      <Image source={{ uri: item.image }} style={styles.productImage} />
+      <Image source={{ uri: item.img }} style={styles.productImage} />
       <Text style={styles.productName}>{item.name}</Text>
-      <Text style={styles.productName}>{item.type}</Text>
+      <Text style={styles.productType}>{item.type}</Text>
       <Text style={styles.productPrice}>₹{item.rate_per_kg.toFixed(2)}</Text>
-      <Text style={styles.productName}>{item.farmers_first_name}{item.farmers_last_name}</Text>
+      <Text style={styles.farmerName}>Farmer: {item.farmers_first_name} {item.farmers_last_name}</Text>
     </TouchableOpacity>
   );
 
@@ -164,7 +169,7 @@ const ManageProducts = ({navigation}) => {
           <Icon name="menu" size={18} color="#102C57" />
             <Text style={styles.filterButtonText}>FILTER</Text>
         </TouchableOpacity>
-         {/* Conditionally render the UpdatePhoneNumber component */}
+         {/* Conditionally render the filter component */}
        {modalVisible && (
           <FilterDialog
           activeFilters={filters}
@@ -183,7 +188,7 @@ const ManageProducts = ({navigation}) => {
           renderItem={renderProduct}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>No products found</Text>
+              <Text style={styles.emptyText}>Loading...</Text>
             </View>}
          ItemSeparatorComponent={() => <View style={{ height: 10 , width:10}} />}
         />
@@ -197,7 +202,7 @@ const productCardWidth = (width - 54) / 2;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAF6E3',
+    backgroundColor: '#f5f5f5',
     paddingHorizontal: 24,
     paddingVertical: 32,
   },
@@ -284,11 +289,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#1A1A1D',
-    marginBottom: 4,
+    //marginBottom: 4,
+  },
+  productType:{
+    fontSize:15,
+    color:'#666',
+    fontWeight:'500'
   },
   productPrice: {
     fontSize: 14,
     color: '#2E7D32',
+    fontWeight:'500'
+  },
+  farmerName:{
+    fontSize:15,
+    color:'#444',
     fontWeight:'500'
   },
   emptyContainer:{
@@ -297,6 +312,7 @@ const styles = StyleSheet.create({
   },
   emptyText:{
     fontSize:20,
+    color:'#666',
     fontWeight:'bold'
   }
 });

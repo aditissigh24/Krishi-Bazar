@@ -10,6 +10,7 @@ import LoginScreen from '../LoginScreen';
 import OtpScreen from '../OtpScreen';
 import HomeScreen from '../HomeScreen/HomeScreen';
 import AuthStack from './AuthStack';
+import CreateProduct from './../ProfileScreen/CreateProduct'
 //screens
 
 
@@ -19,15 +20,12 @@ const Stack=createStackNavigator();
 export default function ProfileStack() {
   return (
     <GluestackUIProvider mode="light"><Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name="Profile" component={ProfileScreen}/>
-        <Stack.Screen name="UpdatePhoneNumber" component={UpdatePhoneNumber}/>
-        <Stack.Screen name="otpScreen" component={OtpScreen}/>
-        <Stack.Screen name="Welcome" component={WelcomeScreen}/>
-        <Stack.Screen name="Login" component={LoginScreen}/>
-        <Stack.Screen name="Home" component={HomeScreen}/>
-        <Stack.Screen name="SignUp" component={SignUpScreen}/>
-        <Stack.Screen name="AuthStack" component={AuthStack}/>
-        <Stack.Screen name="OTPVerification" component={OtpScreen}/>
+    <Stack.Screen name="Profile" component={ProfileScreen} />
+    <Stack.Screen name="UpdatePhoneNumber" component={UpdatePhoneNumber}/>
+    <Stack.Screen name="otpScreen" component={OtpScreen}/>
+    <Stack.Screen name="CreateProduct" component={CreateProduct} options={{tabBarStyle: { display: 'none' }}}/>
+    
+    
       </Stack.Navigator></GluestackUIProvider>
   );
 }

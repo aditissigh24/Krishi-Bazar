@@ -71,7 +71,8 @@ const ExploreScreen = ({navigation}) => {
     farmerName: '',
     deliveryDate: '',
   });
-  const { token } = useAuth();
+  //const { token } = useAuth();
+const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MjQ1ODIsInVzZXJfaWQiOjEsInVzZXJfdHlwZSI6ImZhcm1lciJ9.3DCo4LmnbMGL3jS-SP2TmQkEKW8tkympsh8zwc25lzI';
   const route = useRoute();
   
   const { category } = route.params || {};
@@ -119,9 +120,12 @@ const ExploreScreen = ({navigation}) => {
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
       !filters.productType || products.name === filters.productType;
-    const matchesSearch = products.name.toLowerCase().includes(searchText.toLowerCase());
+    const matchesSearch =  product.name && product.name.toLowerCase().includes(searchText.toLowerCase());
     const matchesFarmer =
-    !filters.farmerName || products.farmers_first_name + products.farmers_last_name === filters.farmerName;
+    !filters.farmerName ||
+    (product.farmers_first_name + ' ' + product.farmers_last_name)
+      .toLowerCase()
+      .includes(filters.farmerName.toLowerCase());
     const matchesPriceRange = !filters.priceRange || (() => {
       const range = filters.priceRange.split(' - ');
       const min = parseInt(range[0].replace('₹', ''));
@@ -136,12 +140,12 @@ const ExploreScreen = ({navigation}) => {
   };
 
   const renderProduct = ({ item }) => (
-    <TouchableOpacity style={styles.productCard} onPress={() => navigation.navigate('ProductDetails', { ProductId: products.id })}>
+    <TouchableOpacity style={styles.productCard} onPress={() => navigation.navigate('ProductDetails', {Id: item.id}  )}>
       <Image source={{ uri: item.img }} style={styles.productImage} />
       <Text style={styles.productName}>{item.name}</Text>
       <Text style={styles.productName}>{item.type}</Text>
       <Text style={styles.productPrice}>₹{item.rate_per_kg.toFixed(2)}</Text>
-      <Text style={styles.productName}>{item.farmers_first_name}{item.farmers_last_name}</Text>
+      <Text style={styles.farmerName}>Farmer: {item.farmers_first_name}{item.farmers_last_name}</Text>
     </TouchableOpacity>
   );
 
@@ -181,7 +185,7 @@ const ExploreScreen = ({navigation}) => {
           renderItem={renderProduct}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>No products found</Text>
+              <Text style={styles.emptyText}>Loading...</Text>
             </View>}
          ItemSeparatorComponent={() => <View style={{ height: 10 , width:10}} />}
         />
@@ -287,6 +291,11 @@ const styles = StyleSheet.create({
   productPrice: {
     fontSize: 14,
     color: '#2E7D32',
+    fontWeight:'500'
+  },
+  farmerName:{
+    fontSize:15,
+    color:'#444',
     fontWeight:'500'
   },
   emptyContainer:{

@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import UpdatePhoneNumber from './UpdatePhoneNumber';
 import { ScrollView } from 'react-native-gesture-handler';
-import LogoutButton from './LogoutButton'
+
 import {useAuth} from './../../Store/AuthContext'
 
 
@@ -18,8 +18,8 @@ export default function ProfileScreen({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [user, setUser] = useState([]);
  const [error, setError] = useState(null);
- const { token } = useAuth();
-  
+ //const { token } = useAuth();
+  const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MjQ1ODIsInVzZXJfaWQiOjEsInVzZXJfdHlwZSI6ImZhcm1lciJ9.3DCo4LmnbMGL3jS-SP2TmQkEKW8tkympsh8zwc25lzI';
   const toggleModal = () => {
     setModalVisible(true)  // Toggle the visibility of modal
   };
@@ -28,7 +28,35 @@ export default function ProfileScreen({navigation}) {
     
   };
  // const [updatedPhoneNumber, setUpdatedPhoneNumber] = useState(userData.phoneNumber);
- 
+ //const { user, token, setToken, setUser } = useAuth();
+
+ const logout = async () => {
+  try {
+    // Confirm logout
+    Alert.alert('Confirm Logout', 'Are you sure you want to log out?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Logout',
+        onPress: async () => {
+          // Clear data from AsyncStorage
+          await AsyncStorage.removeItem('JwtToken');
+          await AsyncStorage.removeItem('user');
+
+          // Reset Auth Context states
+          setToken(null);
+          setUser(null);
+
+          // Navigate to LoginScreen
+          navigation.replace('AuthStack'); // Adjust the screen name as per your navigation
+        },
+      },
+    ]);
+  } catch (error) {
+    console.error('Error during logout:', error);
+    Alert.alert('Logout Failed', 'Something went wrong. Please try again.');
+  }
+
+ };
 
  useEffect(() => {
    const fetchUser = async () => {
@@ -36,7 +64,7 @@ export default function ProfileScreen({navigation}) {
        console.log('Fetching token...');
      console.log('Token:', token);
        // Fetch orders from API with token in the header
-       const response = await fetch('https://krishi-bazar.onrender.com/api/v1/user/1/profile', {
+       const response = await fetch('https://krishi-bazar.onrender.com/api/v1/user/1', {
          method: 'GET',
          headers: {
            'Content-Type': 'application/json',
@@ -75,48 +103,58 @@ export default function ProfileScreen({navigation}) {
               source={require('./../../assets/images/download.jpg')}
               style={styles.profileImage}
             />
+          
           </View>
+          
           <Text style={styles.name}>{user.first_name} {user.last_name}</Text>
-          <Text style={styles.name}>{user.user_type}</Text>
+          <Text style={styles.name}>({user.user_type})</Text>
         </View>
         <View style={styles.infoContainer}>
           <View style={styles.infoItem}>
             
-            <Text style={styles.infoText}>Phone Number - {user.phone_number}</Text>
+            <Text style={styles.infoText}>Phone Number : {user.phone_number}</Text>
           </View>
           <View style={styles.infoItem}>
             
-            <Text style={styles.infoText}>Email - {user.email}</Text>
+            <Text style={styles.infoText}>Email : {user.email}</Text>
           </View>
           <View style={styles.infoItem}>
             
-            <Text style={styles.infoText}>Aadhar Number - {user.aadhar_number}</Text>
+            <Text style={styles.infoText}>Aadhar Number : {user.aadhar_number}</Text>
           </View>
           <View style={styles.infoItem}>
             
-            <Text style={styles.infoText}>Address - {user.address}</Text>
+            <Text style={styles.infoText}>Address : {user.address}</Text>
 
           </View>
           <View style={styles.infoItem}>
             
-            <Text style={styles.infoText}>City - {user.city}</Text>
+            <Text style={styles.infoText}>City : {user.city}</Text>
             
           </View>
           <View style={styles.infoItem}>
             
-            <Text style={styles.infoText}>State - {user.state}</Text>
+            <Text style={styles.infoText}>State : {user.state}</Text>
             
           </View>
           <View style={styles.infoItem}>
            
-            <Text style={styles.infoText}>Pincode - {user.pin_code}</Text>
+            <Text style={styles.infoText}>Pincode : {user.pin_code}</Text>
             
           </View>
         </View>
+        <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.updateButton} onPress={toggleModal}>
           <Text style={styles.updateButtonText}>Update Phone Number</Text>
         </TouchableOpacity>
-       
+        <TouchableOpacity style={styles.updateButton}  onPress={() => navigation.navigate('CreateProduct')}>
+          <Text style={styles.updateButtonText}>Create Product</Text>
+        </TouchableOpacity>
+        </View>
+        <TouchableOpacity style={styles.button} onPress={logout}>
+      <Text style={styles.buttonText}>Logout</Text>
+    </TouchableOpacity>
+        
         {/* Conditionally render the UpdatePhoneNumber component */}
         {modalVisible && (
            <UpdatePhoneNumber
@@ -125,7 +163,7 @@ export default function ProfileScreen({navigation}) {
              onClose={toggleModal} 
              visible={modalVisible} 
              setVisible={setModalVisible}// Pass function to close modal
-             aadhar={setAadhar}
+             aadhar={user.aadhar_number}
            />
          )}
       </ScrollView>
@@ -137,15 +175,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
     paddingHorizontal: 35,
-    paddingVertical: 100,
+    paddingVertical: 60,
   },
+
   profileContainer: {
     alignItems: 'center',
-    marginBottom:70,
-    height:'120'
+   marginBottom:10
+    
   },
   profilePicture: {
-    margin:30,
+   // margin:30,
     width: 150,
     height: 150,
     borderRadius: 70,
@@ -164,9 +203,10 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   name: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#1F2937',
+    
   },
   infoContainer: {
     backgroundColor: 'white',
@@ -188,21 +228,46 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   infoText: {
-    fontSize: 18,
+    fontSize: 16,
     color: '#1F2937',
     marginLeft: 16,
     fontWeight:"500"
   },
+  buttonContainer:{
+    flexDirection:'row'
+  },
   updateButton: {
     paddingVertical: 12,
-    paddingHorizontal:20,
+    paddingHorizontal:12,
     borderRadius: 8,
-    alignSelf:'center',
-    justifyContent: 'flex-start',
-    backgroundColor:'#3B82F6'
+    marginRight:38,
+    backgroundColor:'#3B82F6',
+    marginBottom:20
   },
   updateButtonText: {
     color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  button: {
+    backgroundColor: '#FF6347',
+    paddingHorizontal: 15,
+    paddingVertical: 12,
+    borderRadius: 5,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    marginBottom: 20,
+    
+  },
+  buttonText: {
+    color: '#FFF',
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',

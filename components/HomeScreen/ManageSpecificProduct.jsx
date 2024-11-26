@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather'; 
+
+
 const ManageSpecificProduct = ({ route, navigation }) => {
+  const [orders, setOrders] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [product, setProduct] = useState({
     image: 'https://example.com/product-image.jpg',
     name: 'Organic Tomatoes',
@@ -12,17 +17,86 @@ const ManageSpecificProduct = ({ route, navigation }) => {
     farmerName: 'John Doe',
     deliveryDate: '2024-06-15'
   });
+  const Id = route?.params?.Id;
+  const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MjQ1ODIsInVzZXJfaWQiOjEsInVzZXJfdHlwZSI6ImZhcm1lciJ9.3DCo4LmnbMGL3jS-SP2TmQkEKW8tkympsh8zwc25lzI';
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        console.log('product id',Id)
+        console.log('Fetching token...');
+      console.log('Token:', token);
+        // Fetch orders from API with token in the header
+        const response = await fetch(`https://krishi-bazar.onrender.com/api/v1/product/${Id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`, // Add token in Authorization header
+          },
+        });
+        console.log('Response status:', response.status);
+        console.log('token', token)
+        if (response.ok) {
+          const data = await response.json();
+          console.log('product fetched successfully:', data);
+          setOrders(data); // Adjust based on your API response structure
+        } else {
+          console.error('Failed to fetch product:', response.status, response.statusText);
+          const errorDetails = await response.json(); // Additional error details from the API
+          console.error('Error details:', errorDetails);
+         // console.error('Failed to fetch orders:', response.status);
+        }
+      } catch (error) {
+        console.error('Error fetching the product details:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const handleUpdateAvailability = () => {
+    fetchOrders();
+  }, [token]);
+
+
+  const handleUpdateAvailability =async () => {
+    try {
+      console.log('Fetching token...');
+    console.log('Token:', token);
+      // Fetch orders from API with token in the header
+      const response = await fetch(`https://krishi-bazar.onrender.com/api/v1/product/${Id}/mark-unavailable`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`, // Add token in Authorization header
+        },
+      });
+      console.log('Response status:', response.status);
+      console.log('token', token)
+      if (response.ok) {
+        const data = await response.json();
+        console.log('product fetched successfully:', data);
+        setOrders(data);
+        Alert.alert(
+          'Availability Updated', 
+          `Product is now Available`
+        ); // Adjust based on your API response structure
+      } else {
+        console.error('Failed to fetch api:', response.status, response.statusText);
+        const errorDetails = await response.json(); // Additional error details from the API
+        Alert.alert(
+          'Error', 
+          `Couldn't update the availability`
+        ); 
+        console.error('Error details:', errorDetails);
+       // console.error('Failed to fetch orders:', response.status);
+      }
+    } catch (error) {
+      console.error('Error fetching the product details:', error);
+    }
     setProduct(prevProduct => ({
       ...prevProduct,
       isAvailable: !prevProduct.isAvailable
     }));
     
-    Alert.alert(
-      'Availability Updated', 
-      `Product is now ${!product.isAvailable ? 'Available' : 'Unavailable'}`
-    );
+    
   };
 
   const handleDeleteProduct = () => {
@@ -37,8 +111,41 @@ const ManageSpecificProduct = ({ route, navigation }) => {
         {
           text: 'Delete',
           style: 'destructive',
-          onPress: () => {
+          onPress: async () => {
             // Implement delete logic here
+            try {
+              console.log('Fetching token...');
+            console.log('Token:', token);
+              // Fetch orders from API with token in the header
+              const response = await fetch(`https://krishi-bazar.onrender.com/api/v1/product/${Id}`, {
+                method: 'DELETE',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token}`, // Add token in Authorization header
+                },
+              });
+              console.log('Response status:', response.status);
+              console.log(response)
+              console.log('token', token)
+              if (response.ok) {
+                const data = await response.json();
+                console.log('product deleted successfully:', data);
+                Alert.alert(
+                  "Product deleted successfully"
+                )
+                setOrders(data); // Adjust based on your API response structure
+              } else {
+                
+                console.error('Failed to delete product:', response.status, response.statusText);
+                const errorDetails = await response.json(); // Additional error details from the API
+                console.error('Error details:', errorDetails);
+
+               // console.error('Failed to fetch orders:', response.status);
+              }
+            } catch (error) {
+              console.error('Error in deleting product:', error);
+            }
+            
             navigation.goBack();
           }
         }
@@ -56,27 +163,27 @@ const ManageSpecificProduct = ({ route, navigation }) => {
         </View>
     <View style={styles.imagecontainer}>
       <Image 
-        source={{ uri: product.image }} 
+        source={{ uri: orders.img }} 
         style={styles.productImage} 
         resizeMode="cover"
       />
       </View>
       <View style={styles.card}>
-        <Text style={styles.productName}>{product.name}</Text>
+        <Text style={styles.productName}>{orders.name}</Text>
         
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Type:</Text>
-          <Text>{product.type}</Text>
+          <Text>{orders.type}</Text>
         </View>
         
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Quantity:</Text>
-          <Text>{product.quantity}</Text>
+          <Text>{orders.quantity_in_kg} kg</Text>
         </View>
         
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Price:</Text>
-          <Text>{product.price}</Text>
+          <Text> ₹ {orders.rate_per_kg}</Text>
         </View>
         
         <View style={styles.detailRow}>
@@ -88,13 +195,10 @@ const ManageSpecificProduct = ({ route, navigation }) => {
         
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Farmer:</Text>
-          <Text>{product.farmerName}</Text>
+          <Text>{orders.farmers_first_name} {orders.farmers_last_name}</Text>
         </View>
         
-        <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>Delivery Date:</Text>
-          <Text>{product.deliveryDate}</Text>
-        </View>
+        
         
         <View style={styles.buttonContainer}>
           <TouchableOpacity 
@@ -121,7 +225,7 @@ const ManageSpecificProduct = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAF6E3'
+    backgroundColor: '#f5f5f5'
   },
   header: {
     backgroundColor: 'white',
@@ -138,11 +242,15 @@ const styles = StyleSheet.create({
     backgroundColor:'white',
     marginTop:5,
     height:250,
-    width:'100%'
+    width:'100%',
+    marginTop:20,
+    marginBottom:30,
+    
   },
   productImage: {
     width: '100%',
-    height: '100%'
+    height: '100%',
+    
   },
   card: {
     backgroundColor: 'white',

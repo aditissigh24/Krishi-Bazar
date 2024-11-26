@@ -63,7 +63,7 @@ export default function SignUpScreen  ({navigation})  {
       if (response.ok) {
         // Store phone number temporarily
         Alert.alert('OTP Sent', 'Please check your phone for the OTP');
-        await AsyncStorage.setItem('userData', JSON.stringify(requestBody));
+        await AsyncStorage.setItem('userData', JSON.stringify(response));
         
         navigation.navigate('OTPVerification', { requestBody, flow});
       } else {

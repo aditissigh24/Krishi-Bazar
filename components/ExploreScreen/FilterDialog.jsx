@@ -49,14 +49,14 @@ const FilterDialog = ({ activeFilters, onFilterChange, visible, setVisible, Prod
               <TouchableOpacity
                 style={[
                   styles.option,
-                  activeFilters.productType === 'Zari' && styles.activeOption,
+                  activeFilters.productType === 'Jari' && styles.activeOption,
                 ]}
-                onPress={() => handleFilterSelect('productType', 'Zari')}
+                onPress={() => handleFilterSelect('productType', 'Jari')}
               >
                 <Text
                   style={[
                     styles.optionText,
-                    activeFilters.productType === 'Zari' && styles.activeOptionText,
+                    activeFilters.productType === 'Jari' && styles.activeOptionText,
                   ]}
                 >
                   Zari Products
@@ -91,7 +91,7 @@ const FilterDialog = ({ activeFilters, onFilterChange, visible, setVisible, Prod
                     styles.option,
                     activeFilters.farmerName === farmer && styles.activeOption,
                   ]}
-                  onPress={() => handleFilterSelect('farmerName', farmer)}
+                  onPress={() => handleFilterSelect('farmerName', ProductData.farmerName)}
                 >
                   <Text
                     style={[

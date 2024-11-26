@@ -63,6 +63,7 @@ const products = [
 const MushroomProducts = ({navigation}) => {
   const [searchText, setSearchText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState({
     productType: '',
     priceRange: '',
@@ -71,7 +72,7 @@ const MushroomProducts = ({navigation}) => {
   });
 
   const route = useRoute();
-  
+  const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MjQ1ODIsInVzZXJfaWQiOjEsInVzZXJfdHlwZSI6ImZhcm1lciJ9.3DCo4LmnbMGL3jS-SP2TmQkEKW8tkympsh8zwc25lzI';
   const { category } = route.params || {};
   useEffect(() => {
     if (category) {
@@ -79,20 +80,59 @@ const MushroomProducts = ({navigation}) => {
     }
   }, [category]);
   
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        console.log('Fetching token...');
+      console.log('Token:', token);
+        // Fetch orders from API with token in the header
+        const response = await fetch('https://krishi-bazar.onrender.com/api/v1/product/mushroom', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`, // Add token in Authorization header
+          },
+        });
+        console.log('Response status:', response.status);
+        console.log('token', token)
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Products fetched successfully:', data);
+          setProducts(data); // Adjust based on your API response structure
+        } else {
+          console.error('Failed to fetch products:', response.status, response.statusText);
+          const errorDetails = await response.json(); // Additional error details from the API
+          console.error('Error details:', errorDetails);
+         // console.error('Failed to fetch orders:', response.status);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [token]);
+
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
-      !filters.productType || product.category === filters.productType;
-    const matchesSearch = product.name.toLowerCase().includes(searchText.toLowerCase());
+      !filters.productType || products.name === filters.productType;
+    const matchesSearch =  product.name && product.name.toLowerCase().includes(searchText.toLowerCase());
     const matchesFarmer =
-    !filters.farmerName || product.farmer === filters.farmerName;
+    !filters.farmerName ||
+    (product.farmers_first_name + ' ' + product.farmers_last_name)
+      .toLowerCase()
+      .includes(filters.farmerName.toLowerCase());
     const matchesPriceRange = !filters.priceRange || (() => {
       const range = filters.priceRange.split(' - ');
       const min = parseInt(range[0].replace('₹', ''));
       const max = range[1] ? parseInt(range[1].replace('₹', '')) : Infinity;
-      return (product.price <= max) && (product.price >= min)
+      return (products.rate_per_kg <= max) && (products.rate_per_kg >= min)
      })()
     return matchesCategory && matchesSearch && matchesFarmer&& matchesPriceRange;
   });
+
   const [modalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(true)  // Toggle the visibility of modal
@@ -100,11 +140,13 @@ const MushroomProducts = ({navigation}) => {
 
   const renderProduct = ({ item }) => (
    
-    <TouchableOpacity style={styles.productCard} onPress={() => navigation.navigate('SpecificOrder', { ProductId: products.id })}>
+    <TouchableOpacity style={styles.productCard} onPress={() => navigation.navigate('ProductDetails', {Id: item.id})}>
         
-      <Image source={{ uri: item.image }} style={styles.productImage} />
+        <Image source={{ uri: item.img }} style={styles.productImage} />
       <Text style={styles.productName}>{item.name}</Text>
-      <Text style={styles.productPrice}>₹{item.price.toFixed(2)}</Text>
+      <Text style={styles.productName}>{item.type}</Text>
+      <Text style={styles.productPrice}>₹{item.rate_per_kg.toFixed(2)}</Text>
+      <Text style={styles.farmerName}>Farmer: {item.farmers_first_name}{item.farmers_last_name}</Text>
     </TouchableOpacity>
   );
 
@@ -242,6 +284,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#1A1A1D',
     marginBottom: 4,
+  },
+  farmerName:{
+    fontSize:15,
+    color:'#444',
+    fontWeight:'500'
   },
   productPrice: {
     fontSize: 14,
