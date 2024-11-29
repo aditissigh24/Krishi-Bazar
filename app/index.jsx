@@ -7,6 +7,11 @@ import { Text, View, SafeAreaView,StyleSheet } from "react-native";
 import RootTabs from "../components/Navigator/RootTabs";
 import AuthStack from '../components/Navigator/AuthStack';
 import{AuthProvider,useAuth} from './../Store/AuthContext'
+import OtpScreen from "@/components/OtpScreen";
+
+
+
+
 
 
 
@@ -48,8 +53,8 @@ export default function Index() {
          <View style={styles.container}>
        
         <NavigationIndependentTree>
-          
-        <RootTabs></RootTabs>
+       
+        {isAuthenticated ? <RootTabs /> : <AuthStack />}
        </NavigationIndependentTree>
        </View>
        
@@ -60,9 +65,6 @@ export default function Index() {
        
       );
     }
-    
-    
-    //isAuthenticated ? <RootTabs /> : <AuthStack />}
     const styles = StyleSheet.create({
       container: {
         flex: 1,

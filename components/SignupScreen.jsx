@@ -5,6 +5,10 @@ import { GluestackUIProvider } from "./UI/gluestack-ui-provider";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, StatusBar, Platform, ScrollView, Switch, KeyboardAvoidingView, ImageBackground, Button} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Feather';
+import { uploadImage } from './../Store/SupabaseAPI'; // Adjust the path as needed
+import * as ImagePicker from 'expo-image-picker';
+import { ActivityIndicator } from 'react-native';
+
 
 export default function SignUpScreen  ({navigation})  {
   const [FirstName, setFirstName] = useState('');
@@ -26,11 +30,29 @@ export default function SignUpScreen  ({navigation})  {
     return phoneRegex.test(number.trim());
   };
   const handleSendOTP = async () => {
+    if (!FirstName || !phoneNumber || !LastName || !aadhar ||!email ||!address ||!city ||!state ||!pincode ) {
+      Alert.alert('Error', 'Please fill in all fields');
+       return;
+     }
     if (!validatePhoneNumber(phoneNumber)) {
       Alert.alert('Invalid Phone Number', 'Please enter a valid phone number');
       return;
     }
     setLoading(true);
+    try {
+      // Replace this with your actual API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Handle successful response
+      console.log('Operation completed');
+    } catch (error) {
+      // Handle any errors
+      console.error('Operation failed', error);
+    } finally {
+      setLoading(false);
+    }
+  
+
     try {
       
       const requestBody = {
@@ -63,7 +85,8 @@ export default function SignUpScreen  ({navigation})  {
       if (response.ok) {
         // Store phone number temporarily
         Alert.alert('OTP Sent', 'Please check your phone for the OTP');
-        await AsyncStorage.setItem('userData', JSON.stringify(response));
+        console.log(requestBody)
+        await AsyncStorage.setItem('userData', JSON.stringify(requestBody));
         
         navigation.navigate('OTPVerification', { requestBody, flow});
       } else {
@@ -75,8 +98,31 @@ export default function SignUpScreen  ({navigation})  {
     } finally {
       setLoading(false);
     }
-  };
+  }
+  
 
+  const handleImageUpload = async () => {
+    try {
+      // Pick an image from the device
+      const result = await ImagePicker.launchImageLibraryAsync({
+        type: 'image',
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+        base64: true,
+      });
+
+      if (!result.canceled && result.assets[0].base64) {
+        const fileName = `user_${Date.now()}.jpg`;
+        const folder='profile photos';
+        const imageUrl = await uploadImage(result.assets[0].base64, folder, fileName);
+        console.log('Uploaded image URL:', imageUrl);
+        // You can now use this URL to display the image or save it to your database
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+  };
 
 
   const handleSignUp = async () => {
@@ -133,10 +179,24 @@ export default function SignUpScreen  ({navigation})  {
                    onValueChange={(value) => setIsFarmer(value)}
                   />
           </View>
+          <View >
+             <Button title="Upload Image" onPress={handleImageUpload} />
+          </View>
           </View>
           <View>
-          <TouchableOpacity style={styles.button} onPress={handleSignUpAndSendOtp} disabled={loading}> 
-           <Text style={styles.buttonText}>Sign Up!</Text>
+          <TouchableOpacity  style={[ styles.button, {  backgroundColor: loading ? '#cccccc' : '#0096FF', opacity: loading ? 0.6 : 1}]} onPress={handleSignUpAndSendOtp} disabled={loading}> 
+          {loading ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator 
+               color="white" 
+               size="small" 
+               style={styles.spinner}
+            />
+              <Text style={styles.buttonText}>Processing...</Text>
+             </View>
+           ) : (
+              <Text style={styles.buttonText}>Sign Up</Text>
+            )}
           </TouchableOpacity>
           <View style={styles.subcontainer}>
            <Text style={styles.subtext}>Already have an account? 
@@ -151,7 +211,7 @@ export default function SignUpScreen  ({navigation})  {
       </GluestackUIProvider>
       
   );
-}
+};
 
 const styles = StyleSheet.create({
   container:{
@@ -219,6 +279,14 @@ const styles = StyleSheet.create({
     color: '#fbfcfc',
     fontSize: 18,
     fontWeight: '600',
+  },
+  loadingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  spinner: {
+    marginRight: 10,
   },
   subcontainer:{
     display:'flex',

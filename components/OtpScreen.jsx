@@ -39,7 +39,7 @@ const OTPInput = ({ value, onChange }) => {
 export default function OtpScreen({route, navigation}) {
   
     const [otp, setOtp] = useState('');
-    const [timer, setTimer] = useState(2*60*60);
+    const [timer, setTimer] = useState(1.5*60);
     const [canResend, setCanResend] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -66,8 +66,10 @@ export default function OtpScreen({route, navigation}) {
         const getData = async () => {
           try {
             const storedData = await AsyncStorage.getItem('userData');
+            console.log("retrieved data:", storedData)
             if (storedData !== null) {
               // Parse the stored data
+              
               setUserData(JSON.parse(storedData));
             
             }
@@ -80,14 +82,14 @@ export default function OtpScreen({route, navigation}) {
     
     const handleResendOTP = async () => {
         setCanResend(false);
-        setTimer(2*60*60);
+        setTimer(1.5*60);
         try {
           const response = await fetch('http://krishi-bazar.onrender.com/api/auth/signup', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ phoneNumber }),
+            body: JSON.stringify({phone_number: phoneNumber, aadhar_number: aadhar }),
           });
           
           if (!response.ok) {
@@ -117,9 +119,11 @@ export default function OtpScreen({route, navigation}) {
           Alert.alert('Invalid OTP', 'Please enter a valid 6-digit numeric OTP');
           return;
         }
-      
+        console.log('userData in handleVerifyOTP:', userData);
         // Additional pre-verification checks
-        if (flow === 'signup' && (!userData || !userData.phone_number)) {
+        if (flow === 'signup' && (!userData)) {
+          console.log(userData)
+          
           Alert.alert('Error', 'Missing user data. Please restart the signup process.');
           return;
         }
@@ -130,7 +134,7 @@ export default function OtpScreen({route, navigation}) {
         }
       
         setLoading(true);
-      console.log(storedData)
+      
         try {
           const endpoint =
             flow === 'signup'
@@ -160,6 +164,7 @@ export default function OtpScreen({route, navigation}) {
           });
       
           if (!response.ok) {
+            console.log(response)
             const errorData = await response.json();
             throw new Error(errorData.message || 'Verification failed');
           }
@@ -211,98 +216,153 @@ export default function OtpScreen({route, navigation}) {
       };
   
     return (
-      <GluestackUIProvider mode="light"><View style={styles.container}>
+      <GluestackUIProvider mode="light">
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
           <Text style={styles.title}>Verify Your Account</Text>
-          <Text style={styles.subtitle}>Enter the 6-digit code sent to  {phoneNumber} </Text>
-          <OTPInput placeholder='Enter the code' value={otp} onChange={setOtp} keyboardType='number-pad' maxLength={6} style={styles.otpInput}/>
-          {error ? <Text style={styles.errorText}>{error}</Text> : null}
-          <TouchableOpacity
-            style={[styles.button, loading && styles.buttonDisabled]}
-            onPress={handleVerifyOTP}
-            disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator color="#ffffff" />
-            ) : (
-              <Text style={styles.buttonText}>Verify OTP</Text>
-            )}
-          </TouchableOpacity>
-          <View style={styles.resendContainer}>
-            {!canResend?(
-              <Text>Resend OTP in {timer}s</Text>
-            ):(
-              <TouchableOpacity onPress={handleResendOTP} style={styles.resendButton}>
-                <Text style={styles.resendText}> Resend OTP</Text>
-              </TouchableOpacity>
-            )}
+          <Text style={styles.subtitle}>
+            Enter the 6-digit code sent to {phoneNumber}
+          </Text>
+        </View>
 
-          </View>
-        </View></GluestackUIProvider>
-    );
-}
+        <View style={styles.otpContainer}>
+         
+        <OTPInput placeholder='Enter the code' value={otp} onChange={setOtp} keyboardType='number-pad' maxLength={6} style={styles.otpInput}/>
+
+          {error ? (
+            <Text style={styles.errorText}>{error}</Text>
+          ) : null}
+        </View>
+
+        <TouchableOpacity
+          style={[
+            styles.button, 
+            (loading || otp.length !== 6) && styles.buttonDisabled
+          ]}
+          onPress={handleVerifyOTP}
+          disabled={loading || otp.length !== 6}
+        >
+          {loading ? (
+            <ActivityIndicator 
+              color="#ffffff" 
+              size="small" 
+            />
+          ) : (
+            <Text style={styles.buttonText}>Verify OTP</Text>
+          )}
+        </TouchableOpacity>
+
+        <View style={styles.resendContainer}>
+          {!canResend ? (
+            <Text style={styles.timerText}>
+              Resend OTP in {timer}s
+            </Text>
+          ) : (
+            <TouchableOpacity 
+              onPress={handleResendOTP} 
+              style={styles.resendButton}
+            >
+              <Text style={styles.resendText}>Resend OTP</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
+    </GluestackUIProvider>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#f5f5f5',
-    padding: 20,
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+  },
+  headerContainer: {
+    marginBottom: 30,
+    alignItems: 'center',
   },
   title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    marginBottom: 10,
+    fontSize: 24,
+    fontWeight: '700',
     color: '#333',
+    marginBottom: 10,
+    textAlign: 'center',
   },
   subtitle: {
-    fontSize: 17,
+    fontSize: 16,
     color: '#666',
-    marginBottom: 30,
     textAlign: 'center',
+    lineHeight: 24,
   },
   otpContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '80%',
-    marginBottom: 30,
+    marginBottom: 20,
+    flexDirection:"row",
+    alignSelf:'center'
   },
   otpInput: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
     width: 50,
     height: 45,
-    borderWidth: 2,
-    borderColor: '#3498db',
+    borderColor: '#e0e0e0',
     borderRadius: 10,
-    fontSize: 24,
-    textAlign: 'center',
-    backgroundColor: '#fff',
-  },
-  button: {
-    backgroundColor: '#3498db',
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 25,
-    marginTop: 20,
-    marginBottom:10
-  },
-  buttonDisabled: {
-    backgroundColor: '#bdc3c7',
-  },
-  buttonText: {
-    color: '#fff',
+    marginRight:5,
+    padding: 10,
     fontSize: 18,
-    fontWeight: 'bold',
+    textAlign: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  otpText: {
+    fontSize: 18,
+    textAlign: 'center',
   },
   errorText: {
-    color: '#e74c3c',
-    marginBottom: 10,
+    color: '#ff4d4f',
+    textAlign: 'center',
+    marginTop: 10,
+    fontSize: 14,
   },
-  resendButton: {
+  button: {
+    backgroundColor: '#0096FF',
+    borderRadius: 8,
+    padding:12,
+    width:150,
+    alignSelf:"center",
+    alignItems: 'center',
     marginTop: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
   },
-  resendText: {
-    color: '#3498db',
+  buttonDisabled: {
+    backgroundColor: '#cccccc',
+  },
+  buttonText: {
+    color: '#ffffff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  resendContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  timerText: {
+    color: '#666',
     fontSize: 16,
   },
+  resendButton: {
+    padding: 10,
+  },
+  resendText: {
+    color: '#4CAF50',
+    fontSize: 16,
+    fontWeight: '600',
+  },
 });
-

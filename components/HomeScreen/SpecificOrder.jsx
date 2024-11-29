@@ -14,6 +14,8 @@ import Icon from 'react-native-vector-icons/Feather';
 
 
 const SpecificOrder = ({ navigation }) => {
+  const [orders, setOrders] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [showActionsheet, setShowActionsheet] = React.useState(false)
   const handleClose = () => setShowActionsheet(false)
   // Sample order data - replace with your actual data
@@ -38,7 +40,7 @@ const SpecificOrder = ({ navigation }) => {
   });
 
   const [modalVisible, setModalVisible] = useState(false);
- 
+  const orderId = route?.params?.orderId;
   const [selectedOption, setSelectedOption] = useState(null);
   const options = [
     { id: '1', label: 'Delivered' },
@@ -58,13 +60,48 @@ const SpecificOrder = ({ navigation }) => {
       default: return '#607D8B';           // Grey
     }
   };
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        console.log('Fetching token...');
+      console.log('Token:', token);
+      console.log('orderid:' ,orderId)
+        // Fetch orders from API with token in the header
+        const response = await fetch(`https://krishi-bazar.onrender.com/api/v1/orders/${orderId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`, // Add token in Authorization header
+          },
+        });
+        console.log('Response status:', response.status);
+        console.log('token', token)
+        if (response.ok) {
+          const data = await response.json();
+          console.log('order fetched successfully:', data);
+          setOrders(data); // Adjust based on your API response structure
+        } else {
+          console.error('Failed to fetch order:', response.status, response.statusText);
+          const errorDetails = await response.json(); // Additional error details from the API
+          console.error('Error details:', errorDetails);
+         // console.error('Failed to fetch orders:', response.status);
+        }
+      } catch (error) {
+        console.error('Error fetching the order details:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, [token]);
   const handleStatusSelect = (option) => {
     setSelectedOption(option.label);
     setModalVisible(false);
   };
   const handleViewProduct = () => {
     // Navigate to product details screen
-     navigation.navigate('ProductDetails', { productId: order.orderId });
+     navigation.navigate('ProductDetails', { Id: orders.order_id });
   
   };
  
@@ -82,7 +119,7 @@ const SpecificOrder = ({ navigation }) => {
           {/* Order Status Card */}
           <View style={styles.card}>
             <View style={styles.orderIdRow}>
-              <Text style={styles.orderId}>Order #{order.orderId}</Text>
+              <Text style={styles.orderId}>Order #{orders.order_id}</Text>
               <View style={[
                             styles.statusBadge,
                             { backgroundColor: getStatusColor(selectedOption) }
@@ -90,7 +127,7 @@ const SpecificOrder = ({ navigation }) => {
                 <Text style={styles.statusText}>{selectedOption ? selectedOption : 'Processing'}</Text>
               </View>
             </View>
-            <Text style={styles.orderDate}>Ordered on: {order.orderDate}</Text>
+            <Text style={styles.orderDate}>Ordered on: {orders.order_date}</Text>
           </View>
 
           {/* Product Details Card */}
@@ -103,9 +140,9 @@ const SpecificOrder = ({ navigation }) => {
                 resizeMode="cover"
               />
               <View style={styles.productInfo}>
-                <Text style={styles.productName}>{order.product.name}</Text>
-                <Text style={styles.price}>₹{order.product.price}</Text>
-                <Text style={styles.quantity}>Quantity: {order.product.quantity}</Text>
+                <Text style={styles.productName}>{orders.product_name}</Text>
+                <Text style={styles.price}>₹{orders.total_price}</Text>
+                <Text style={styles.quantity}>Quantity: {orders.quantity_in_kg}</Text>
               </View>
             </View>
           </View>
@@ -115,16 +152,16 @@ const SpecificOrder = ({ navigation }) => {
             <Text style={styles.cardTitle}>Customer Details</Text>
             <View style={styles.detailRow}>
               <Text style={styles.detailLabel}>Name:</Text>
-              <Text style={styles.detailText}>{order.customer.name}</Text>
+              <Text style={styles.detailText}>{orders.user_first_name} {orders.user_last_name}</Text>
             </View>
             <View style={styles.detailRow}>
               <Text style={styles.detailLabel}>Phone:</Text>
-              <Text style={styles.detailText}>{order.customer.phone}</Text>
+              <Text style={styles.detailText}>{orders.buyer_phone_number}</Text>
             </View>
             <View style={styles.detailRow}>
               <Text style={styles.detailLabel}>Address:</Text>
               <Text style={styles.detailText}>
-                {`${order.customer.address}, ${order.customer.city}, ${order.customer.state} - ${order.customer.pincode}`}
+                {`${orders.delivery_address}, ${orders.delivery_city}, - ${orders.delivery_address_pincode}`}
               </Text>
             </View>
           </View>

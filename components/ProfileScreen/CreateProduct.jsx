@@ -12,6 +12,7 @@ import {
 import { Picker } from '@react-native-picker/picker';
 import { Feather } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { uploadImage } from './../../Store/SupabaseAPI';
 import * as ImagePicker from 'expo-image-picker';
 
 const CreateProductScreen = ({navigation}) => {
@@ -50,10 +51,13 @@ const CreateProductScreen = ({navigation}) => {
         base64: true,
       });
 
-      if (!result.canceled) {
-        const imageUri = result.assets[0].uri;
+      if (!result.canceled && result.assets[0].base64) {
+        const fileName = `product_${Date.now()}.jpg`;
+        const folder='product photos';
+        const imageUrl = await uploadImage(result.assets[0].base64,folder, fileName);
+        console.log('Uploaded image URL:', imageUrl);
         // Get base64 data
-        const base64 = await fetch(imageUri)
+        const base64 = await fetch(imageUrl)
           .then(response => response.blob())
           .then(blob => {
             return new Promise((resolve, reject) => {
@@ -64,7 +68,7 @@ const CreateProductScreen = ({navigation}) => {
             });
           });
 
-        setSelectedImage(imageUri);
+        setSelectedImage(imageUrl);
         // Store base64 image string in formData
         setFormData({ ...formData, img: base64 });
       }

@@ -130,7 +130,7 @@ const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MjQ1ODIsInVzZX
       const max = range[1] ? parseInt(range[1].replace('₹', '')) : Infinity;
       return (products.rate_per_kg <= max) && (products.rate_per_kg >= min)
      })()
-    return  matchesSearch && matchesFarmer&& matchesPriceRange;
+    return matchesSearch && matchesFarmer&& matchesPriceRange;
   });
   const [modalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
@@ -175,6 +175,7 @@ const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MjQ1ODIsInVzZX
           />
         )}
         </View>
+        
         <FlatList
           data={filteredProducts}
           keyExtractor={(item) => item.id}
