@@ -53,8 +53,8 @@ export default function Index() {
          <View style={styles.container}>
        
         <NavigationIndependentTree>
+         {isAuthenticated ? <RootTabs /> : <AuthStack />} 
        
-        {isAuthenticated ? <RootTabs /> : <AuthStack />}
        </NavigationIndependentTree>
        </View>
        
@@ -65,6 +65,7 @@ export default function Index() {
        
       );
     }
+    // 
     const styles = StyleSheet.create({
       container: {
         flex: 1,

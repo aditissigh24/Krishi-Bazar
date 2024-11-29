@@ -41,7 +41,10 @@
     "@react-navigation/stack": "^7.0.3",
     "@supabase/supabase-js": "^2.46.2",
     "base64-arraybuffer": "^1.0.2",
+    "braces": "^3.0.3",
     "buffer": "^6.0.3",
+    "cookie": "^0.7.1",
+    "cross-spawn": "^7.0.6",
     "eas-cli": "^13.4.2",
     "expo": "^52.0.7",
     "expo-app-loading": "^2.1.1",
@@ -58,6 +61,8 @@
     "expo-web-browser": "^14.0.1",
     "formik": "^2.4.6",
     "hermes-engine": "^0.11.0",
+    "html-elements": "^1.0.0",
+    "lodash": "^4.17.21",
     "lottie-react-native": "^7.1.0",
     "lucide-react-native": "^0.460.0",
     "metro": "^0.81.0",
@@ -86,7 +91,7 @@
     "tailwindcss": "^3.4.15"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
+    "@babel/core": "^7.23.2",
     "@types/jest": "^29.5.12",
     "@types/react": "^18.3.12",
     "@types/react-test-renderer": "^18.0.7",
