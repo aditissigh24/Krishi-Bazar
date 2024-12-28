@@ -14,7 +14,7 @@ import { Feather } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { uploadImage } from './../../Store/SupabaseAPI';
 import * as ImagePicker from 'expo-image-picker';
-
+import {useAuth} from './../../Store/AuthContext'
 const CreateProductScreen = ({navigation}) => {
   const [formData, setFormData] = useState({
     img: '',
@@ -30,7 +30,7 @@ const CreateProductScreen = ({navigation}) => {
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-
+const { token } = useAuth();
   // Request permission when component mounts
   React.useEffect(() => {
     (async () => {
@@ -90,7 +90,7 @@ const CreateProductScreen = ({navigation}) => {
         Alert.alert('Error', 'Please select a product image');
         return;
       }
-      const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MjQ1ODIsInVzZXJfaWQiOjEsInVzZXJfdHlwZSI6ImZhcm1lciJ9.3DCo4LmnbMGL3jS-SP2TmQkEKW8tkympsh8zwc25lzI';
+      //const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MjQ1ODIsInVzZXJfaWQiOjEsInVzZXJfdHlwZSI6ImZhcm1lciJ9.3DCo4LmnbMGL3jS-SP2TmQkEKW8tkympsh8zwc25lzI';
       // Create JSON payload
       const currentDate = new Date().toISOString();
       const payload = {

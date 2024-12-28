@@ -72,8 +72,10 @@ const ExploreScreen = ({navigation}) => {
     deliveryDate: '',
   });
   //const { token } = useAuth();
-const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MjQ1ODIsInVzZXJfaWQiOjEsInVzZXJfdHlwZSI6ImZhcm1lciJ9.3DCo4LmnbMGL3jS-SP2TmQkEKW8tkympsh8zwc25lzI';
-  const route = useRoute();
+//const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MjQ1ODIsInVzZXJfaWQiOjEsInVzZXJfdHlwZSI6ImZhcm1lciJ9.3DCo4LmnbMGL3jS-SP2TmQkEKW8tkympsh8zwc25lzI';
+const { token } = useAuth();
+ const { user_id } = useAuth(); 
+const route = useRoute();
   
   const { category } = route.params || {};
   useEffect(() => {

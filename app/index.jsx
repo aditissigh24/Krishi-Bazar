@@ -54,7 +54,7 @@ export default function Index() {
        
         <NavigationIndependentTree>
          {isAuthenticated ? <RootTabs /> : <AuthStack />} 
-       
+      
        </NavigationIndependentTree>
        </View>
        

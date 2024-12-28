@@ -180,7 +180,8 @@ export default function SignUpScreen  ({navigation})  {
                   />
           </View>
           <View >
-             <Button title="Upload Image" onPress={handleImageUpload} />
+             <TouchableOpacity style={styles.button} onPress={handleImageUpload}><Text  style={styles.buttonText}>Upload Image</Text>
+              </TouchableOpacity> 
           </View>
           </View>
           <View>

@@ -6,7 +6,7 @@ import { View, Text, TextInput,Platform, StatusBar, TouchableOpacity, StyleSheet
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({navigation}) => {
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -14,21 +14,15 @@ const LoginScreen = ({navigation}) => {
   const flow = 'login';
 
   
-  const validatePhoneNumber = (number) => {
-    const phoneRegex = /^[0-9]\d{9}$/;
-    return phoneRegex.test(number.trim());
-  };
+  
 
   const handlesendOTP = async() => {
-    if (!validatePhoneNumber(phoneNumber)) {
-      Alert.alert('Invalid Phone Number', 'Please enter a valid phone number');
-      return;
-    }
+   
      //Implement OTP sending logic here
    setLoading(true);
    try{
     const requestBody={
-      phone_number: phoneNumber,
+      email: email,
       aadhar_number: aadhar,
     };
     
@@ -44,7 +38,7 @@ const LoginScreen = ({navigation}) => {
     if (response.ok) {
       Alert.alert('OTP Sent', 'Please check your phone for the OTP');
       await AsyncStorage.setItem('logindata', JSON.stringify(requestBody));
-      navigation.navigate('OTPVerification', { phoneNumber,aadhar, flow  });
+      navigation.navigate('OTPVerification', { email,aadhar, flow  });
     }
        else {
       console.log(data)
@@ -65,7 +59,7 @@ const LoginScreen = ({navigation}) => {
          
            <Text style={styles.wmtext}>Welcome Back!</Text>
            <Text style={styles.lgtext}>Login to your account</Text>
-          <TextInput style={styles.input} placeholder='Phone-number' value={phoneNumber} onChangeText={setPhoneNumber}/>
+          <TextInput style={styles.input} placeholder='Email' value={email} onChangeText={setEmail}/>
           <TextInput style={styles.input} placeholder='Aadhar no.' value={aadhar} onChangeText={setAadhar}/>
          
           <TouchableOpacity style={styles.button} onPress={handlesendOTP} disabled={loading}>

@@ -18,7 +18,9 @@ const ManageSpecificProduct = ({ route, navigation }) => {
     deliveryDate: '2024-06-15'
   });
   const Id = route?.params?.Id;
-  const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MjQ1ODIsInVzZXJfaWQiOjEsInVzZXJfdHlwZSI6ImZhcm1lciJ9.3DCo4LmnbMGL3jS-SP2TmQkEKW8tkympsh8zwc25lzI';
+  const { token } = useAuth();
+   const { user_id } = useAuth();
+  //const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MjQ1ODIsInVzZXJfaWQiOjEsInVzZXJfdHlwZSI6ImZhcm1lciJ9.3DCo4LmnbMGL3jS-SP2TmQkEKW8tkympsh8zwc25lzI';
   useEffect(() => {
     const fetchOrders = async () => {
       try {

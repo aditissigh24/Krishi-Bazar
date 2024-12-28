@@ -1,4 +1,4 @@
-import { View, Text,TouchableOpacity,StyleSheet,Image } from 'react-native'
+import { View, Text,TouchableOpacity,StyleSheet,Image,Alert } from 'react-native'
 import "./../../global.css";
 import { GluestackUIProvider } from "./../UI/gluestack-ui-provider";
 import React,{useState,useEffect} from 'react';
@@ -18,8 +18,9 @@ export default function ProfileScreen({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [user, setUser] = useState([]);
  const [error, setError] = useState(null);
- //const { token } = useAuth();
-  const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MjQ1ODIsInVzZXJfaWQiOjEsInVzZXJfdHlwZSI6ImZhcm1lciJ9.3DCo4LmnbMGL3jS-SP2TmQkEKW8tkympsh8zwc25lzI';
+ const { token } = useAuth();
+ const { setToken, setUserID } = useAuth();
+  //const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MjQ1ODIsInVzZXJfaWQiOjEsInVzZXJfdHlwZSI6ImZhcm1lciJ9.3DCo4LmnbMGL3jS-SP2TmQkEKW8tkympsh8zwc25lzI';
   const toggleModal = () => {
     setModalVisible(true)  // Toggle the visibility of modal
   };
@@ -38,16 +39,18 @@ export default function ProfileScreen({navigation}) {
       {
         text: 'Logout',
         onPress: async () => {
-          // Clear data from AsyncStorage
+          // Clear data from AsyncStorage        
           await AsyncStorage.removeItem('JwtToken');
-          await AsyncStorage.removeItem('user');
-
+          await AsyncStorage.removeItem('userID');  
+          console.log('AsyncStorage cleared');
           // Reset Auth Context states
-          setToken(null);
-          setUser(null);
-
+          console.log('Before logout:', token);
+          setToken(null); 
+          setUserID(null); 
+          console.log('After logout:', token);          
           // Navigate to LoginScreen
-          navigation.replace('AuthStack'); // Adjust the screen name as per your navigation
+          navigation.replace('WelcomeScreen'); 
+          // Adjust the screen name as per your navigation
         },
       },
     ]);

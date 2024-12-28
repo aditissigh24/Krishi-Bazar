@@ -45,7 +45,7 @@ export default function OtpScreen({route, navigation}) {
     const [error, setError] = useState('');
     const requestBody=route?.params.requestBody;
     const flow = route?.params?.flow;
-    const phoneNumber = route?.params?.phoneNumber;
+    const email = route?.params?.email;
     const aadhar = route?.params?.aadhar;
     
     const [userData, setUserData] = useState(null);
@@ -62,6 +62,7 @@ export default function OtpScreen({route, navigation}) {
         }
         return () => clearInterval(interval);
       }, [timer]);
+
       useEffect(() => {
         const getData = async () => {
           try {
@@ -84,12 +85,12 @@ export default function OtpScreen({route, navigation}) {
         setCanResend(false);
         setTimer(1.5*60);
         try {
-          const response = await fetch('http://krishi-bazar.onrender.com/api/auth/signup', {
+          const response = await fetch('http://krishi-bazar.onrender.com/api/auth/login', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({phone_number: phoneNumber, aadhar_number: aadhar }),
+            body: JSON.stringify({email: email, aadhar_number: aadhar }),
           });
           
           if (!response.ok) {
@@ -128,7 +129,7 @@ export default function OtpScreen({route, navigation}) {
           return;
         }
       
-        if (flow === 'login' && (!phoneNumber || !aadhar)) {
+        if (flow === 'login' && (!email || !aadhar)) {
           Alert.alert('Error', 'Missing required information for login verification.');
           return;
         }
@@ -141,7 +142,7 @@ export default function OtpScreen({route, navigation}) {
               ? 'https://krishi-bazar.onrender.com/api/auth/complete-signup'
               : 'https://krishi-bazar.onrender.com/api/auth/complete-login';
       
-          const requestBody =
+          const RequestBody =
             flow === 'signup'
               ? { 
                   user: requestBody,
@@ -149,7 +150,7 @@ export default function OtpScreen({route, navigation}) {
                   
                 }
               : { 
-                  phone_number: phoneNumber, 
+                  email: email, 
                   aadhar_number: aadhar, 
                   verification_code: otp 
                 };
@@ -159,7 +160,7 @@ export default function OtpScreen({route, navigation}) {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(requestBody),
+            body: JSON.stringify(RequestBody),
            // timeout: 10000 // 10-second timeout
           });
       
@@ -181,7 +182,7 @@ export default function OtpScreen({route, navigation}) {
           try {
             await AsyncStorage.setItem('JwtToken', token);
             await AsyncStorage.setItem('userID', JSON.stringify(user));
-            await AsyncStorage.removeItem('tempPhone');
+            
           } catch (storageError) {
             console.error('Storage error:', storageError);
             Alert.alert('Storage Error', 'Could not save user data. Please try again.');
@@ -191,7 +192,7 @@ export default function OtpScreen({route, navigation}) {
           // Clear sensitive data
           resetSensitiveState();
       
-          navigation.navigate('HomeTab');
+          navigation.navigate('RootTab', { screen: 'HomeTab' });
         } catch (error) {
           console.error('Verification error:', error);
           
@@ -221,7 +222,7 @@ export default function OtpScreen({route, navigation}) {
         <View style={styles.headerContainer}>
           <Text style={styles.title}>Verify Your Account</Text>
           <Text style={styles.subtitle}>
-            Enter the 6-digit code sent to {phoneNumber}
+            Enter the 6-digit code sent to your email
           </Text>
         </View>
 
