@@ -1,50 +1,28 @@
-# Welcome to your Expo app 👋
-
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
-
-## Get started
-
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+# Krishi-Bazar  
+Krishi-Bazar is a real-time marketplace designed to empower farmers of Jhabua, Madhya Pradesh by connecting them directly to buyers. This platform facilitates seamless crop trading, ensuring transparency, fair pricing, and improved market access for both farmers and buyers.  
+## Features  
+### For Farmers  
+Product Listings: Upload crop details nad create the product, set prices, and update stock availability.  
+Admin Verification: Secure and reliable verification for farmers and their products.    
+Order Management: View and manage orders placed by buyers.   
+### For Buyers
+Browse Crops: Explore available crops with details such as price, quantity, and seller information.  
+Real-Time Orders: Place orders easily with minimal steps.  
+### General Features
+User Authentication: Secure login and signup with OTP verification.   
+Scalability: Optimized for 500+ concurrent users with 99.9% uptime.  
+Communication: Powered by Twilio for real-time notifications and updates.
+## Frontend Tech Stack
+React Native: Framework for building cross-platform mobile applications.  
+Expo: Simplifies app development and testing with its powerful CLI.  
+Gluestack UI: Provides a modular and customizable component library for styling.  
+React Navigation: Handles seamless navigation between screens.  
+AsyncStorage: For storing user data securely on the device.    
+## How to Use
+### Farmers:
+-Sign up and complete admin verification.  
+-List crops with price and quantity.  
+-Manage orders from buyers.  
+### Buyers:
+-Sign up or log in to explore the marketplace.  
+-Browse crops and place orders.  
