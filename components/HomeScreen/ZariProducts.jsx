@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import "./../../global.css";
 import { GluestackUIProvider } from "./../UI/gluestack-ui-provider";
+
 import {
   View,
   Text,

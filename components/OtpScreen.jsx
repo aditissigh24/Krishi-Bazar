@@ -100,20 +100,13 @@ export default function OtpScreen({route, navigation}) {
           Alert.alert('Error', 'Network error. Please try again.');
         }
       };
-    /*  const fetchWithTimeout = async (resource, options = {}, timeout = 50000) => {
-        const controller = new AbortController();
-        const signal = controller.signal;
-        const id = setTimeout(() => controller.abort(), timeout);
-      
-        try {
-          const response = await fetch(resource, { ...options, signal });
-          clearTimeout(id);
-          return response;
-        } catch (err) {
-          throw new Error('Request timed out or failed.');
-        }
-      };*/
-      
+   
+      const checkHandler=()=>{
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'RootTabs' }], // Make sure this name matches your tab navigator name
+        });
+      }
       const handleVerifyOTP = async () => {
         // Enhanced input validation
         if (!otp || otp.length !== 6 || !/^\d+$/.test(otp)) {
@@ -182,6 +175,7 @@ export default function OtpScreen({route, navigation}) {
           try {
             await AsyncStorage.setItem('JwtToken', token);
             await AsyncStorage.setItem('userID', JSON.stringify(user));
+            console.log('token stored successfully')
             
           } catch (storageError) {
             console.error('Storage error:', storageError);
@@ -192,7 +186,7 @@ export default function OtpScreen({route, navigation}) {
           // Clear sensitive data
           resetSensitiveState();
       
-          navigation.navigate('RootTab', { screen: 'HomeTab' });
+          navigation.replace('RootTabs');
         } catch (error) {
           console.error('Verification error:', error);
           
@@ -202,7 +196,7 @@ export default function OtpScreen({route, navigation}) {
               ? 'Network error. Please check your internet connection.'
               : error.message || 'Verification failed. Please try again.';
           
-          Alert.alert('Verification Failed', errorMessage);
+          Alert.alert('Verification Failed', 'Something is wrong on our side, try again after some time.');
         } finally {
           setLoading(false);
         }
@@ -234,8 +228,7 @@ export default function OtpScreen({route, navigation}) {
             <Text style={styles.errorText}>{error}</Text>
           ) : null}
         </View>
-
-        <TouchableOpacity
+         <TouchableOpacity
           style={[
             styles.button, 
             (loading || otp.length !== 6) && styles.buttonDisabled
@@ -251,7 +244,7 @@ export default function OtpScreen({route, navigation}) {
           ) : (
             <Text style={styles.buttonText}>Verify OTP</Text>
           )}
-        </TouchableOpacity>
+        </TouchableOpacity> 
 
         <View style={styles.resendContainer}>
           {!canResend ? (

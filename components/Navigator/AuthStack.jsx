@@ -1,7 +1,6 @@
 import React from "react";
 import "./../../global.css";
-import { GluestackUIProvider } from "./../UI/gluestack-ui-provider";
-import { NavigationContainer } from "@react-navigation/native";
+import { GluestackUIProvider } from "./../UI/gluestack-ui-provider"
 import { createStackNavigator } from "@react-navigation/stack";
 //screens
 import WelcomeScreen from '../WelcomeScreen';
@@ -20,6 +19,7 @@ export default  function AuthStack() {
                 <Stack.Screen name="Login" component={LoginScreen}/>
                 <Stack.Screen name="OTPVerification" component={OtpScreen}/>
                 {/* <Stack.Screen name="Home" component={HomeScreen}/> */}
-            </Stack.Navigator></GluestackUIProvider>
+            </Stack.Navigator>
+        </GluestackUIProvider>
     );
 }

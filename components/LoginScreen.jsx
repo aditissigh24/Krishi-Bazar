@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import "./../global.css";
 import { GluestackUIProvider } from "./UI/gluestack-ui-provider";
-import { View, Text, TextInput,Platform, StatusBar, TouchableOpacity, StyleSheet, Alert, ImageBackground } from 'react-native';
+import { View, Text, TextInput,Platform, StatusBar, TouchableOpacity,ActivityIndicator, StyleSheet, Alert, ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({navigation}) => {
@@ -36,7 +36,7 @@ const LoginScreen = ({navigation}) => {
     });
     const data = await response.json();
     if (response.ok) {
-      Alert.alert('OTP Sent', 'Please check your phone for the OTP');
+      Alert.alert('OTP Sent', 'Please check your mail for the OTP');
       await AsyncStorage.setItem('logindata', JSON.stringify(requestBody));
       navigation.navigate('OTPVerification', { email,aadhar, flow  });
     }
@@ -62,9 +62,23 @@ const LoginScreen = ({navigation}) => {
           <TextInput style={styles.input} placeholder='Email' value={email} onChangeText={setEmail}/>
           <TextInput style={styles.input} placeholder='Aadhar no.' value={aadhar} onChangeText={setAadhar}/>
          
-          <TouchableOpacity style={styles.button} onPress={handlesendOTP} disabled={loading}>
-           <Text style={styles.buttonText}>Get OTP</Text>
-          </TouchableOpacity>
+         <TouchableOpacity
+                   style={[
+                     styles.button, 
+                     (loading) && styles.buttonDisabled
+                   ]}
+                   onPress={handlesendOTP}
+                   disabled={loading}
+                 >
+                   {loading ? (
+                     <ActivityIndicator 
+                       color="#ffffff" 
+                       size="small" 
+                     />
+                   ) : (
+                     <Text style={styles.buttonText}>Get OTP</Text>
+                   )}
+                 </TouchableOpacity>
            </View>
           <View style={styles.subcontainer}>
            <Text style={styles.subtext}>Don't have an account? <Text onPress={()=> navigation.navigate('SignUp')} style={styles.signuptext}>SignUp</Text></Text>
@@ -125,6 +139,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 20,
     marginTop:8,
+  },
+  buttonDisabled: {
+    backgroundColor: '#cccccc',
   },
   button: {
     paddingVertical: 12,

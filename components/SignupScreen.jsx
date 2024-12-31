@@ -84,7 +84,7 @@ export default function SignUpScreen  ({navigation})  {
       
       if (response.ok) {
         // Store phone number temporarily
-        Alert.alert('OTP Sent', 'Please check your phone for the OTP');
+        Alert.alert('OTP Sent', 'Please check your mail for the OTP');
         console.log(requestBody)
         await AsyncStorage.setItem('userData', JSON.stringify(requestBody));
         

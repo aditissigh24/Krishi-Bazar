@@ -20,7 +20,8 @@ import ExploreStack from './ExploreStack'
 const Stack=createStackNavigator();
 export default function HomeStack() {
   return (
-    <GluestackUIProvider mode="light"><Stack.Navigator screenOptions={{headerShown: false}}>
+    <GluestackUIProvider mode="light">
+      <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="Home" component={HomeScreen}/>
         <Stack.Screen name="Explore" component={ExploreScreen}/>
         <Stack.Screen name="Profile" component={ProfileScreen}/>
@@ -33,6 +34,7 @@ export default function HomeStack() {
         <Stack.Screen name="BuyOrder" component={BuyOrder}/>
         <Stack.Screen name="ExploreStack" component={ExploreStack}/>
         <Stack.Screen name="ManageSpecificProduct" component={ManageSpecificProduct}/>
-      </Stack.Navigator></GluestackUIProvider>
+      </Stack.Navigator>
+    </GluestackUIProvider>
   );
 }

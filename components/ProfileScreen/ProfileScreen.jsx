@@ -19,6 +19,7 @@ export default function ProfileScreen({navigation}) {
   const [user, setUser] = useState([]);
  const [error, setError] = useState(null);
  const { token } = useAuth();
+  const { user_id } = useAuth();
  const { setToken, setUserID } = useAuth();
   //const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MjQ1ODIsInVzZXJfaWQiOjEsInVzZXJfdHlwZSI6ImZhcm1lciJ9.3DCo4LmnbMGL3jS-SP2TmQkEKW8tkympsh8zwc25lzI';
   const toggleModal = () => {
@@ -49,7 +50,13 @@ export default function ProfileScreen({navigation}) {
           setUserID(null); 
           console.log('After logout:', token);          
           // Navigate to LoginScreen
-          navigation.replace('WelcomeScreen'); 
+          console.log(navigation.getState());
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'AuthStack', params: { screen: 'Welcome' } }],
+          });
+          
+
           // Adjust the screen name as per your navigation
         },
       },
@@ -67,7 +74,7 @@ export default function ProfileScreen({navigation}) {
        console.log('Fetching token...');
      console.log('Token:', token);
        // Fetch orders from API with token in the header
-       const response = await fetch('https://krishi-bazar.onrender.com/api/v1/user/1', {
+       const response = await fetch(`https://krishi-bazar.onrender.com/api/v1/user/${user_id}`, {
          method: 'GET',
          headers: {
            'Content-Type': 'application/json',

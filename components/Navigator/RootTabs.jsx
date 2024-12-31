@@ -13,6 +13,7 @@ import ExploreStack from './ExploreStack'
 
 
 const Tab = createBottomTabNavigator();
+
 export default function RootTabs
 () {
   return (
@@ -60,7 +61,7 @@ export default function RootTabs
      
       </Tab.Navigator>
       </View>
-        </GluestackUIProvider>
+    </GluestackUIProvider>
   );
 }
 

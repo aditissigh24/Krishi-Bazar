@@ -1,7 +1,7 @@
 import "./../global.css";
 import { GluestackUIProvider } from "../components/UI/gluestack-ui-provider";
 import React, { useState, useEffect } from 'react';
-import { NavigationIndependentTree, KeyboardAvoidingView,Platform } from '@react-navigation/native';
+import { NavigationIndependentTree, KeyboardAvoidingView,Platform, NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Text, View, SafeAreaView,StyleSheet } from "react-native";
 import RootTabs from "../components/Navigator/RootTabs";
@@ -9,7 +9,7 @@ import AuthStack from '../components/Navigator/AuthStack';
 import{AuthProvider,useAuth} from './../Store/AuthContext'
 import OtpScreen from "@/components/OtpScreen";
 
-
+import AppNavigator from '../components/Navigator/AppNavigator'
 
 
 
@@ -23,6 +23,7 @@ export default function Index() {
     const checkAuth = async () => {
       try {
         const token = await AsyncStorage.getItem('JwtToken');
+        
         setIsAuthenticated(!!token);
       } catch (error) {
         console.error('Authentication check failed:', error);
@@ -52,10 +53,10 @@ export default function Index() {
         
          <View style={styles.container}>
        
-        <NavigationIndependentTree>
-         {isAuthenticated ? <RootTabs /> : <AuthStack />} 
+        <AppNavigator/>
+         
       
-       </NavigationIndependentTree>
+       
        </View>
        
        </GluestackUIProvider>

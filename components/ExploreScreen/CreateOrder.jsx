@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker'
-
+import { useAuth } from '@/Store/AuthContext';
 const BuyOrder = ({ navigation, route }) => {
   // Sample product data - replace with your actual data
   const product = {
@@ -57,7 +57,8 @@ const BuyOrder = ({ navigation, route }) => {
         Alert.alert('Error', 'Please fill all required fields');
         return;
       }
-      const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MjQ1ODIsInVzZXJfaWQiOjEsInVzZXJfdHlwZSI6ImZhcm1lciJ9.3DCo4LmnbMGL3jS-SP2TmQkEKW8tkympsh8zwc25lzI';
+      const { token } = useAuth();
+      //const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MjQ1ODIsInVzZXJfaWQiOjEsInVzZXJfdHlwZSI6ImZhcm1lciJ9.3DCo4LmnbMGL3jS-SP2TmQkEKW8tkympsh8zwc25lzI';
       // Create JSON payload
       const payload = {
         ...formData,

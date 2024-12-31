@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather'; 
-
+import { useAuth } from '@/Store/AuthContext';
 
 const ManageSpecificProduct = ({ route, navigation }) => {
   const [orders, setOrders] = useState([]);

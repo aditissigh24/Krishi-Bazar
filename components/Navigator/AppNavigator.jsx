@@ -1,18 +1,20 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import OtpScreen from '../OtpScreen';
-import RootTabs from './RootTabs';
+import React from "react";
+import "./../../global.css";
+import { GluestackUIProvider } from "./../UI/gluestack-ui-provider"
+import { createStackNavigator } from "@react-navigation/stack";
+//screens
+import Authstack from './AuthStack'
+import RootTabs from './RootTabs'
 
-const Stack = createNativeStackNavigator();
-
-export default function AppNavigator() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="otpScreen" component={OtpScreen} />
-      <Stack.Screen
-        name="RootTabs"
-        component={RootTabs}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
-  );
+const Stack= createStackNavigator();
+export default  function AppNavigator() {
+    return (
+        <GluestackUIProvider mode="light">
+            <Stack.Navigator screenOptions={{headerShown: false}}>
+                <Stack.Screen name="AuthStack" component={Authstack}/>
+                <Stack.Screen name="RootTabs" component={RootTabs}/>               
+                {/* <Stack.Screen name="Home" component={HomeScreen}/> */}
+            </Stack.Navigator>
+        </GluestackUIProvider>
+    );
 }

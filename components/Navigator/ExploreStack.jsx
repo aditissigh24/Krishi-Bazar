@@ -13,11 +13,13 @@ import BuyOrder from './../ExploreScreen/CreateOrder';
 const Stack=createStackNavigator();
 export default function ProfileStack() {
   return (
-    <GluestackUIProvider mode="light"><Stack.Navigator screenOptions={{headerShown: false}}>
+    <GluestackUIProvider mode="light">
+      <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="Explore" component={ExploreScreen}/>
         <Stack.Screen name="ProductDetails" component={ProductDetails}/>
         <Stack.Screen name="BuyOrder" component={BuyOrder}/>
         
-      </Stack.Navigator></GluestackUIProvider>
+      </Stack.Navigator>
+    </GluestackUIProvider>
   );
 }
