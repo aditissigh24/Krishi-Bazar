@@ -47,6 +47,7 @@
     "cross-spawn": "^7.0.6",
     "eas-cli": "^13.4.2",
     "expo": "~52.0.20",
+    "expo-cli": "^6.3.12",
     "expo-constants": "^17.0.3",
     "expo-dom": "^27.0.2",
     "expo-font": "^13.0.1",
