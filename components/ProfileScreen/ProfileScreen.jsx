@@ -161,9 +161,7 @@ export default function ProfileScreen({navigation}) {
           <Text style={styles.updateButtonText}>Create Product</Text>
         </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.button} onPress={logout}>
-      <Text style={styles.buttonText}>Logout</Text>
-    </TouchableOpacity>
+        
         
         {/* Conditionally render the UpdatePhoneNumber component */}
         {modalVisible && (
