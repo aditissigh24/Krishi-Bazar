@@ -7,7 +7,7 @@ import { Text, View, SafeAreaView,StyleSheet } from "react-native";
 import RootTabs from "../components/Navigator/RootTabs";
 import AuthStack from '../components/Navigator/AuthStack';
 import{AuthProvider,useAuth} from './../Store/AuthContext'
-import OtpScreen from "@/components/OtpScreen";
+import OtpScreen from "../components/OtpScreen";
 
 import AppNavigator from '../components/Navigator/AppNavigator'
 
