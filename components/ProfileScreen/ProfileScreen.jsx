@@ -40,7 +40,8 @@ export default function ProfileScreen({navigation}) {
       {
         text: 'Logout',
         onPress: async () => {
-          // Clear data from AsyncStorage        
+          // Clear data from AsyncStorage 
+          await AsyncStorage.clear();       
           await AsyncStorage.removeItem('JwtToken');
           await AsyncStorage.removeItem('userID');  
           console.log('AsyncStorage cleared');
@@ -50,7 +51,6 @@ export default function ProfileScreen({navigation}) {
           setUserID(null); 
           console.log('After logout:', token);          
           // Navigate to LoginScreen
-          console.log(navigation.getState());
           navigation.reset({
             index: 0,
             routes: [{ name: 'AuthStack', params: { screen: 'Welcome' } }],
@@ -161,6 +161,11 @@ export default function ProfileScreen({navigation}) {
           <Text style={styles.updateButtonText}>Create Product</Text>
         </TouchableOpacity>
         </View>
+        <TouchableOpacity style={styles.button} onPress={logout}>
+          <Text style={styles.updateButtonText}>Logout</Text>
+        </TouchableOpacity>
+        
+        
         
         
         {/* Conditionally render the UpdatePhoneNumber component */}
@@ -242,13 +247,13 @@ const styles = StyleSheet.create({
     fontWeight:"500"
   },
   buttonContainer:{
-    flexDirection:'row'
+    flexDirection:'row',
+    justifyContent:'space-between'
   },
   updateButton: {
     paddingVertical: 12,
     paddingHorizontal:12,
     borderRadius: 8,
-    marginRight:38,
     backgroundColor:'#3B82F6',
     marginBottom:20
   },
@@ -260,9 +265,9 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#FF6347',
-    paddingHorizontal: 15,
+    paddingHorizontal: 12,
     paddingVertical: 12,
-    borderRadius: 5,
+    borderRadius: 8,
     elevation: 5,
     shadowColor: '#000',
     shadowOffset: {
@@ -271,7 +276,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    marginBottom: 20,
+    
     
   },
   buttonText: {
