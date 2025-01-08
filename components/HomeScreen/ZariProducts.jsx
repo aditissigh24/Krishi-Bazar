@@ -15,7 +15,7 @@ import {
 import Icon from 'react-native-vector-icons/Feather';
 import { useRoute } from '@react-navigation/native';
 import FilterDialog from './../ExploreScreen/FilterDialog';
-import { useAuth } from '@/Store/AuthContext';
+import { useAuth } from '../../Store/AuthContext';
 
 // Sample product data
 /*const products = [

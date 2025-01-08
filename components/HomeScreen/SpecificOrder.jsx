@@ -11,7 +11,7 @@ import {
   SafeAreaView,Modal,FlatList
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import { useAuth } from '@/Store/AuthContext';
+import { useAuth } from '../../Store/AuthContext';
 
 const SpecificOrder = ({ navigation }) => {
   const [orders, setOrders] = useState([]);

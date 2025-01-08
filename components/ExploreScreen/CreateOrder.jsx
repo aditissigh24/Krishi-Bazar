@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker'
-import { useAuth } from '@/Store/AuthContext';
+import { useAuth } from '../../Store/AuthContext';
 const BuyOrder = ({ navigation, route }) => {
   // Sample product data - replace with your actual data
   const product = {

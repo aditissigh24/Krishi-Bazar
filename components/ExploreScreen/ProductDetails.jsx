@@ -16,7 +16,7 @@ import { ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient'; 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Icon from 'react-native-vector-icons/Feather';// Assuming using Expo, if not, use appropriate icon library
-import { useAuth } from '@/Store/AuthContext';
+import { useAuth } from '../../Store/AuthContext';
 const ProductDetails = ({ navigation, route}) => {
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
